@@ -45,6 +45,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.ui_last_time = time()
         self.walls_styles = {   "empty":'QPushButton {background-color: #FFFFFF;}',
                                 'filled':'QPushButton {background-color: #FFFF00;}'}
+        self.cells_styles = {
+                                "empty":'QPushButton {background-color: #FFFFFF;}',
+                                "start":'QPushButton {background-color: #2d7cd6;}',
+                                "finish":'QPushButton {background-color: #e86f6f;}',
+        }
         self.wallsButtons = []
         self.settingsWindow = SettingsWindow()
         self.settingsWindow.hide()
@@ -107,6 +112,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     center_button.setGeometry(screen.QtCore.QRect(const_move['x'] + e + x_index * ew, const_move['y'] + e + y_index * ew, w, w))
                     center_button.setObjectName("b_" + str(y_index) + "_" + str(x_index) + "_center")
                     center_button.setStyleSheet(self.wallsButtons[y_index][x_index]['center']['style'])
+                    center_button.clicked.connect(lambda ch, coors=[y_index, x_index, "center"]: self.pressCell(coors))
         print('time for loading is', time() - s_t)
     def moveWalls(self, delta_x, delta_y, zoom = 0):                            # moves all walls on given deltas
         s_t = time()
@@ -144,8 +150,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.mouse_scroll_counter = 0
         elif self.mouse_scroll_counter < -2:
             self.zoomOut()
-            self.mouse_scroll_counter = 0
-         
+            self.mouse_scroll_counter = 0        
     def randomGraph(self):                                                      # trigger to random map
         r_g = Graph.Graph(self.size_x, self.size_y)
         r_g.generateGraph(Graph.randint(0, self.size_x * self.size_y))
@@ -173,7 +178,23 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 if x_index != x_len and y_index != y_len:
                     self.wallsButtons[y_index][x_index]['center'] = {   'style' : self.walls_styles['empty'],
                                                                         'name' : "b_" + str(y_index) + "_" + str(x_index) + "_center",
-                                                                        'value' : -1}
+                                                                        'value' : 0}
+    def pressCell(self,coors):                                                  # accepts mouse click on cell to setup start and finish positions
+        print('pressed', coors)
+        y, x, side = coors
+        bs = self.wallsButtons[y][x][side]["style"]
+        if bs == self.cells_styles["empty"]:
+            self.wallsButtons[y][x][side]["style"] = self.cells_styles["start"]
+            self.wallsButtons[y][x][side]["value"] = 1
+        elif bs == self.cells_styles["start"]:
+            self.wallsButtons[y][x][side]["style"] = self.cells_styles["finish"]
+            self.wallsButtons[y][x][side]["value"] = 2
+        elif bs == self.cells_styles["finish"]:
+            self.wallsButtons[y][x][side]["style"] = self.cells_styles["empty"]
+            self.wallsButtons[y][x][side]["value"] = 0
+        bs = self.wallsButtons[y][x][side]["style"]
+        self.wallsButtons[y][x][side]["core"].setStyleSheet(bs)
+        pass                                                            
     def pressWall(self,coors):                                                  # accepts mouse click on wall
         y, x, side = coors
         if self.wallsButtons[y][x][side]["style"] == self.walls_styles['empty']:
