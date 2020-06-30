@@ -1,0 +1,15 @@
+Map: vertex -> [upper wall, right wall, bottom wall, left wall]
+1 if wall exists and 0 if there's no wall.
+One line - one vertex starting from 0
+[1, 0, 0, 1]
+[1, 1, 0, 0]
+[0, 0, 1, 1]
+[0, 1, 1, 0]
+
+
+
+Map: Simple adjacency map
+[0, 0, 0, 0]
+[0, 0, 0, 0]
+[0, 0, 0, 0]
+[0, 0, 0, 0]

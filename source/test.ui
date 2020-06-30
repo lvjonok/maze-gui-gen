@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="cursor">
+   <cursorShape>CrossCursor</cursorShape>
+  </property>
+  <property name="mouseTracking">
+   <bool>false</bool>
+  </property>
+  <property name="windowTitle">
+   <string>maze-map-gui-generator</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <widget class="QWidget" name="pool"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="cursor">
+    <cursorShape>ArrowCursor</cursorShape>
+   </property>
+   <property name="sizeGripEnabled">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>600</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menutools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actioncreate_map"/>
+    <addaction name="actionrandom_this_map"/>
+    <addaction name="actionfill_this_map"/>
+    <addaction name="actionexport_xml_maze"/>
+    <addaction name="actionexport_xml_line_map"/>
+    <addaction name="actionexport_adjacency_map"/>
+    <addaction name="separator"/>
+    <addaction name="actionsettings"/>
+   </widget>
+   <addaction name="menutools"/>
+  </widget>
+  <action name="actioncreate_map">
+   <property name="text">
+    <string>create map</string>
+   </property>
+  </action>
+  <action name="actionexport_xml_maze">
+   <property name="text">
+    <string>export xml maze</string>
+   </property>
+  </action>
+  <action name="actionexport_xml_line_map">
+   <property name="text">
+    <string>export xml line map</string>
+   </property>
+  </action>
+  <action name="actionexport_adjacency_map">
+   <property name="text">
+    <string>export adjacency map</string>
+   </property>
+  </action>
+  <action name="actionsettings">
+   <property name="text">
+    <string>settings</string>
+   </property>
+  </action>
+  <action name="actionrandom_this_map">
+   <property name="text">
+    <string>random this map</string>
+   </property>
+  </action>
+  <action name="actionfill_this_map">
+   <property name="text">
+    <string>fill this map</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
