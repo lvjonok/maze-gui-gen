@@ -11,6 +11,7 @@ import pprint
 import json
 import source.Graph as Graph
 from pathlib import Path
+import source.empty_field as ef
 
 
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
@@ -185,8 +186,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     def generateXML_line(self):                                                 # generates XML file with lines
         def_size = self.settingsWindow.getSliderLine() * 50
         adj_map = self.generateAdjMap()
-        empty_field_file = Path("source/fields/empty_field.xml")
-        doc = xmltodict.parse(empty_field_file.read_text(), process_namespaces=True)
+        # empty_field_file = Path("source/fields/empty_field.xml")
+        doc = xmltodict.parse(ef.EMPTY_FIELD_STR, process_namespaces=True)
         doc['root']['world']['colorFields'] = []
         for y_i in range(self.size_y):
             for x_i in range(self.size_x):
@@ -202,7 +203,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         # print(xmltodict.unparse(doc, pretty=True))
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()","","All Files (*);;Text Files (*.txt)", options=options)
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Select a place to save your xml file","new_field","Fields (*.xml)", options=options)
+
         if fileName:
             print(fileName)
             file_map = open(fileName, 'w')
@@ -212,8 +214,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     def generateXML_maze(self):                                                 # generates XML file with maze
         def_size = self.settingsWindow.getSliderMaze() * 50
         adj_map = self.generateAdjMap()
-        empty_field_file = Path("source/fields/empty_field.xml")
-        doc = xmltodict.parse(empty_field_file.read_text(), process_namespaces=True)
+        # empty_field_file = Path("source/fields/empty_field.xml")
+        doc = xmltodict.parse(ef.EMPTY_FIELD_STR, process_namespaces=True)
         doc['root']['world']['walls'] = []
         for y_i in range(self.size_y):
             for x_i in range(self.size_x):
@@ -229,7 +231,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         # print(xmltodict.unparse(doc, pretty=True))
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()","","All Files (*);;Text Files (*.txt)", options=options)
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Select a place to save your xml file","new_field","Fields (*.xml)", options=options)
         if fileName:
             print(fileName)
             file_map = open(fileName, 'w')
@@ -265,7 +267,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         adj_map = self.generateAdjMap()
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()","","All Files (*);;Text Files (*.txt)", options=options)
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Select a place to save txt file","my_map","Text Files (*.txt)", options=options)
         if fileName:
             print(fileName)
             file_map = open(fileName, 'w')

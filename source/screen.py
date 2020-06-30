@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(600, 600)
+        # MainWindow.resize(600, 600)
         MainWindow.setMinimumSize(QtCore.QSize(600, 600))
         MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
         MainWindow.setMouseTracking(False)
