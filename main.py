@@ -6,7 +6,6 @@ import source.screen as screen # Это наш конвертированный 
 import source.settingsUI as settingsUI
 from time import sleep
 from time import time
-import sip
 import xmltodict
 import pprint
 import json
@@ -349,7 +348,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
 def main():
     app = QtWidgets.QApplication(sys.argv)  # Новый экземпляр QApplication
-    app.setStyle('macintosh')
+    app.setStyle('fusion')
     window = MazeGenApp()  # Создаём объект класса MazeGenApp
     window.show()  # Показываем окно
     app.exec_()  # и запускаем приложение
