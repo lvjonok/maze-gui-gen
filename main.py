@@ -18,7 +18,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.lineColorLineEdit.textEdited.connect(self.controlColor)
+        self.lineColorLineEdit.textEdited.connect(self.controlColor) 
         self.lineColorLineEdit.setInputMask("HHHHHH")
         self.colorLine = "#000000"
     def getSliderMaze(self) -> int:
@@ -349,6 +349,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
 def main():
     app = QtWidgets.QApplication(sys.argv)  # Новый экземпляр QApplication
+    app.setStyle('macintosh')
     window = MazeGenApp()  # Создаём объект класса MazeGenApp
     window.show()  # Показываем окно
     app.exec_()  # и запускаем приложение
