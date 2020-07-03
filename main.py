@@ -4,15 +4,18 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import source.screen as screen # Это наш конвертированный файл дизайна
 import source.settingsUI as settingsUI
-from time import sleep
-from time import time
-import xmltodict
-import pprint
-import json
+import source.empty_field as ef
+import source.informationUI as informationUI
+from time import sleep, time
+import xmltodict, pprint, json
 import source.Graph as Graph
 from pathlib import Path
-import source.empty_field as ef
+import collections
 
+class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
 
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
     def __init__(self):
@@ -53,10 +56,14 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.wallsButtons = []
         self.settingsWindow = SettingsWindow()
         self.settingsWindow.hide()
+        self.informationWindow = InformationWindow()
+        self.informationWindow.hide()
         self.reloadWindow()
         self.size_x = 5
         self.size_y = 5
         self.walls_id_xml = 0
+        self.start_id_container = []
+        self.finish_id_container = []
         self.generateWallsButtons(5, 5)
         self.displayWalls(0, 0, 0)
     def reloadWindow(self):                                                     # clears window and adds triggers
@@ -68,6 +75,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.actionexport_xml_line_map.triggered.connect(self.generateXML_line)
         self.actionexport_adjacency_map.triggered.connect(self.saveAdjMap)
         self.actionsettings.triggered.connect(self.settingsWindow.show)
+        self.actioninformation.triggered.connect(self.informationWindow.show)
         self.actionfill_this_map.triggered.connect(lambda ch, flag=1 : self.generateMap_init(flag))
         self.actionrandom_this_map.triggered.connect(self.randomGraph)
         self.shortcut_in_pl = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl++'), self.pool)
@@ -208,19 +216,19 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         def_size = self.settingsWindow.getSliderLine() * 50
         adj_map = self.generateAdjMap()
         # empty_field_file = Path("source/fields/empty_field.xml")
-        doc = xmltodict.parse(ef.EMPTY_FIELD_STR, process_namespaces=True)
-        doc['root']['world']['colorFields'] = []
+        doc = self.prepareField(self.settingsWindow.getSliderLine() * 50)
+        doc['root']['world']['colorFields'] = {'line':[]}
         for y_i in range(self.size_y):
             for x_i in range(self.size_x):
                 vertex = y_i * self.size_x + x_i
                 if not adj_map[vertex][0]:
-                    doc['root']['world']['colorFields'].append(xmltodict.parse(self.getXML_line(def_size // 2 + x_i * def_size, def_size//2 + y_i * def_size, 0, -def_size//2)))
+                    doc['root']['world']['colorFields']['line'].append((self.getXML_line(def_size // 2 + x_i * def_size, def_size//2 + y_i * def_size, 0, -def_size//2)))
                 if not adj_map[vertex][1]:
-                    doc['root']['world']['colorFields'].append(xmltodict.parse(self.getXML_line(def_size // 2 + x_i * def_size, def_size//2 + y_i * def_size, def_size//2, 0)))
+                    doc['root']['world']['colorFields']['line'].append((self.getXML_line(def_size // 2 + x_i * def_size, def_size//2 + y_i * def_size, def_size//2, 0)))
                 if not adj_map[vertex][2]:
-                    doc['root']['world']['colorFields'].append(xmltodict.parse(self.getXML_line(def_size // 2 + x_i * def_size, def_size//2 + y_i * def_size, 0, def_size//2)))
+                    doc['root']['world']['colorFields']['line'].append((self.getXML_line(def_size // 2 + x_i * def_size, def_size//2 + y_i * def_size, 0, def_size//2)))
                 if not adj_map[vertex][3]:
-                     doc['root']['world']['colorFields'].append(xmltodict.parse(self.getXML_line(def_size // 2 + x_i * def_size, def_size//2 + y_i * def_size, -def_size//2, 0)))
+                     doc['root']['world']['colorFields']['line'].append((self.getXML_line(def_size // 2 + x_i * def_size, def_size//2 + y_i * def_size, -def_size//2, 0)))
         # print(xmltodict.unparse(doc, pretty=True))
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
@@ -236,19 +244,21 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         def_size = self.settingsWindow.getSliderMaze() * 50
         adj_map = self.generateAdjMap()
         # empty_field_file = Path("source/fields/empty_field.xml")
-        doc = xmltodict.parse(ef.EMPTY_FIELD_STR, process_namespaces=True)
-        doc['root']['world']['walls'] = []
+        
+        doc = self.prepareField(self.settingsWindow.getSliderMaze() * 50)
+        
+        doc['root']['world']['walls'] = {'wall':[]}
         for y_i in range(self.size_y):
             for x_i in range(self.size_x):
                 vertex = y_i * self.size_x + x_i
                 if adj_map[vertex][0]:
-                    doc['root']['world']['walls'].append(xmltodict.parse(self.getXML_wall(x_i * def_size, y_i * def_size, def_size, 0)))
+                    doc['root']['world']['walls']['wall'].append((self.getXML_wall(x_i * def_size, y_i * def_size, def_size, 0)))
                 if adj_map[vertex][1]:
-                    doc['root']['world']['walls'].append(xmltodict.parse(self.getXML_wall(x_i * def_size + def_size, y_i * def_size, 0, def_size)))
+                    doc['root']['world']['walls']['wall'].append((self.getXML_wall(x_i * def_size + def_size, y_i * def_size, 0, def_size)))
                 if adj_map[vertex][2]:
-                    doc['root']['world']['walls'].append(xmltodict.parse(self.getXML_wall(x_i * def_size, y_i * def_size + def_size, def_size, 0)))
+                    doc['root']['world']['walls']['wall'].append((self.getXML_wall(x_i * def_size, y_i * def_size + def_size, def_size, 0)))
                 if adj_map[vertex][3]:
-                     doc['root']['world']['walls'].append(xmltodict.parse(self.getXML_wall(x_i * def_size, y_i * def_size, 0, def_size)))
+                     doc['root']['world']['walls']['wall'].append((self.getXML_wall(x_i * def_size, y_i * def_size, 0, def_size)))
         # print(xmltodict.unparse(doc, pretty=True))
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
@@ -259,16 +269,111 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             file_map.write(xmltodict.unparse(doc, pretty=True))
             file_map.close()
         pass
-    def getXML_line(self, x_start, y_start, x_len, y_len):                      # generates string describing line
-        out_str = "<line stroke-width=\"6\" fill-style=\"none\" end=\"" + str(x_start + x_len) + ":" + str(y_start + y_len) + "\" id=\"{" + str(self.walls_id_xml) + "}\" stroke-style=\"solid\" fill=\"" + str(self.settingsWindow.colorLine) + "\" stroke=\"" + str(self.settingsWindow.colorLine) + "\" begin=\"" + str(x_start) + ":" + str(y_start) +"\"/>"
+    def prepareField(self, def_size):                                                     # returns field with updated start and finish
+        self.updateFinishStartID()
+        field_template = ""
+        if len(self.start_id_container) > 0 and len(self.finish_id_container) > 0:
+            field_template = ef.FIELD_START_FINISH_STR
+        elif len(self.start_id_container) > 0:
+            field_template = ef.FIELD_START_STR
+        elif len(self.finish_id_container) > 0:
+            field_template = ef.FIELD_FINISH_STR
+        else:
+            field_template = ef.EMPTY_FIELD_STR
+        
+        doc = xmltodict.parse(field_template, process_namespaces=True)
+
+        try:
+            doc['root']['world']['regions'] = {'region':[]}
+        except:
+            pass
+        try:
+            doc['root']['constraints']['constraint']['conditions']['inside'] = []
+        except:
+            pass
+        try:
+            doc['root']['constraints']['event'][1]['conditions']['inside'] = []
+        except:
+            pass
+        last_start_coor = [0, 0]
+        for start_id, start_coors in enumerate(self.start_id_container):
+            y, x = start_coors
+            doc['root']['world']['regions']['region'].append(self.getXML_start(x * def_size, y * def_size, def_size, def_size, start_id))
+            in_s = {'@regionId':'start_'+str(start_id), '@objectId':'robot1'}
+            doc['root']['constraints']['constraint']['conditions']['inside'].append(in_s)
+            last_start_coor = start_coors
+        for finish_id, finish_coors in enumerate(self.finish_id_container):
+            y, x = finish_coors
+            doc['root']['world']['regions']['region'].append(self.getXML_finish(x * def_size, y * def_size, def_size, def_size, finish_id))
+            in_s = {'@regionId':'finish_'+str(finish_id), '@objectId':'robot1'}
+            doc['root']['constraints']['event'][1]['conditions']['inside'].append(in_s)
+        y, x = last_start_coor
+        k = def_size // 50
+        disp = def_size // k
+        doc['root']['robots']['robot']['@position'] = str(x * def_size + 25 * (k-1))+":"+str(y * def_size + 25 * (k-1))
+        doc['root']['robots']['robot']['startPosition']['@x'] = str(x * def_size + 25 * k)
+        doc['root']['robots']['robot']['startPosition']['@y'] = str(y * def_size + 25 * k)
+        return doc
+    def updateFinishStartID(self):
+        self.start_id_container = []
+        self.finish_id_container = []
+        for y_index in range(self.size_y):
+            for x_index in range(self.size_x):
+                if self.wallsButtons[y_index][x_index]['center']['value'] == 1:
+                    # start button
+                    self.start_id_container.append([y_index, x_index])
+                if self.wallsButtons[y_index][x_index]['center']['value'] == 2:
+                    # finish button
+                    self.finish_id_container.append([y_index, x_index])
+    def getXML_line(self, x_start, y_start, x_len, y_len):                      # generates dict describing line
+        out_dict = {}
+        out_dict['@stroke-width'] = '6'
+        out_dict['@fill-style'] = 'none'
+        out_dict['@begin'] = str(x_start) + ":" + str(y_start)
+        out_dict['@end'] = str(x_start + x_len) + ":" + str(y_start + y_len)
+        out_dict['@id'] = '{wall'+str(self.walls_id_xml)+'}'
+        out_dict['@stroke-style'] = 'solid'
+        out_dict['@fill'] = str(self.settingsWindow.colorLine)
+        out_dict['@stroke'] = str(self.settingsWindow.colorLine)
         self.walls_id_xml+=1
-        print(out_str)
-        return out_str
-    def getXML_wall(self, x_start, y_start, x_len, y_len):                      # generates string describing wall
-        out_str = "<wall id=\"{" + str(self.walls_id_xml) + "}\" begin=\"" + str(x_start) + ":" + str(y_start) +"\" end=\"" + str(x_start + x_len) + ":" + str(y_start + y_len) + "\"/>"
+        return out_dict
+    def getXML_wall(self, x_start, y_start, x_len, y_len):                      # generates dict describing wall
+        out_dict = {}
+        out_dict['@id'] = "{wall" + str(self.walls_id_xml) + "}"
+        out_dict['@begin'] = str(x_start) + ":" + str(y_start)
+        out_dict['@end'] = str(x_start + x_len) + ":" + str(y_start + y_len)
         self.walls_id_xml+= 1
-        print(out_str)
-        return out_str
+        return out_dict
+    def getXML_start(self, x_start, y_start, x_len, y_len, id=0):               # generates dict describing start rectangle
+        out_dict = {}
+        out_dict['@visible'] = "true"
+        out_dict['@id'] = "start_" + str(id)
+        out_dict['@x'] = str(x_start)
+        out_dict['@y'] = str(y_start)
+        out_dict['@width'] = str(x_len)
+        out_dict['@height'] = str(y_len)
+        out_dict['@filled'] = 'true'
+        out_dict['@textX'] = '0'
+        out_dict['@textY'] = '0'
+        out_dict['@color'] = '#0000FF'
+        out_dict['@text'] = 'Start'
+        out_dict['@type'] = 'rectangle'
+        return out_dict
+    def getXML_finish(self, x_start, y_start, x_len, y_len, id=0):
+        out_dict = {}
+        out_dict['@visible'] = "true"
+        out_dict['@id'] = "finish_" + str(id)
+        out_dict['@x'] = str(x_start)
+        out_dict['@y'] = str(y_start)
+        out_dict['@width'] = str(x_len)
+        out_dict['@height'] = str(y_len)
+        out_dict['@filled'] = 'true'
+        out_dict['@textX'] = '0'
+        out_dict['@textY'] = '0'
+        out_dict['@color'] = '#FF0000'
+        out_dict['@text'] = 'Finish'
+        out_dict['@type'] = 'rectangle'
+        return out_dict
     def generateAdjMap(self):                                                   # generates map vertex->adjanced vertices from wallsButtons
         adj_map = [] # vertex -> others 0 1 2 3
         current_vertex = 0

@@ -34,10 +34,10 @@ FIELD_START_FINISH_STR = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
         </world>\
         <robots>\
                 <!-- Описание робота -->\
-                <robot id=\"trikKitRobot\" position=\"0:0\" direction=\"0\">\
+                <robot id=\"trikKitRobot\" position=\"50:50\" direction=\"0\">\
                         <sensors>\
                         </sensors>\
-                        <startPosition id=\"{robot1}\" x=\"25\" y=\"25\" direction=\"0\" />\
+                        <startPosition id=\"{robot1}\" x=\"75\" y=\"75\" direction=\"0\" />\
                         <wheels left=\"M3###output###М3###\" right=\"M4###output###М4###\" />\
                 </robot>\
         </robots>\
@@ -85,10 +85,10 @@ FIELD_START_STR = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
         </world>\
         <robots>\
                 <!-- Описание робота -->\
-                <robot id=\"trikKitRobot\" position=\"0:0\" direction=\"0\">\
+                <robot id=\"trikKitRobot\" position=\"50:50\" direction=\"0\">\
                         <sensors>\
                         </sensors>\
-                        <startPosition id=\"{robot1}\" x=\"25\" y=\"25\" direction=\"0\" />\
+                        <startPosition id=\"{robot1}\" x=\"75\" y=\"75\" direction=\"0\" />\
                         <wheels left=\"M3###output###М3###\" right=\"M4###output###М4###\" />\
                 </robot>\
         </robots>\
