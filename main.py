@@ -66,9 +66,20 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.finish_id_container = []
         self.generateWallsButtons(5, 5)
         self.displayWalls(0, 0, 0)
+    def resizeEvent(self, event):
+        o_size = [event.oldSize().width(), event.oldSize().height()]
+        c_size = [event.size().width(), event.size().height()]
+
+        if c_size[0] - o_size[0] < 100 or c_size[1] - o_size[1] < 100:
+            return False
+        
+        min_size = 60
+        window_sizes = [self.width()//(self.size_x + 1), self.height()//(self.size_y + 1)]
+        self.ui_scale = (max(min(window_sizes), min_size))/min_size
+        self.ui_x = 0
+        self.ui_y = 0
+        self.displayWalls()
     def reloadWindow(self):                                                     # clears window and adds triggers
-        # self.ui_x = 0
-        # self.ui_y = 0
         self.setupUi(self)  # Это нужно для инициализации нашего дизайна
         self.actioncreate_map.triggered.connect(self.generateMap_init)
         self.actionexport_xml_maze.triggered.connect(self.generateXML_maze)
@@ -85,10 +96,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.shortcut_out = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+-'), self.pool)
         self.shortcut_out.activated.connect(self.zoomOut)
         self.setMouseTracking(True)
-    def zoomIn(self, scale_delta = 0.1):                                                           # zooms in map
+    def zoomIn(self, scale_delta = 0.1):                                                        # zooms in map
         self.ui_scale += scale_delta
         self.displayWalls()
-    def zoomOut(self, scale_delta = 0.1):                                                          # zooms out map
+    def zoomOut(self, scale_delta = 0.1):                                                       # zooms out map
         self.ui_scale -= scale_delta
         self.displayWalls()
     def displayWalls(self, delta_x = 0, delta_y = 0, zoom = 0):                 # function draws window with walls from nothing
@@ -99,7 +110,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         e = self.empty_part_size * self.ui_scale
         w = self.wall_size * self.ui_scale
         for y_index in range(self.size_y + 1):
-            for x_index in range(self.size_x + 1):
+            for x_index in range(self.size_x + 1):  
                 if y_index != self.size_y:
                     left_button = QtWidgets.QPushButton(self.pool)
                     self.wallsButtons[y_index][x_index]['left']['core'] = left_button
@@ -153,10 +164,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         numSteps = numDegrees / 15
         self.mouse_scroll_counter += numSteps
         print(self.mouse_scroll_counter)
-        if self.mouse_scroll_counter > 2:
+        if self.mouse_scroll_counter > 1:
             self.zoomIn()
             self.mouse_scroll_counter = 0
-        elif self.mouse_scroll_counter < -2:
+        elif self.mouse_scroll_counter < -1:
             self.zoomOut()
             self.mouse_scroll_counter = 0        
     def randomGraph(self):                                                      # trigger to random map
@@ -165,6 +176,13 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.setWalls(r_g.getMapVertexList())
     def generateWallsButtons(self, x_len, y_len, filled = False):               # generates self.wallsButtons with given size
         self.wallsButtons = []
+        
+        min_size = 60
+        print('sizes', self.width(), self.height())
+        window_sizes = [self.width()//(x_len + 1), self.height()//(y_len + 1)]
+        self.ui_scale = (max(min(window_sizes), min_size))/min_size
+        print(window_sizes)
+
         for y_index in range(y_len + 1):
             self.wallsButtons.append([0] * (x_len + 1))
             for x_index in range(x_len + 1):
