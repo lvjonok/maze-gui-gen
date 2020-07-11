@@ -16,7 +16,7 @@ class Ui_InformationWidget(object):
         InformationWidget.setObjectName("InformationWidget")
         InformationWidget.resize(900, 600)
         InformationWidget.setMinimumSize(QtCore.QSize(900, 600))
-        InformationWidget.setMaximumSize(QtCore.QSize(900, 600))
+        InformationWidget.setMaximumSize(QtCore.QSize(99999, 99999))
         self.tutorialImage = QtWidgets.QLabel(InformationWidget)
         self.tutorialImage.setGeometry(QtCore.QRect(0, 0, 900, 600))
         self.tutorialImage.setText("")

@@ -1,4 +1,5 @@
 import sys  # sys нужен для передачи argv в QApplication
+import os
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -21,6 +22,17 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         self.b_nextImage.clicked.connect(self.nextImage)
         self.b_previousImage.clicked.connect(self.previousImage)
         self.displayImage()
+    def resizeEvent(self, event):
+        o_size = [event.oldSize().width(), event.oldSize().height()]
+        c_size = [event.size().width(), event.size().height()]
+
+        if c_size[0]/1.75 <= c_size[1]:
+            self.tutorialImage.setGeometry(0, 0, c_size[0], c_size[0]/1.75)
+        else:
+            new_left_x = (c_size[0] - c_size[1] * 1.75)//2
+            self.tutorialImage.setGeometry(new_left_x, 0, c_size[1] * 1.75, c_size[1])
+        self.b_nextImage.move(c_size[0] - 20, 240/600 * c_size[1])
+        self.b_previousImage.move(0, 240/600 * c_size[1])
     def nextImage(self):
         self.current_image += 1
         if self.current_image > 5:
@@ -34,9 +46,13 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
     def displayImage(self):
         print(self.getImagePath())
         self.tutorialImage.setPixmap(QtGui.QPixmap(self.getImagePath()))
-        self.show()
     def getImagePath(self):
-        return "app_screenshots/out_" + str(self.current_image) + ".png"
+        try:
+            bp = sys._MEIPASS
+            return os.path.join(bp, "out_" + str(self.current_image) + ".png") # 
+        except:
+            bp = os.path.abspath(".")
+            return os.path.join(bp, "source/app_screenshots/out_" + str(self.current_image) + ".png") # 
     
 
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
@@ -100,13 +116,13 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.generateWallsButtons(5, 5)
         self.displayWalls(0, 0, 0)
     def closeEvent(self, event):
-        exit()
+        return
     def resizeEvent(self, event):
         o_size = [event.oldSize().width(), event.oldSize().height()]
         c_size = [event.size().width(), event.size().height()]
 
         if c_size[0] - o_size[0] < 100 or c_size[1] - o_size[1] < 100:
-            return False
+            return
         
         min_size = 60
         window_sizes = [self.width()//(self.size_x + 1), self.height()//(self.size_y + 1)]
@@ -536,3 +552,14 @@ def main():
 
 if __name__ == '__main__':  # Если мы запускаем файл напрямую, а не импортируем
     main()  # то запускаем функцию main()
+
+
+"""
+
+                    ("app_screenshots/out_2.png", "app_screenshots/out_2.png"), 
+                    ("app_screenshots/out_3.png", "app_screenshots/out_3.png"), 
+                    ("app_screenshots/out_4.png", "app_screenshots/out_4.png"), 
+                    ("app_screenshots/out_5.png", "app_screenshots/out_5.png")
+
+("out_1.png","source/app_screenshots/out_1.png", "source/app_screenshots/out_1.png")
+"""
