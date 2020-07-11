@@ -11,21 +11,46 @@ import xmltodict, pprint, json
 import source.Graph as Graph
 from pathlib import Path
 import collections
+import pyperclip
 
 class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
     def __init__(self):
         super().__init__()
+        self.current_image = 1
         self.setupUi(self)
+        self.b_nextImage.clicked.connect(self.nextImage)
+        self.b_previousImage.clicked.connect(self.previousImage)
+        self.displayImage()
+    def nextImage(self):
+        self.current_image += 1
+        if self.current_image > 5:
+            self.current_image = 1
+        self.displayImage()
+    def previousImage(self):
+        self.current_image -= 1
+        if self.current_image < 1:
+            self.current_image = 5
+        self.displayImage()
+    def displayImage(self):
+        print(self.getImagePath())
+        self.tutorialImage.setPixmap(QtGui.QPixmap(self.getImagePath()))
+        self.show()
+    def getImagePath(self):
+        return "app_screenshots/out_" + str(self.current_image) + ".png"
+    
 
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.lineColorLineEdit.textEdited.connect(self.controlColor) 
+        self.telegramChannel.mousePressEvent = (self.copyLink)
         self.lineColorLineEdit.setInputMask("HHHHHH")
         self.colorLine = "#000000"
         self.lineSlider.valueChanged.connect(self.updateValueLine)
         self.mazeSlider.valueChanged.connect(self.updateValueMaze)
+    def copyLink(self, event):
+        pyperclip.copy('https://t.me/maze_gui_gen')
     def updateValueMaze(self):
         self.mazeCellSizeValue.setText("<html><head/><body><p align=\"center\">" + str(self.getSliderMaze()) + "</p></body></html>") # <html><head/><body><p align="center">2</p></body></html>
     def updateValueLine(self):
@@ -45,7 +70,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setMouseTracking(True)
-        self.mouse_scroll_counter = 0 # shoud be in range [-5, 5] if hits abs(6), zoom map
+        self.mouse_scroll_counter = 0
         self.ui_x = 0
         self.ui_y = 0
         self.ui_scale = 1
@@ -74,6 +99,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.finish_id_container = []
         self.generateWallsButtons(5, 5)
         self.displayWalls(0, 0, 0)
+    def closeEvent(self, event):
+        exit()
     def resizeEvent(self, event):
         o_size = [event.oldSize().width(), event.oldSize().height()]
         c_size = [event.size().width(), event.size().height()]

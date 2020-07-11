@@ -19,7 +19,7 @@ class Graph:
         elif direction == 3:
             next_vertex -= 1 if next_vertex % self.size_x != 0 else 0
         return next_vertex if next_vertex != vertex else False
-    def generateGraph(self, vertex):
+    def generateGraph(self, vertex, flag = True):
         if vertex in self.visited:
             return True
         # print('entered', vertex)
@@ -34,9 +34,12 @@ class Graph:
             shuffle(available)
             for way in range(ways):
                 selected_vertex = available[way]
-                self.map[vertex][selected_vertex] = 1
-                self.map[selected_vertex][vertex] = 1
-                self.generateGraph(selected_vertex)
+                if (not flag and not selected_vertex in self.visited) or flag:
+                    self.map[vertex][selected_vertex] = 1
+                    self.map[selected_vertex][vertex] = 1
+                    self.generateGraph(selected_vertex, flag)
+                else:
+                    continue
     def getMapVertexList(self):
         out = [[-1, -1, -1, -1] for vertex in range(self.size_x * self.size_y)]
         for vertex in range(self.size_x * self.size_y):
