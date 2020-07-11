@@ -24,10 +24,18 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.lineColorLineEdit.textEdited.connect(self.controlColor) 
         self.lineColorLineEdit.setInputMask("HHHHHH")
         self.colorLine = "#000000"
+        self.lineSlider.valueChanged.connect(self.updateValueLine)
+        self.mazeSlider.valueChanged.connect(self.updateValueMaze)
+    def updateValueMaze(self):
+        self.mazeCellSizeValue.setText("<html><head/><body><p align=\"center\">" + str(self.getSliderMaze()) + "</p></body></html>") # <html><head/><body><p align="center">2</p></body></html>
+    def updateValueLine(self):
+        self.lineCellSizeValue.setText("<html><head/><body><p align=\"center\">" + str(self.getSliderLine()) + "</p></body></html>")
     def getSliderMaze(self) -> int:
         return self.mazeSlider.value()
     def getSliderLine(self) -> int:
         return self.lineSlider.value()
+    def getMazeCheckBox(self):      
+        return self.MazeLoopsCheckBox.isChecked()
     def controlColor(self):
         text_in = self.lineColorLineEdit.text()
         self.colorLabel.setStyleSheet('QLabel {border: 3px solid blue;background-color: #'+str(text_in)+';}')
@@ -172,7 +180,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.mouse_scroll_counter = 0        
     def randomGraph(self):                                                      # trigger to random map
         r_g = Graph.Graph(self.size_x, self.size_y)
-        r_g.generateGraph(Graph.randint(0, self.size_x * self.size_y))
+        r_g.generateGraph(Graph.randint(0, self.size_x * self.size_y), self.settingsWindow.getMazeCheckBox())
         self.setWalls(r_g.getMapVertexList())
     def generateWallsButtons(self, x_len, y_len, filled = False):               # generates self.wallsButtons with given size
         self.wallsButtons = []
