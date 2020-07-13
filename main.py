@@ -362,8 +362,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         # print(xmltodict.unparse(doc, pretty=True))
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Select a place to save your xml file","new_field","Fields (*.xml)", options=options)
-
+        if self.locale_language == 'en':
+            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Select a place to save your xml file","new_field","Fields (*.xml)", options=options)
+        else:
+            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Выберите место, чтобы сохранить ваше поле","new_field","Fields (*.xml)", options=options)
         if fileName:
             print(fileName)
             file_map = open(fileName, 'w')
@@ -392,7 +394,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         # print(xmltodict.unparse(doc, pretty=True))
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Select a place to save your xml file","new_field","Fields (*.xml)", options=options)
+        if self.locale_language == 'en':
+            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Select a place to save your xml file","new_field","Fields (*.xml)", options=options)
+        else:
+            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Выберите место, чтобы сохранить ваше поле","new_field","Fields (*.xml)", options=options)
         if fileName:
             print(fileName)
             file_map = open(fileName, 'w')
@@ -528,7 +533,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         adj_map = self.generateAdjMap()
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Select a place to save txt file","my_map","Text Files (*.txt)", options=options)
+        if self.locale_language == 'en':
+            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Select a place to save txt file","my_map","Text Files (*.txt)", options=options)
+        else:
+            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Выберите место, чтобы сохранить вашу карту","my_map","Text Files (*.txt)", options=options)
         if fileName:
             print(fileName)
             file_map = open(fileName, 'w')

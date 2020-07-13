@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(600, 600)
+        # MainWindow.resize(600, 600)
         MainWindow.setMinimumSize(QtCore.QSize(600, 600))
         MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
         MainWindow.setMouseTracking(False)
@@ -79,7 +79,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "maze-map-gui-generator"))
         self.menutools.setTitle(_translate("MainWindow", "Tools"))
-        self.menulan.setTitle(_translate("MainWindow", "lan/ язык"))
+        self.menulan.setTitle(_translate("MainWindow", "Language selection/ Выбор языка"))
         self.actioncreate_map.setText(_translate("MainWindow", "create map"))
         self.actionexport_xml_maze.setText(_translate("MainWindow", "export xml maze"))
         self.actionexport_xml_line_map.setText(_translate("MainWindow", "export xml line map"))
