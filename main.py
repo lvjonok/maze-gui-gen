@@ -21,6 +21,7 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         self.setupUi(self)
         self.b_nextImage.clicked.connect(self.nextImage)
         self.b_previousImage.clicked.connect(self.previousImage)
+        self.locale_language = 'ru'
         self.displayImage()
     def resizeEvent(self, event):
         o_size = [event.oldSize().width(), event.oldSize().height()]
@@ -49,19 +50,20 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
     def getImagePath(self):
         try:
             bp = sys._MEIPASS
-            return os.path.join(bp, "out_" + str(self.current_image) + ".png") # 
+            return os.path.join(bp, "out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
         except:
             bp = os.path.abspath(".")
-            return os.path.join(bp, "source/app_screenshots/out_" + str(self.current_image) + ".png") # 
+            return os.path.join(bp, "app_screenshots/out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
     
 
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.lineColorLineEdit.textEdited.connect(self.controlColor) 
+        self.setRussian()
+        self.colorLabel.mousePressEvent = (self.controlColor) 
         self.telegramChannel.mousePressEvent = (self.copyLink)
-        self.lineColorLineEdit.setInputMask("HHHHHH")
+        # self.lineColorLineEdit.setInputMask("HHHHHH")
         self.colorLine = "#000000"
         self.lineSlider.valueChanged.connect(self.updateValueLine)
         self.mazeSlider.valueChanged.connect(self.updateValueMaze)
@@ -73,19 +75,45 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.lineCellSizeValue.setText("<html><head/><body><p align=\"center\">" + str(self.getSliderLine()) + "</p></body></html>")
     def getSliderMaze(self) -> int:
         return self.mazeSlider.value()
+    def rgb_to_hex(self, rgb):
+        return '%02x%02x%02x' % rgb
     def getSliderLine(self) -> int:
         return self.lineSlider.value()
     def getMazeCheckBox(self):      
         return self.MazeLoopsCheckBox.isChecked()
-    def controlColor(self):
-        text_in = self.lineColorLineEdit.text()
-        self.colorLabel.setStyleSheet('QLabel {border: 3px solid blue;background-color: #'+str(text_in)+';}')
-        self.colorLine = "#"+str(text_in)
+    def getTimelimit(self, event):
+        v = self.excersizeTime.time().toString()
+        v = [int(vi) for vi in v.split(':')][1:3]
+        return v
+    def controlColor(self, event):
+        color = QtWidgets.QColorDialog.getColor()
+        if color:
+            rgb = (color.getRgb()[0:3])
+            self.colorLabel.setStyleSheet('QLabel {background-color: #'+str(self.rgb_to_hex(rgb))+';}')
+    def setRussian(self):
+        self.MazeLoopsLabel.setText('Лабиринт с циклами')
+        self.groupBox.setTitle('Настройки для генерирования полей')
+        self.lineCellSizeLabel.setText('Размер ячейки с линией')
+        self.mazeCellSizeLabel.setText('Размер ячейки для лабиринта')
+        self.timelimitLabel.setText('Временное ограничение для задания')
+        self.lineColorLabel.setText('Цвет линии')
+        self.InfoLabel.setText('По вопросам и проблемам свяжитесь со мной в telegram: @robot_lev')
+        self.telegramChannel.setText('Нажмите, чтобы скопировать ссылку на telegram канал: https://t.me/maze_gui_gen')
+    def setEnglish(self):
+        self.MazeLoopsLabel.setText('Maze with loops')
+        self.groupBox.setTitle('Settings for fields generation')
+        self.lineCellSizeLabel.setText('Line cell size')
+        self.mazeCellSizeLabel.setText('Maze cell size')
+        self.timelimitLabel.setText('Timelimit for excersize')
+        self.lineColorLabel.setText('Line color')
+        self.InfoLabel.setText('For any issues contact me on telegram: @robot_lev')
+        self.telegramChannel.setText('Press to copy link to telegram channel: https://t.me/maze_gui_gen')
 
 class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setMouseTracking(True)
+        self.locale_language = 'ru'
         self.mouse_scroll_counter = 0
         self.ui_x = 0
         self.ui_y = 0
@@ -115,8 +143,33 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.finish_id_container = []
         self.generateWallsButtons(5, 5)
         self.displayWalls(0, 0, 0)
+    def setRussian(self):
+        self.settingsWindow.setRussian()
+        self.menutools.setTitle('Инструменты')
+        self.actioncreate_map.setText('Создать карту')
+        self.actionrandom_this_map.setText('Случайно расставить стенки')
+        self.actionfill_this_map.setText('Заполнить карту стенками')
+        self.actionexport_xml_maze.setText('Экспортировать поле с лабиринтом')
+        self.actionexport_xml_line_map.setText('Экспортировать поле с линиями')
+        self.actionexport_adjacency_map.setText('Экспортировать матрицы смежности')
+        self.actionsettings.setText('Настройки')
+        self.actioninformation.setText('Справка')
+    def setEnglish(self):
+        self.settingsWindow.setEnglish()
+        self.menutools.setTitle('Tools')
+        self.actioncreate_map.setText('Create a map')
+        self.actionrandom_this_map.setText('Random this map')
+        self.actionfill_this_map.setText('Fill this map')
+        self.actionexport_xml_maze.setText('Export maze map')
+        self.actionexport_xml_line_map.setText('Export line map')
+        self.actionexport_adjacency_map.setText('Export adjacency matrix')
+        self.actionsettings.setText('Settings')
+        self.actioninformation.setText('Help')
     def closeEvent(self, event):
-        return
+        self.settingsWindow.hide()
+        self.informationWindow.hide()
+        self.hide()
+        exit()
     def resizeEvent(self, event):
         o_size = [event.oldSize().width(), event.oldSize().height()]
         c_size = [event.size().width(), event.size().height()]
@@ -136,17 +189,25 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.actionexport_xml_maze.triggered.connect(self.generateXML_maze)
         self.actionexport_xml_line_map.triggered.connect(self.generateXML_line)
         self.actionexport_adjacency_map.triggered.connect(self.saveAdjMap)
+        self.actionru.triggered.connect(self.setRussian)
+        self.actionen.triggered.connect(self.setEnglish)
         self.actionsettings.triggered.connect(self.settingsWindow.show)
         self.actioninformation.triggered.connect(self.informationWindow.show)
         self.actionfill_this_map.triggered.connect(lambda ch, flag=1 : self.generateMap_init(flag))
         self.actionrandom_this_map.triggered.connect(self.randomGraph)
         self.shortcut_in_pl = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl++'), self.pool)
         self.shortcut_in_eq = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+='), self.pool)
+        self.shortcut_help = QtWidgets.QShortcut(QtGui.QKeySequence('F1'), self.pool)
+        self.shortcut_help.activated.connect(self.informationWindow.show)
         self.shortcut_in_pl.activated.connect(self.zoomIn)
         self.shortcut_in_eq.activated.connect(self.zoomIn)
         self.shortcut_out = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+-'), self.pool)
         self.shortcut_out.activated.connect(self.zoomOut)
         self.setMouseTracking(True)
+        if self.locale_language == 'ru':
+            self.setRussian()
+        else:
+            self.setEnglish()
     def zoomIn(self, scale_delta = 0.1):                                                        # zooms in map
         self.ui_scale += scale_delta
         self.displayWalls()
@@ -362,6 +423,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             pass
         try:
             doc['root']['constraints']['event'][1]['conditions']['inside'] = []
+        except:
+            pass
+        try:
+            min_sec = self.settingsWindow.getTimelimit(None)
+            doc['root']['constraints']['timelimit']['@value'] = (min_sec[0] * 60 + min_sec[1]) * 1000
         except:
             pass
         last_start_coor = [0, 0]
