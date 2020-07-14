@@ -55,7 +55,7 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         except:
             bp = os.path.abspath(".")
             return os.path.join(bp, "source/app_screenshots/out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
-    
+
 
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
     def __init__(self):
@@ -90,7 +90,9 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         color = QtWidgets.QColorDialog.getColor()
         if color:
             rgb = (color.getRgb()[0:3])
-            self.colorLabel.setStyleSheet('QLabel {background-color: #'+str(self.rgb_to_hex(rgb))+';}')
+            hex_color = self.rgb_to_hex(rgb)
+            self.colorLabel.setStyleSheet('QLabel {background-color: #'+str(hex_color)+';}')
+            self.colorLine = hex_color
     def setRussian(self):
         self.MazeLoopsLabel.setText('Лабиринт с циклами')
         self.groupBox.setTitle('Настройки для генерирования полей')
@@ -125,7 +127,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.ui_last_y = 0
         self.ui_last_time = time()
         self.walls_styles = {   "empty":'QPushButton {background-color: #FFFFFF;}',
-                                'filled':'QPushButton {background-color: #FFFF00;}'}
+                                "filled":"QPushButton {background-color: #FFFF00;}"}
         self.cells_styles = {
                                 "empty":'QPushButton {background-color: #FFFFFF;}',
                                 "start":'QPushButton {background-color: #2d7cd6;}',
@@ -179,10 +181,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         o_size = [event.oldSize().width(), event.oldSize().height()]
         c_size = [event.size().width(), event.size().height()]
 
-        if c_size[0] - o_size[0] < 100 or c_size[1] - o_size[1] < 100:
+        if abs(c_size[0] - o_size[0]) < 50 or abs(c_size[1] - o_size[1]) < 50:
             return
         
-        min_size = 60
+        min_size = 90
         window_sizes = [self.width()//(self.size_x + 1), self.height()//(self.size_y + 1)]
         self.ui_scale = (max(min(window_sizes), min_size))/min_size
         self.ui_x = 0
@@ -570,7 +572,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         return new_map
     def generateMap_init(self, flag = 0):                                       # trigger to create a new map
         if flag == 0:
-            text, ok = QtWidgets.QInputDialog.getText(self, 'gen map', 'Write map sizes separated by whitespace\nCurrent map will be erased!!!')
+            if self.locale_language == 'en':
+                text, ok = QtWidgets.QInputDialog.getText(self, 'Create a map', 'Write map sizes separated by whitespace\nCurrent map will be erased!!!')
+            else:
+                text, ok = QtWidgets.QInputDialog.getText(self, 'Создание карты', 'Введите размеры карты через пробел\nТекущая карта будет обнулена!!!')
             if ok:
                 try:
                     y_size, x_size = [int(dim) for dim in text.split()]
@@ -584,8 +589,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 return False
             pass
         elif flag == 1:
-            self.reloadWindow()
-            self.generateWallsButtons(self.size_x, self.size_y, flag)
+            # self.reloadWindow()
+            # self.generateWallsButtons(self.size_x, self.size_y, flag)
+            self.setWalls([[0, 0, 0, 0] for i in range(self.size_x * self.size_y)])
         self.displayWalls()
     def setWalls(self, mapVertexList):                                          # sets map to real walls
         current_vertex = 0
@@ -641,4 +647,5 @@ if __name__ == '__main__':  # Если мы запускаем файл напр
                     ("app_screenshots/out_5.png", "app_screenshots/out_5.png")
 
 ("out_1.png","source/app_screenshots/out_1.png", "source/app_screenshots/out_1.png")
+
 """
