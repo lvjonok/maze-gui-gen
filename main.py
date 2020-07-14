@@ -36,24 +36,25 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         self.b_previousImage.move(0, 240/600 * c_size[1])
     def nextImage(self):
         self.current_image += 1
-        if self.current_image > 5:
+        if self.current_image > 3:
             self.current_image = 1
         self.displayImage()
     def previousImage(self):
         self.current_image -= 1
         if self.current_image < 1:
-            self.current_image = 5
+            self.current_image = 3
         self.displayImage()
     def displayImage(self):
-        print(self.getImagePath())
-        self.tutorialImage.setPixmap(QtGui.QPixmap(self.getImagePath()))
+        path = self.getImagePath()
+        print(path)
+        self.tutorialImage.setPixmap(QtGui.QPixmap(path))
     def getImagePath(self):
         try:
             bp = sys._MEIPASS
             return os.path.join(bp, "out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
         except:
             bp = os.path.abspath(".")
-            return os.path.join(bp, "app_screenshots/out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
+            return os.path.join(bp, "source/app_screenshots/out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
     
 
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
@@ -145,6 +146,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.displayWalls(0, 0, 0)
     def setRussian(self):
         self.settingsWindow.setRussian()
+        self.informationWindow.locale_language = 'ru'
+        self.informationWindow.displayImage()
         self.menutools.setTitle('Инструменты')
         self.actioncreate_map.setText('Создать карту')
         self.actionrandom_this_map.setText('Случайно расставить стенки')
@@ -156,6 +159,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.actioninformation.setText('Справка')
     def setEnglish(self):
         self.settingsWindow.setEnglish()
+        self.informationWindow.locale_language = 'en'
+        self.informationWindow.displayImage()
         self.menutools.setTitle('Tools')
         self.actioncreate_map.setText('Create a map')
         self.actionrandom_this_map.setText('Random this map')
