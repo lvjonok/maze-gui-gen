@@ -1,18 +1,23 @@
-import sys  # sys нужен для передачи argv в QApplication
+import collections
+import json
 import os
-from PyQt5 import QtWidgets, uic, QtCore, QtGui
+import pprint
+import sys  # sys нужен для передачи argv в QApplication
+from pathlib import Path
+from time import sleep, time
+
+import pyperclip
+import xmltodict
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-import source.screen as screen # Это наш конвертированный файл дизайна
-import source.settingsUI as settingsUI
+
 import source.empty_field as ef
-import source.informationUI as informationUI
-from time import sleep, time
-import xmltodict, pprint, json
 import source.Graph as Graph
-from pathlib import Path
-import collections
-import pyperclip
+import source.informationUI as informationUI
+import source.screen as screen  # Это наш конвертированный файл дизайна
+import source.settingsUI as settingsUI
+
 
 class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
     def __init__(self):
@@ -23,6 +28,16 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         self.b_previousImage.clicked.connect(self.previousImage)
         self.locale_language = 'ru'
         self.displayImage()
+        self.shortcut_n_img = QtWidgets.QShortcut(QtGui.QKeySequence('Right'), self)
+        self.shortcut_p_img = QtWidgets.QShortcut(QtGui.QKeySequence('Left'), self)
+        self.shortcut_n_img_k = QtWidgets.QShortcut(QtGui.QKeySequence('n'), self)
+        self.shortcut_p_img_k = QtWidgets.QShortcut(QtGui.QKeySequence('p'), self)
+        self.shortcut_n_img.activated.connect(self.nextImage)
+        # self.reloadWindow()
+        # self.generateWallsButtons(self.size_x, self.size_y, flag)
+        self.shortcut_p_img.activated.connect(self.previousImage)
+        self.shortcut_n_img_k.activated.connect(self.nextImage)
+        self.shortcut_p_img_k.activated.connect(self.previousImage)
     def resizeEvent(self, event):
         o_size = [event.oldSize().width(), event.oldSize().height()]
         c_size = [event.size().width(), event.size().height()]
@@ -46,7 +61,7 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         self.displayImage()
     def displayImage(self):
         path = self.getImagePath()
-        print(path)
+        # print(path)
         self.tutorialImage.setPixmap(QtGui.QPixmap(path))
     def getImagePath(self):
         try:
@@ -64,8 +79,8 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.setRussian()
         self.colorLabel.mousePressEvent = (self.controlColor) 
         self.telegramChannel.mousePressEvent = (self.copyLink)
-        # self.lineColorLineEdit.setInputMask("HHHHHH")
-        self.colorLine = "#000000"
+        self.colorLine = "000000"
+        self.colorLabel.setStyleSheet('QLabel {background-color: #'+str(self.colorLine)+';}')
         self.lineSlider.valueChanged.connect(self.updateValueLine)
         self.mazeSlider.valueChanged.connect(self.updateValueMaze)
     def copyLink(self, event):
@@ -297,10 +312,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.wallsButtons = []
         
         min_size = 60
-        print('sizes', self.width(), self.height())
         window_sizes = [self.width()//(x_len + 1), self.height()//(y_len + 1)]
         self.ui_scale = (max(min(window_sizes), min_size))/min_size
-        print(window_sizes)
 
         for y_index in range(y_len + 1):
             self.wallsButtons.append([0] * (x_len + 1))
@@ -370,11 +383,13 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         if self.locale_language == 'en':
-            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Select a place to save your xml file","new_field","Fields (*.xml)", options=options)
+            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Select a place to save your xml file","new_field.xml","Fields (*.xml)", options=options)
         else:
-            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Выберите место, чтобы сохранить ваше поле","new_field","Fields (*.xml)", options=options)
+            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Выберите место, чтобы сохранить ваше поле","new_field.xml","Fields (*.xml)", options=options)
         if fileName:
             print(fileName)
+            if fileName[::-1][0:4] != '.xml'[::-1]:
+                fileName += '.xml'
             file_map = open(fileName, 'w')
             file_map.write(xmltodict.unparse(doc, pretty=True))
             file_map.close()
@@ -402,11 +417,13 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         if self.locale_language == 'en':
-            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Select a place to save your xml file","new_field","Fields (*.xml)", options=options)
+            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Select a place to save your xml file","new_field.xml","Fields (*.xml)", options=options)
         else:
-            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Выберите место, чтобы сохранить ваше поле","new_field","Fields (*.xml)", options=options)
+            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Выберите место, чтобы сохранить ваше поле","new_field.xml","Fields (*.xml)", options=options)
         if fileName:
-            print(fileName)
+            #print(fileName)
+            if fileName[::-1][0:4] != '.xml'[::-1]:
+                fileName += '.xml'
             file_map = open(fileName, 'w')
             file_map.write(xmltodict.unparse(doc, pretty=True))
             file_map.close()
@@ -545,7 +562,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         else:
             fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Выберите место, чтобы сохранить вашу карту","my_map","Text Files (*.txt)", options=options)
         if fileName:
-            print(fileName)
+            # print(fileName)
+            if fileName[::-1][0:4] != '.txt'[::-1]:
+                fileName += '.txt'
             file_map = open(fileName, 'w')
             file_map.write('Map: vertex -> [upper wall, right wall, bottom wall, left wall]\n1 if wall exists and 0 if there\'s no wall.\nOne line - one vertex starting from 0\n')
             for line in adj_map:
@@ -581,6 +600,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     y_size, x_size = [int(dim) for dim in text.split()]
                 except:
                     return
+                x_size = abs(x_size)
+                y_size = abs(y_size)
+                if x_size * y_size > 2500:
+                    return False
                 self.reloadWindow()
                 self.size_x = x_size
                 self.size_y = y_size
@@ -643,7 +666,9 @@ if __name__ == '__main__':  # Если мы запускаем файл напр
 
                     ("app_screenshots/out_2.png", "app_screenshots/out_2.png"), 
                     ("app_screenshots/out_3.png", "app_screenshots/out_3.png"), 
-                    ("app_screenshots/out_4.png", "app_screenshots/out_4.png"), 
+                    ("app_screenshots/out_4.png", "app_screensh
+            # self.reloadWindow()
+            # self.generateWallsButtons(self.size_x, self.size_y, flag)ots/out_4.png"), 
                     ("app_screenshots/out_5.png", "app_screenshots/out_5.png")
 
 ("out_1.png","source/app_screenshots/out_1.png", "source/app_screenshots/out_1.png")
