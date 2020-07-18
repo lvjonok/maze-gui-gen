@@ -39,7 +39,7 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         self.shortcut_n_img_k.activated.connect(self.nextImage)
         self.shortcut_p_img_k.activated.connect(self.previousImage)
     def resizeEvent(self, event):
-        o_size = [event.oldSize().width(), event.oldSize().height()]
+        # o_size = [event.oldSize().width(), event.oldSize().height()]
         c_size = [event.size().width(), event.size().height()]
 
         if c_size[0]/1.75 <= c_size[1]:
@@ -47,6 +47,7 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         else:
             new_left_x = (c_size[0] - c_size[1] * 1.75)//2
             self.tutorialImage.setGeometry(new_left_x, 0, c_size[1] * 1.75, c_size[1])
+
         self.b_nextImage.move(c_size[0] - 20, 240/600 * c_size[1])
         self.b_previousImage.move(0, 240/600 * c_size[1])
     def nextImage(self):
@@ -188,10 +189,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.actionsettings.setText('Settings')
         self.actioninformation.setText('Help')
     def closeEvent(self, event):
-        self.settingsWindow.hide()
-        self.informationWindow.hide()
-        self.hide()
-        exit()
+        self.settingsWindow.close()
+        self.informationWindow.close()
+        self.close()
     def resizeEvent(self, event):
         o_size = [event.oldSize().width(), event.oldSize().height()]
         c_size = [event.size().width(), event.size().height()]
@@ -306,8 +306,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.mouse_scroll_counter = 0        
     def randomGraph(self):                                                      # trigger to random map
         r_g = Graph.Graph(self.size_x, self.size_y)
-        r_g.generateGraph(Graph.randint(0, self.size_x * self.size_y), self.settingsWindow.getMazeCheckBox())
-        self.setWalls(r_g.getMapVertexList())
+        r_g.generateGraph(Graph.randint(0, self.size_x * self.size_y - 1), self.settingsWindow.getMazeCheckBox())
+        _map = r_g.getMapVertexList()
+        self.setWalls(_map)
     def generateWallsButtons(self, x_len, y_len, filled = False):               # generates self.wallsButtons with given size
         self.wallsButtons = []
         
@@ -602,7 +603,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     return
                 x_size = abs(x_size)
                 y_size = abs(y_size)
-                if x_size * y_size > 2500:
+                if x_size * y_size > 2000:
                     return False
                 self.reloadWindow()
                 self.size_x = x_size
@@ -621,27 +622,36 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         for y_index in range(self.size_y):
             for x_index in range(self.size_x):
                 # direction 0
-                if mapVertexList[current_vertex][0] != 1:
+                if mapVertexList[current_vertex][0] != 1:       # if there is no way
                     self.wallsButtons[y_index][x_index]['up']['value'] = 1
                     self.wallsButtons[y_index][x_index]['up']["style"] = self.walls_styles['filled']
-                else:
+                else:                                           # way exists
                     self.wallsButtons[y_index][x_index]['up']['value'] = 0
                     self.wallsButtons[y_index][x_index]['up']["style"] = self.walls_styles['empty']
                 self.wallsButtons[y_index][x_index]['up']["core"].setStyleSheet(self.wallsButtons[y_index][x_index]['up']["style"])
+
+                # direction 1
+                # print(current_vertex)
                 if mapVertexList[current_vertex][1] != 1:
+                    # print('filled')
                     self.wallsButtons[y_index][x_index + 1]['left']['value'] = 1
                     self.wallsButtons[y_index][x_index + 1]['left']["style"] = self.walls_styles['filled']
                 else:
+                    # print('empty')
                     self.wallsButtons[y_index][x_index + 1]['left']['value'] = 0
                     self.wallsButtons[y_index][x_index + 1]['left']["style"] = self.walls_styles['empty']
                 self.wallsButtons[y_index][x_index + 1]['left']["core"].setStyleSheet(self.wallsButtons[y_index][x_index + 1]['left']["style"])
+
+                # direction 2
                 if mapVertexList[current_vertex][2] != 1:
-                    self.wallsButtons[y_index + 1][x_index]['up']['value'] = 1
+                    self.wallsButtons[y_index + 1][x_index]['up']['value'] = 1  
                     self.wallsButtons[y_index + 1][x_index]['up']["style"] = self.walls_styles['filled']
                 else:
                     self.wallsButtons[y_index + 1][x_index]['up']['value'] = 0
                     self.wallsButtons[y_index + 1][x_index]['up']["style"] = self.walls_styles['empty']
                 self.wallsButtons[y_index + 1][x_index]['up']["core"].setStyleSheet(self.wallsButtons[y_index + 1][x_index]['up']["style"])
+
+                # direction 3
                 if mapVertexList[current_vertex][3] != 1:
                     self.wallsButtons[y_index][x_index]['left']['value'] = 1
                     self.wallsButtons[y_index][x_index]['left']["style"] = self.walls_styles['filled']
