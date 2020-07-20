@@ -131,6 +131,12 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
 class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     def __init__(self):
         super().__init__()
+        try:
+            bp = sys._MEIPASS
+            icos = os.path.join(bp, "maze.ico")
+        except:
+            icos = "maze.ico"
+        self.setWindowIcon(QtGui.QIcon(icos))
         self.setMouseTracking(True)
         self.locale_language = 'ru'
         self.mouse_scroll_counter = 0
@@ -429,7 +435,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             file_map.write(xmltodict.unparse(doc, pretty=True))
             file_map.close()
         pass
-    def prepareField(self, def_size):                                                     # returns field with updated start and finish
+    def prepareField(self, def_size):                                           # returns field with updated start and finish
         self.updateFinishStartID()
         field_template = ""
         if len(self.start_id_container) > 0 and len(self.finish_id_container) > 0:
