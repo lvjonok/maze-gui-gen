@@ -569,11 +569,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             file_map = open(fileName, 'w')
             file_map.write('Map: vertex -> [upper wall, right wall, bottom wall, left wall]\n1 if wall exists and 0 if there\'s no wall.\nOne line - one vertex starting from 0\n')
             for line in adj_map:
-                file_map.write(str(line) + '\n')
+                file_map.write(str(line) + ',\n')
 
             file_map.write('\n\n\nMap: Simple adjacency map\n')
             for line in self.convertMap(adj_map):
-                file_map.write(str(line) + "\n")
+                file_map.write(str(line) + ",\n")
             file_map.close()
         pass
     def convertMap(self, adj_map):                                              # convert map from vertex-> adjanced vertices to vertex -> all vertices
@@ -593,9 +593,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     def generateMap_init(self, flag = 0):                                       # trigger to create a new map
         if flag == 0:
             if self.locale_language == 'en':
-                text, ok = QtWidgets.QInputDialog.getText(self, 'Create a map', 'Write map sizes separated by whitespace\nCurrent map will be erased!!!')
+                text, ok = QtWidgets.QInputDialog.getText(self, 'Create a map', 'Write map sizes separated by whitespace\nCurrent map will be erased!!!\nMaximum maze size is 2000 cells')
             else:
-                text, ok = QtWidgets.QInputDialog.getText(self, 'Создание карты', 'Введите размеры карты через пробел\nТекущая карта будет обнулена!!!')
+                text, ok = QtWidgets.QInputDialog.getText(self, 'Создание карты', 'Введите размеры карты через пробел\nТекущая карта будет обнулена!!!\nМаксимальный размер карты ограничен 2000 клетками')
             if ok:
                 try:
                     y_size, x_size = [int(dim) for dim in text.split()]
@@ -603,7 +603,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     return
                 x_size = abs(x_size)
                 y_size = abs(y_size)
-                if x_size * y_size > 2000:
+                if (x_size * y_size) > 2000:
+                    print('falseee  ')
                     return False
                 self.reloadWindow()
                 self.size_x = x_size

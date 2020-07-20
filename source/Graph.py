@@ -61,29 +61,6 @@ class Graph:
                 # break
             if queue[len(queue) - 1] == current_vertex:
                 queue.pop()
-
-    def loopGraph(self, vertex, flag = True):
-        if vertex in self.visited:
-            return True
-        # print('entered', vertex)
-        self.visited.append(vertex)
-        available = []
-        for d in range(4):
-            n_v = self.getNextVertex(vertex, d)
-            # if n_v and not n_v in self.visited:
-            available.append(n_v)
-        if len(available) != 0:
-            # ways = randint(1, len(available))
-            shuffle(available)
-            for way in range(4):
-                selected_vertex = available[way]
-                if not selected_vertex: continue
-                if (not flag and not selected_vertex in self.visited) or flag:
-                    self.map[vertex][selected_vertex] = 1
-                    self.map[selected_vertex][vertex] = 1
-                    self.generateGraph(selected_vertex, flag)
-                else:
-                    continue    
     def getMapVertexList(self):
         out = [[-1, -1, -1, -1] for vertex in range(self.size_x * self.size_y)]
         for vertex in range(self.size_x * self.size_y):
