@@ -18,7 +18,7 @@ class Graph:
             next_vertex += self.size_x if vertex + self.size_x < self.size_x * self.size_y else 0
         elif direction == 3:    
             next_vertex -= 1 if vertex % self.size_x != 0 else 0
-        out = next_vertex if next_vertex != vertex and 0 <= next_vertex < self.size_y * self.size_y else -1
+        out = next_vertex if next_vertex != vertex and 0 <= next_vertex < self.size_y * self.size_x else -1
         return out
 
     def generateGraph(self, start_vertex, loops = True):
@@ -69,3 +69,6 @@ class Graph:
                 if nv != -1:
                     out[vertex][d] = self.map[vertex][nv]
         return out
+g = Graph(7, 3)
+v = g.getNextVertex(14, 1)
+print(v)
