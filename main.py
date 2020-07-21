@@ -314,8 +314,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         r_g = Graph.Graph(self.size_x, self.size_y)
         r_g.generateGraph(Graph.randint(0, self.size_x * self.size_y - 1), self.settingsWindow.getMazeCheckBox())
         _map = r_g.getMapVertexList()
-        for v in _map:
-            print(v)
+        # for v in _map:
+        #     print(v)
         self.setWalls(_map)
     def generateWallsButtons(self, x_len, y_len, filled = False):               # generates self.wallsButtons with given size
         self.wallsButtons = []
