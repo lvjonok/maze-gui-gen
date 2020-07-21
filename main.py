@@ -131,6 +131,12 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
 class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     def __init__(self):
         super().__init__()
+        try:
+            bp = sys._MEIPASS
+            icos = os.path.join(bp, "source/maze.ico")
+        except:
+            icos = "source/maze.ico"
+        self.setWindowIcon(QtGui.QIcon(icos))
         self.setMouseTracking(True)
         self.locale_language = 'ru'
         self.mouse_scroll_counter = 0
@@ -308,6 +314,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         r_g = Graph.Graph(self.size_x, self.size_y)
         r_g.generateGraph(Graph.randint(0, self.size_x * self.size_y - 1), self.settingsWindow.getMazeCheckBox())
         _map = r_g.getMapVertexList()
+        # for v in _map:
+        #     print(v)
         self.setWalls(_map)
     def generateWallsButtons(self, x_len, y_len, filled = False):               # generates self.wallsButtons with given size
         self.wallsButtons = []
@@ -595,7 +603,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             if self.locale_language == 'en':
                 text, ok = QtWidgets.QInputDialog.getText(self, 'Create a map', 'Write map sizes separated by whitespace\nCurrent map will be erased!!!\nMaximum maze size is 2000 cells')
             else:
-                text, ok = QtWidgets.QInputDialog.getText(self, 'Создание карты', 'Введите размеры карты через пробел\nТекущая карта будет обнулена!!!\nМаксимальный размер карты ограничен 2000 клетками')
+                text, ok = QtWidgets.QInputDialog.getText(self, 'Создание карты', 'Введите размеры карты через пробел: "y x"\nТекущая карта будет обнулена!!!\nМаксимальный размер карты ограничен 2000 клетками')
             if ok:
                 try:
                     y_size, x_size = [int(dim) for dim in text.split()]
