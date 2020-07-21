@@ -9,16 +9,25 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import sys, os
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+        self.mWWW = MainWindow
         MainWindow.setObjectName("MainWindow")
         # MainWindow.resize(600, 600)
         MainWindow.setMinimumSize(QtCore.QSize(600, 600))
         MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
         MainWindow.setMouseTracking(False)
-        icon = QtGui.QIcon()
+        try:
+            bp = sys._MEIPASS
+            icos = os.path.join(bp, "maze.ico")
+        except:
+            bp = os.path.abspath(".")
+            icos = os.path.join(bp, "source/maze.ico")
+        print(icos)
+        icon = QtGui.QIcon(icos) # "source/maze.png")
         icon.addPixmap(QtGui.QPixmap("../../../../.designer/maze.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setAutoFillBackground(True)

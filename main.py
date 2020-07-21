@@ -131,12 +131,6 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
 class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        try:
-            bp = sys._MEIPASS
-            icos = os.path.join(bp, "maze.ico")
-        except:
-            icos = "maze.ico"
-        self.setWindowIcon(QtGui.QIcon(icos))
         self.setMouseTracking(True)
         self.locale_language = 'ru'
         self.mouse_scroll_counter = 0
