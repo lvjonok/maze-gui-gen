@@ -9,7 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import sys, os
+import sys
+import os
 
 
 class Ui_MainWindow(object):
@@ -23,7 +24,7 @@ class Ui_MainWindow(object):
         try:
             bp = sys._MEIPASS
             icos = os.path.join(bp, "maze.ico")
-        except:
+        except AttributeError:
             bp = os.path.abspath(".")
             icos = os.path.join(bp, "source/maze.ico")
         print(icos)

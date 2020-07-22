@@ -48,7 +48,8 @@ class Graph:
             vertices = []
             for direction in directions:
                 vertex = self.getNextVertex(current_vertex, direction)
-                if vertex != -1 and not vertex in visited : vertices.append(vertex)
+                if vertex != -1 and vertex not in visited : 
+                    vertices.append(vertex)
             shuffle(vertices)
             for next_vertex in vertices[:randint(1, 4)]:
                 try:
