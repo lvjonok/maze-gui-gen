@@ -9,8 +9,8 @@ from time import sleep, time
 import pyperclip
 import xmltodict
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+# from PyQt5.QtCore import *
+# from PyQt5.QtGui import *
 
 import source.empty_field as ef
 import source.Graph as Graph
@@ -68,7 +68,7 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         try:
             bp = sys._MEIPASS
             return os.path.join(bp, "out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
-        except:
+        except AttributeError:      # sys._MEIPASS uses when code was builded in app
             bp = os.path.abspath(".")
             return os.path.join(bp, "source/app_screenshots/out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
 
@@ -134,7 +134,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         try:
             bp = sys._MEIPASS
             icos = os.path.join(bp, "source/maze.ico")
-        except:
+        except AttributeError:      # sys._MEIPASS uses when code was builded in app
             icos = "source/maze.ico"
         self.setWindowIcon(QtGui.QIcon(icos))
         self.setMouseTracking(True)
@@ -360,8 +360,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.wallsButtons[y][x][side]["style"] = self.cells_styles["empty"]
             self.wallsButtons[y][x][side]["value"] = 0
         bs = self.wallsButtons[y][x][side]["style"]
-        self.wallsButtons[y][x][side]["core"].setStyleSheet(bs)
-        pass                                                            
+        self.wallsButtons[y][x][side]["core"].setStyleSheet(bs)                                        
     def pressWall(self,coors):                                                  # accepts mouse click on wall
         y, x, side = coors
         if self.wallsButtons[y][x][side]["style"] == self.walls_styles['empty']:
@@ -402,7 +401,6 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             file_map = open(fileName, 'w')
             file_map.write(xmltodict.unparse(doc, pretty=True))
             file_map.close()
-        pass
     def generateXML_maze(self):                                                 # generates XML file with maze
         def_size = self.settingsWindow.getSliderMaze() * 50
         adj_map = self.generateAdjMap()
@@ -436,7 +434,6 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             file_map = open(fileName, 'w')
             file_map.write(xmltodict.unparse(doc, pretty=True))
             file_map.close()
-        pass
     def prepareField(self, def_size):                                           # returns field with updated start and finish
         self.updateFinishStartID()
         field_template = ""
@@ -517,10 +514,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         out_dict['@end'] = str(x_start + x_len) + ":" + str(y_start + y_len)
         self.walls_id_xml+= 1
         return out_dict
-    def getXML_start(self, x_start, y_start, x_len, y_len, id=0):               # generates dict describing start rectangle
+    def getXML_start(self, x_start, y_start, x_len, y_len, zone_id=0):               # generates dict describing start rectangle
         out_dict = {}
         out_dict['@visible'] = "true"
-        out_dict['@id'] = "start_" + str(id)
+        out_dict['@id'] = "start_" + str(zone_id)
         out_dict['@x'] = str(x_start)
         out_dict['@y'] = str(y_start)
         out_dict['@width'] = str(x_len)
@@ -532,10 +529,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         out_dict['@text'] = 'Start'
         out_dict['@type'] = 'rectangle'
         return out_dict
-    def getXML_finish(self, x_start, y_start, x_len, y_len, id=0):
+    def getXML_finish(self, x_start, y_start, x_len, y_len, zone_id=0):
         out_dict = {}
         out_dict['@visible'] = "true"
-        out_dict['@id'] = "finish_" + str(id)
+        out_dict['@id'] = "finish_" + str(zone_id)
         out_dict['@x'] = str(x_start)
         out_dict['@y'] = str(y_start)
         out_dict['@width'] = str(x_len)
@@ -583,7 +580,6 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             for line in self.convertMap(adj_map):
                 file_map.write(str(line) + ",\n")
             file_map.close()
-        pass
     def convertMap(self, adj_map):                                              # convert map from vertex-> adjanced vertices to vertex -> all vertices
         am_v = self.size_x * self.size_y
         new_map = [[0] * am_v for i in range(am_v)]
@@ -607,12 +603,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             if ok:
                 try:
                     y_size, x_size = [int(dim) for dim in text.split()]
-                except:
+                except ValueError:
                     return
                 x_size = abs(x_size)
                 y_size = abs(y_size)
                 if (x_size * y_size) > 2000:
-                    print('falseee  ')
                     return False
                 self.reloadWindow()
                 self.size_x = x_size
@@ -620,10 +615,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 self.generateWallsButtons(x_size, y_size, flag)
             else:
                 return False
-            pass
         elif flag == 1:
-            # self.reloadWindow()
-            # self.generateWallsButtons(self.size_x, self.size_y, flag)
             self.setWalls([[0, 0, 0, 0] for i in range(self.size_x * self.size_y)])
         self.displayWalls()
     def setWalls(self, mapVertexList):                                          # sets map to real walls
@@ -679,17 +671,3 @@ def main():
 
 if __name__ == '__main__':  # Если мы запускаем файл напрямую, а не импортируем
     main()  # то запускаем функцию main()
-
-
-"""
-
-                    ("app_screenshots/out_2.png", "app_screenshots/out_2.png"), 
-                    ("app_screenshots/out_3.png", "app_screenshots/out_3.png"), 
-                    ("app_screenshots/out_4.png", "app_screensh
-            # self.reloadWindow()
-            # self.generateWallsButtons(self.size_x, self.size_y, flag)ots/out_4.png"), 
-                    ("app_screenshots/out_5.png", "app_screenshots/out_5.png")
-
-("out_1.png","source/app_screenshots/out_1.png", "source/app_screenshots/out_1.png")
-
-"""
