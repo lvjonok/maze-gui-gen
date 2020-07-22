@@ -45,5 +45,5 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False , 
-          icon='source/maze.ico')
+          console=False,
+          icon = "source/maze.ico" )
