@@ -77,4 +77,4 @@ class Graph:
 
 g = Graph(7, 3)
 v = g.getNextVertex(14, 1)
-print(v)
+#print(v)
