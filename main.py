@@ -248,9 +248,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         s_t = time()    
         self.reloadWindow()
         const_move = {'x': 30 + self.ui_x, 'y': 30 + self.ui_y}
-        ew = (self.wall_size + self.empty_part_size) * self.ui_scale
-        e = self.empty_part_size * self.ui_scale
-        w = self.wall_size * self.ui_scale
+        ew = round((self.wall_size + self.empty_part_size) * self.ui_scale)
+        e = round(self.empty_part_size * self.ui_scale)
+        w = round(self.wall_size * self.ui_scale)
         for y_index in range(self.size_y + 1):
             for x_index in range(self.size_x + 1):
                 y_coor = y_index
@@ -261,21 +261,21 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     left_button.setGeometry(screen.QtCore.QRect(const_move['x'] + x_coor * ew, const_move['y'] + e + y_coor * ew, e, w))
                     left_button.setObjectName("b_" + str(y_coor) + "_" + str(x_coor) + "_left")
                     left_button.setStyleSheet(self.wallsButtons[y_coor][x_coor]['left']['style'])
-                    left_button.clicked.connect(lambda ch, coors=[y_coor, x_coor, "left"] : self.pressWall(coors))
+                    left_button.clicked.connect(lambda ch, x=x_coor, y=y_coor: self.pressWall([y, x, 'left']))
                 if x_coor != self.size_x:
                     up_button = QtWidgets.QPushButton(self.pool)
                     self.wallsButtons[y_coor][x_coor]['up']['core'] = up_button
                     up_button.setGeometry(screen.QtCore.QRect(const_move['x'] + e + x_coor * ew,const_move['y'] + y_coor * ew, w, e))
                     up_button.setObjectName("b_" + str(y_coor) + "_" + str(x_coor) + "_up")
                     up_button.setStyleSheet(self.wallsButtons[y_coor][x_coor]['up']['style'])
-                    up_button.clicked.connect(lambda ch, coors=[y_coor, x_coor, "up"] : self.pressWall(coors))
+                    up_button.clicked.connect(lambda ch, x=x_coor, y=y_coor: self.pressWall([y, x, 'up']))
                 if x_coor != self.size_x and y_coor != self.size_y:
                     center_button = QtWidgets.QPushButton(  str(y_coor * self.size_x + x_coor),self.pool)
                     self.wallsButtons[y_coor][x_coor]['center']['core'] = center_button
                     center_button.setGeometry(screen.QtCore.QRect(const_move['x'] + e + x_coor * ew, const_move['y'] + e + y_coor * ew, w, w))
                     center_button.setObjectName("b_" + str(y_coor) + "_" + str(x_coor) + "_center")
                     center_button.setStyleSheet(self.wallsButtons[y_coor][x_coor]['center']['style'])
-                    center_button.clicked.connect(lambda ch, coors=[y_index, x_coor, "center"]: self.pressCell(coors))
+                    center_button.clicked.connect(lambda ch, x=x_coor, y=y_coor: self.pressCell([y, x, 'center']))
         print('time for loading is', time() - s_t)
     def moveWalls(self, delta_x, delta_y, zoom = 0):                            # moves all walls on given deltas
         s_t = time()
@@ -367,6 +367,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.wallsButtons[y][x][side]["core"].setStyleSheet(bs)                                        
     def pressWall(self,coors):                                                  # accepts mouse click on wall
         y, x, side = coors
+        print('pr wall', coors)
         if self.wallsButtons[y][x][side]["style"] == self.walls_styles['empty']:
             self.wallsButtons[y][x][side]["style"] = self.walls_styles['filled']
             self.wallsButtons[y][x][side]['value'] = 1
