@@ -10,6 +10,12 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="minimumSize">
    <size>
     <width>600</width>
@@ -23,14 +29,18 @@
    <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string>maze-map-gui-generator</string>
+   <string>maze-gui-generator</string>
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../../../../.designer/maze.ico</normaloff>../../../../.designer/maze.ico</iconset>
+    <normaloff>../maze.ico</normaloff>
+    <normalon>../maze.ico</normalon>../maze.ico</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>false</bool>
   </property>
   <widget class="QWidget" name="pool"/>
   <widget class="QStatusBar" name="statusbar">
@@ -50,78 +60,143 @@
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menutools">
+   <widget class="QMenu" name="menuTools">
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actioncreate_map"/>
-    <addaction name="actionrandom_this_map"/>
-    <addaction name="actionfill_this_map"/>
-    <addaction name="actionexport_xml_maze"/>
-    <addaction name="actionexport_xml_line_map"/>
-    <addaction name="actionexport_adjacency_map"/>
-    <addaction name="separator"/>
-    <addaction name="actionsettings"/>
-    <addaction name="actioninformation"/>
+    <addaction name="actionCreateMap"/>
+    <addaction name="actionRandomMap"/>
+    <addaction name="actionFillMap"/>
    </widget>
-   <widget class="QMenu" name="menulan">
+   <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Language selection/ Выбор языка</string>
+     <string>Help</string>
     </property>
-    <addaction name="actionen"/>
-    <addaction name="actionru"/>
+    <addaction name="actionTutorial"/>
+    <addaction name="actionAboutApplication"/>
    </widget>
-   <addaction name="menutools"/>
-   <addaction name="menulan"/>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <widget class="QMenu" name="menuLanguage_selection">
+     <property name="title">
+      <string>Language selection/ Выбор языка</string>
+     </property>
+     <addaction name="actionRu"/>
+     <addaction name="actionEn"/>
+    </widget>
+    <addaction name="actionSettings"/>
+    <addaction name="menuLanguage_selection"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionExportAdjacencyMap"/>
+    <addaction name="actionExportXmlMaze"/>
+    <addaction name="actionExportXmlLineMap"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionZoomIn"/>
+    <addaction name="actionZoomOut"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuView"/>
+   <addaction name="menuTools"/>
+   <addaction name="menuSettings"/>
+   <addaction name="menuHelp"/>
   </widget>
-  <action name="actioncreate_map">
+  <action name="actionCreateMap">
    <property name="text">
-    <string>create map</string>
+    <string>Create a map</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="actionexport_xml_maze">
+  <action name="actionRandomMap">
    <property name="text">
-    <string>export xml maze</string>
+    <string>Random this map</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
    </property>
   </action>
-  <action name="actionexport_xml_line_map">
+  <action name="actionFillMap">
    <property name="text">
-    <string>export xml line map</string>
+    <string>Fill this map</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
-  <action name="actionexport_adjacency_map">
+  <action name="actionTutorial">
    <property name="text">
-    <string>export adjacency map</string>
+    <string>Small help</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
   </action>
-  <action name="actionsettings">
+  <action name="actionSettings">
    <property name="text">
-    <string>settings</string>
+    <string>Preferences</string>
+   </property>
+   <property name="toolTip">
+    <string>Preferences</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
-  <action name="actionrandom_this_map">
+  <action name="actionRu">
    <property name="text">
-    <string>random this map</string>
+    <string>ru</string>
    </property>
   </action>
-  <action name="actionfill_this_map">
-   <property name="text">
-    <string>fill this map</string>
-   </property>
-  </action>
-  <action name="actioninformation">
-   <property name="text">
-    <string>tutorial</string>
-   </property>
-  </action>
-  <action name="actionen">
+  <action name="actionEn">
    <property name="text">
     <string>en</string>
    </property>
   </action>
-  <action name="actionru">
+  <action name="actionZoomIn">
    <property name="text">
-    <string>ru</string>
+    <string>Zoom In</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
+   </property>
+  </action>
+  <action name="actionZoomOut">
+   <property name="text">
+    <string>Zoom out</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="actionExportAdjacencyMap">
+   <property name="text">
+    <string>Export adjacency map (.txt)</string>
+   </property>
+  </action>
+  <action name="actionExportXmlMaze">
+   <property name="text">
+    <string>Export maze field (.xml)</string>
+   </property>
+  </action>
+  <action name="actionExportXmlLineMap">
+   <property name="text">
+    <string>Export maze field with lines (.xml)</string>
+   </property>
+  </action>
+  <action name="actionAboutApplication">
+   <property name="text">
+    <string>About maze-gui-generator</string>
    </property>
   </action>
  </widget>

@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 
-import collections
-import json
+# import collections
+# import json
 import os
-import pprint
+# import pprint
 import sys  # sys нужен для передачи argv в QApplication
-from pathlib import Path
-from time import sleep, time
+# from pathlib import Path
+from time import time
 
 import pyperclip
 import xmltodict
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
+from PyQt5 import QtGui, QtWidgets
 # from PyQt5.QtCore import *
 # from PyQt5.QtGui import *
 
@@ -35,8 +35,6 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         self.shortcut_n_img_k = QtWidgets.QShortcut(QtGui.QKeySequence('n'), self)
         self.shortcut_p_img_k = QtWidgets.QShortcut(QtGui.QKeySequence('p'), self)
         self.shortcut_n_img.activated.connect(self.nextImage)
-        # self.reloadWindow()
-        # self.generateWallsButtons(self.size_x, self.size_y, flag)
         self.shortcut_p_img.activated.connect(self.previousImage)
         self.shortcut_n_img_k.activated.connect(self.nextImage)
         self.shortcut_p_img_k.activated.connect(self.previousImage)
@@ -46,13 +44,13 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         c_size = [event.size().width(), event.size().height()]
 
         if c_size[0] / 1.75 <= c_size[1]:
-            self.tutorialImage.setGeometry(0, 0, c_size[0], c_size[0] / 1.75)
+            self.tutorialImage.setGeometry(0, 0, c_size[0], c_size[0] // 1.75)
         else:
             new_left_x = (c_size[0] - c_size[1] * 1.75) // 2
-            self.tutorialImage.setGeometry(new_left_x, 0, c_size[1] * 1.75, c_size[1])
+            self.tutorialImage.setGeometry(new_left_x, 0, round(c_size[1] * 1.75), c_size[1])
 
-        self.b_nextImage.move(c_size[0] - 20, 240 / 600 * c_size[1])
-        self.b_previousImage.move(0, 240 / 600 * c_size[1])
+        self.b_nextImage.move(c_size[0] - 20, round(240 / 600 * c_size[1]))
+        self.b_previousImage.move(0, round(240 / 600 * c_size[1]))
 
     def nextImage(self):
         self.current_image += 1
@@ -77,6 +75,7 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
             return os.path.join(bp, "out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
         except AttributeError:      # sys._MEIPASS uses when code was builded in app
             bp = os.path.abspath(".")
+            # print(bp)
             return os.path.join(bp, "source/app_screenshots/out_" + str(self.locale_language) +
                                 "_" + str(self.current_image) + ".png")
 
@@ -162,16 +161,16 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.setWindowIcon(QtGui.QIcon(icos))
         self.setMouseTracking(True)
         self.locale_language = 'ru'
-        self.mouse_scroll_counter = 0
-        self.ui_x = 0
+        self.mouse_scroll_counter = 0   # uses to count scaling
+        self.ui_x = 0                   # uses to move all map
         self.ui_y = 0
-        self.ui_scale = 1
-        self.wall_size = 40
-        self.empty_part_size = 10
+        self.ui_scale = 1               # initialize scale
+        self.wall_size = 40             # center button size
+        self.empty_part_size = 10       # distance between center buttons
         self.ui_last_x = 0
         self.ui_last_y = 0
         self.ui_last_time = time()
-        self.walls_styles = {"empty": 'QPushButton {background-color: #FFFFFF;}',
+        self.walls_styles = {"empty": "QPushButton {background-color: #FFFFFF;}",
                              "filled": "QPushButton {background-color: #FFFF00;}"}
         self.cells_styles = {
             "empty": 'QPushButton {background-color: #FFFFFF;}',
@@ -180,7 +179,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         }
         self.wallsButtons = []
         self.settingsWindow = SettingsWindow()
-        self.settingsWindow.hide()
+        self.settingsWindow.hide()                   
         self.informationWindow = InformationWindow()
         self.informationWindow.hide()
         self.reloadWindow()
@@ -190,35 +189,59 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.start_id_container = []
         self.finish_id_container = []
         self.generateWallsButtons(5, 5)
-        self.displayWalls(0, 0, 0)
+        self.displayWalls()
 
     def setRussian(self):
         self.settingsWindow.setRussian()
         self.informationWindow.locale_language = 'ru'
         self.informationWindow.displayImage()
-        self.menutools.setTitle('Инструменты')
-        self.actioncreate_map.setText('Создать карту')
-        self.actionrandom_this_map.setText('Случайно расставить стенки')
-        self.actionfill_this_map.setText('Заполнить карту стенками')
-        self.actionexport_xml_maze.setText('Экспортировать поле с лабиринтом')
-        self.actionexport_xml_line_map.setText('Экспортировать поле с линиями')
-        self.actionexport_adjacency_map.setText('Экспортировать матрицы смежности')
-        self.actionsettings.setText('Настройки')
-        self.actioninformation.setText('Справка')
+        
+        self.menuFile.setTitle('Файл')
+        self.actionExportXmlMaze.setText('Сохранить поле с лабиринтом')
+        self.actionExportXmlLineMap.setText('Сохранить поле с линиями')
+        self.actionExportAdjacencyMap.setText('Сохранить матрицу смежности')
+
+        self.menuView.setTitle('Вид')
+        self.actionZoomIn.setText('Приблизить')
+        self.actionZoomOut.setText('Отдалить')
+
+        self.menuTools.setTitle('Инструменты')
+        self.actionCreateMap.setText('Создать карту')
+        self.actionRandomMap.setText('Случайно расставить стенки')
+        self.actionFillMap.setText('Заполнить карту стенками')
+
+        self.menuSettings.setTitle('Настройки')
+        self.actionSettings.setText('Настройки \u2026')
+
+        self.menuHelp.setTitle('Справка')
+        self.actionTutorial.setText('Помощь \u2026')
+        self.actionAboutApplication.setText('О программе maze-gui-generator')
 
     def setEnglish(self):
         self.settingsWindow.setEnglish()
         self.informationWindow.locale_language = 'en'
         self.informationWindow.displayImage()
-        self.menutools.setTitle('Tools')
-        self.actioncreate_map.setText('Create a map')
-        self.actionrandom_this_map.setText('Random this map')
-        self.actionfill_this_map.setText('Fill this map')
-        self.actionexport_xml_maze.setText('Export maze map')
-        self.actionexport_xml_line_map.setText('Export line map')
-        self.actionexport_adjacency_map.setText('Export adjacency matrix')
-        self.actionsettings.setText('Settings')
-        self.actioninformation.setText('Help')
+
+        self.menuFile.setTitle('File')
+        self.actionExportXmlMaze.setText('Export maze map')
+        self.actionExportXmlLineMap.setText('Export line map')
+        self.actionExportAdjacencyMap.setText('Export adjacency matrix')
+
+        self.menuView.setTitle('View')
+        self.actionZoomIn.setText('Zoom in')
+        self.actionZoomOut.setText('Zoom out')
+
+        self.menuTools.setTitle('Tools')
+        self.actionCreateMap.setText('Create a map')
+        self.actionRandomMap.setText('Random this map')
+        self.actionFillMap.setText('Fill this map')
+
+        self.menuSettings.setTitle('Settings')
+        self.actionSettings.setText('Preferences \u2026')
+
+        self.menuHelp.setTitle('Help')
+        self.actionTutorial.setText('Small help \u2026')
+        self.actionAboutApplication.setText('About maze-gui-generator')
 
     def closeEvent(self, event):
         self.settingsWindow.close()
@@ -234,48 +257,54 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         min_size = 90
         window_sizes = [self.width() // (self.size_x + 1), self.height() // (self.size_y + 1)]
-        self.ui_scale = (max(min(window_sizes), min_size)) / min_size
+        self.ui_scale = round((max(min(window_sizes), min_size)) / min_size)
         self.ui_x = 0
         self.ui_y = 0
         self.displayWalls()
 
     def reloadWindow(self):                                                     # clears window and adds triggers
-        self.setupUi(self)  # Это нужно для инициализации нашего дизайна
-        self.actioncreate_map.triggered.connect(self.generateMap_init)
-        self.actionexport_xml_maze.triggered.connect(self.generateXML_maze)
-        self.actionexport_xml_line_map.triggered.connect(self.generateXML_line)
-        self.actionexport_adjacency_map.triggered.connect(self.saveAdjMap)
-        self.actionru.triggered.connect(self.setRussian)
-        self.actionen.triggered.connect(self.setEnglish)
-        self.actionsettings.triggered.connect(self.settingsWindow.show)
-        self.actioninformation.triggered.connect(self.informationWindow.show)
-        self.actionfill_this_map.triggered.connect(lambda ch, flag=1: self.generateMap_init(flag))
-        self.actionrandom_this_map.triggered.connect(self.randomGraph)
-        self.shortcut_in_pl = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl++'), self.pool)
-        self.shortcut_in_eq = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+='), self.pool)
-        self.shortcut_help = QtWidgets.QShortcut(QtGui.QKeySequence('F1'), self.pool)
-        self.shortcut_help.activated.connect(self.informationWindow.show)
-        self.shortcut_in_pl.activated.connect(self.zoomIn)
-        self.shortcut_in_eq.activated.connect(self.zoomIn)
-        self.shortcut_out = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+-'), self.pool)
-        self.shortcut_out.activated.connect(self.zoomOut)
+        self.setupUi(self)
+
+        # actions for file menu
+        self.actionExportXmlMaze.triggered.connect(self.generateXML_maze)
+        self.actionExportXmlLineMap.triggered.connect(self.generateXML_line)
+        self.actionExportAdjacencyMap.triggered.connect(self.saveAdjMap)
+
+        # actions for language selection
+        self.actionRu.triggered.connect(self.setRussian)
+        self.actionEn.triggered.connect(self.setEnglish)
+
+        self.actionSettings.triggered.connect(self.settingsWindow.show)
+        self.actionTutorial.triggered.connect(self.informationWindow.show)
+
+        # actions for file menu
+        self.actionCreateMap.triggered.connect(self.generateMap_init)
+        self.actionFillMap.triggered.connect(lambda ch, filled=1: self.generateMap_init(filled))
+        self.actionRandomMap.triggered.connect(self.randomGraph)
+
+        # actions for view menu
+        self.actionZoomIn.triggered.connect(self.zoomIn)
+        self.actionZoomOut.triggered.connect(self.zoomOut)
         self.setMouseTracking(True)
         if self.locale_language == 'ru':
             self.setRussian()
         else:
             self.setEnglish()
 
-    def zoomIn(self, scale_delta=0.1):                                                        # zooms in map
-        self.ui_scale += scale_delta
+    def zoomIn(self):                                                        # zooms in map
+        SCALE_DELTA = 0.1
+        self.ui_scale += SCALE_DELTA
         self.displayWalls()
 
-    def zoomOut(self, scale_delta=0.1):                                                       # zooms out map
-        self.ui_scale -= scale_delta
+    def zoomOut(self):                                                       # zooms out map
+        SCALE_DELTA = 0.1
+        self.ui_scale -= SCALE_DELTA
         self.displayWalls()
 
-    def displayWalls(self, delta_x=0, delta_y=0, zoom=0):                 # function draws window with walls from nothing
-        s_t = time()
+    def displayWalls(self):                 # function draws window with walls from nothing
+        old_scale = self.ui_scale
         self.reloadWindow()
+        self.ui_scale = old_scale
         const_move = {'x': 30 + self.ui_x, 'y': 30 + self.ui_y}
         ew = round((self.wall_size + self.empty_part_size) * self.ui_scale)
         e = round(self.empty_part_size * self.ui_scale)
@@ -310,12 +339,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     center_button.clicked.connect(lambda ch, x=x_coor, y=y_coor: self.pressCell([y, x, 'center']))
         #print('time for loading is', time() - s_t)
 
-    def moveWalls(self, delta_x, delta_y, zoom=0):                            # moves all walls on given deltas
-        s_t = time()
+    def moveWalls(self, delta_x, delta_y):                            # moves all walls on given deltas
         const_move = {'x': 30 + delta_x, 'y': 30 + delta_y}
-        ew = (self.wall_size + self.empty_part_size) * self.ui_scale
-        e = self.empty_part_size * self.ui_scale
-        w = self.wall_size * self.ui_scale
+        ew = round((self.wall_size + self.empty_part_size) * self.ui_scale)     # distance between cells center
+        e = round(self.empty_part_size * self.ui_scale)                         # scaled empty size between cells
         for y_index in range(self.size_y + 1):
             for x_index in range(self.size_x + 1):
                 if y_index != self.size_y:
@@ -335,7 +362,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         if time() - self.ui_last_time < 0.2:        # random time)
             self.ui_x += x - self.ui_last_x
             self.ui_y += y - self.ui_last_y
-            self.moveWalls(self.ui_x, self.ui_y, 0)
+            self.moveWalls(self.ui_x, self.ui_y)
 
         self.ui_last_x = x
         self.ui_last_y = y
@@ -448,10 +475,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         if self.locale_language == 'en':
             fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
-                self, "Select a place to save your xml file", "new_field.xml", "Fields (*.xml)", options=options)
+                self, "Select file to save field to", "new_field.xml", "Fields (*.xml)", options=options)
         else:
             fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
-                self, "Выберите место, чтобы сохранить ваше поле", "new_field.xml", "Fields (*.xml)", options=options)
+                self, "Выберите файл для сохранения вашего поля", "new_field.xml", "Fields (*.xml)", options=options)
         if fileName:
             #print(fileName)
             if fileName[::-1][0:4] != '.xml'[::-1]:
@@ -488,10 +515,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         if self.locale_language == 'en':
             fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
-                self, "Select a place to save your xml file", "new_field.xml", "Fields (*.xml)", options=options)
+                self, "Select file to save field to", "new_field.xml", "Fields (*.xml)", options=options)
         else:
             fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
-                self, "Выберите место, чтобы сохранить ваше поле", "new_field.xml", "Fields (*.xml)", options=options)
+                self, "Выберите файл для сохранения вашего поля", "new_field.xml", "Fields (*.xml)", options=options)
         if fileName:
             # print(fileName)
             if fileName[::-1][0:4] != '.xml'[::-1]:
@@ -547,7 +574,6 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             doc['root']['constraints']['event'][1]['conditions']['inside'].append(in_s)
         y, x = last_start_coor
         k = def_size // 50
-        disp = def_size // k
         doc['root']['robots']['robot']['@position'] = str(x * def_size +
                                                           25 * (k - 1)) + ":" + str(y * def_size + 25 * (k - 1))
         doc['root']['robots']['robot']['startPosition']['@x'] = str(x * def_size + 25 * k)
@@ -630,9 +656,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 adj_map[current_vertex].append(self.wallsButtons[y_index][x_index + 1]['left']['value'])
                 adj_map[current_vertex].append(self.wallsButtons[y_index + 1][x_index]['up']['value'])
                 adj_map[current_vertex].append(self.wallsButtons[y_index][x_index]['left']['value'])
-                print(adj_map[current_vertex])
+                # print(adj_map[current_vertex])
                 current_vertex += 1
-                # input()
         self.adj_map = adj_map
         return adj_map
 
@@ -642,10 +667,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         if self.locale_language == 'en':
             fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
-                self, "Select a place to save txt file", "my_map", "Text Files (*.txt)", options=options)
+                self, "Select file to save map to", "my_map", "Text Files (*.txt)", options=options)
         else:
             fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
-                self, "Выберите место, чтобы сохранить вашу карту", "my_map", "Text Files (*.txt)", options=options)
+                self, "Выберите файл для сохранения вашей матрицы", "my_map", "Text Files (*.txt)", options=options)
         if fileName:
             # print(fileName)
             if fileName[::-1][0:4] != '.txt'[::-1]:
@@ -656,7 +681,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             for line in adj_map:
                 file_map.write(str(line) + ',\n')
 
-            file_map.write('\n\n\nMap: Simple adjacency map\n')
+            file_map.write('\n\n\nMap: Simple adjacency matrix\n')
             for line in self.convertMap(adj_map):
                 file_map.write(str(line) + ",\n")
             file_map.close()
@@ -689,7 +714,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 try:
                     y_size, x_size = [int(dim) for dim in text.split()]
                 except ValueError:
-                    return
+                    return False
                 x_size = abs(x_size)
                 y_size = abs(y_size)
                 if (x_size * y_size) > 2000:
