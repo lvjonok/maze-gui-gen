@@ -1,0 +1,43 @@
+git:
+  depth: 10
+addons:
+  homebrew:
+    packages:
+    - python # also installs python3 and pip3
+    - upx
+  apt:
+    packages:
+    - python3-pip #installs also python3
+    - upx-ucl
+
+matrix:
+  include:
+  - name: "Xenial default"
+    os: linux
+    dist: xenial
+  - name: "macOS with Homebrew"
+    os: osx
+  - name: "Xenial + python 3.8 // no miniconda"
+    os: linux
+    dist: xenial
+    language: python
+    python: 3.8
+  - name: "PyLint"
+    os: linux
+    script:
+    - python3 -m pylint main.py
+
+#TODO: switch to `conda` to test different Python versions on build matrix 
+before_install:
+# init correct installation environment here
+  - true
+
+install:
+  - python3 -m pip install -U pip wheel setuptools
+  - python3 -m pip install -r requirements_dev.txt
+
+script:
+  - python3 -m PyInstaller main.spec
+after_script:
+  - ls -la dist/*
+

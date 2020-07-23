@@ -1,0 +1,4 @@
+#Runtime requirements for the script
+pyperclip
+PyQt5
+xmltodict
