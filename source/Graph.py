@@ -73,8 +73,3 @@ class Graph:
                 if nv != -1:
                     out[vertex][d] = self.map[vertex][nv]
         return out
-
-
-g = Graph(7, 3)
-v = g.getNextVertex(14, 1)
-#print(v)
