@@ -373,23 +373,26 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             for x_index in range(x_len + 1):
                 self.wallsButtons[y_index][x_index] = {}  # contains two buttons: one up, one left
                 if y_index != y_len:
-                    self.wallsButtons[y_index][x_index]['left'] = {'style': self.walls_styles['empty'],
-                                                                   'name': "b_" + str(y_index) + "_" + str(x_index) + "_left",
-                                                                   'value': 0}
+                    self.wallsButtons[y_index][x_index]['left'] = {
+                        'style': self.walls_styles['empty'],
+                        'name': "b_" + str(y_index) + "_" + str(x_index) + "_left",
+                        'value': 0}
                     if x_index == 0 or x_index == x_len or filled:
                         self.wallsButtons[y_index][x_index]['left']['style'] = self.walls_styles['filled']
                         self.wallsButtons[y_index][x_index]['left']['value'] = 1
                 if x_index != x_len:
-                    self.wallsButtons[y_index][x_index]['up'] = {'style': self.walls_styles['empty'],
-                                                                 'name': "b_" + str(y_index) + "_" + str(x_index) + "_up",
-                                                                 'value': 0}
+                    self.wallsButtons[y_index][x_index]['up'] = {
+                        'style': self.walls_styles['empty'],
+                        'name': "b_" + str(y_index) + "_" + str(x_index) + "_up",
+                        'value': 0}
                     if y_index == 0 or y_index == y_len or filled:
                         self.wallsButtons[y_index][x_index]['up']['style'] = self.walls_styles['filled']
                         self.wallsButtons[y_index][x_index]['up']['value'] = 1
                 if x_index != x_len and y_index != y_len:
-                    self.wallsButtons[y_index][x_index]['center'] = {'style': self.walls_styles['empty'],
-                                                                     'name': "b_" + str(y_index) + "_" + str(x_index) + "_center",
-                                                                     'value': 0}
+                    self.wallsButtons[y_index][x_index]['center'] = {
+                        'style': self.walls_styles['empty'],
+                        'name': "b_" + str(y_index) + "_" + str(x_index) + "_center",
+                        'value': 0}
 
     # accepts mouse click on cell to setup start and finish positions
     def pressCell(self, coors):
@@ -726,7 +729,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     self.wallsButtons[y_index][x_index + 1]['left']['value'] = 0
                     self.wallsButtons[y_index][x_index + 1]['left']["style"] = self.walls_styles['empty']
                 self.wallsButtons[y_index][x_index +
-                                           1]['left']["core"].setStyleSheet(self.wallsButtons[y_index][x_index + 1]['left']["style"])
+                                           1]['left']["core"].setStyleSheet(self.wallsButtons[y_index][x_index +
+                                                                                                       1]['left']["style"])
 
                 # direction 2
                 if mapVertexList[current_vertex][2] != 1:
