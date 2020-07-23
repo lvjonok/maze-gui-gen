@@ -3,3 +3,4 @@
 /dist
 /main.spec
 /.vscode
+/source/__pycache__
