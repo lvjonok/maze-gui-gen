@@ -308,7 +308,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     center_button.setObjectName("b_" + str(y_coor) + "_" + str(x_coor) + "_center")
                     center_button.setStyleSheet(self.wallsButtons[y_coor][x_coor]['center']['style'])
                     center_button.clicked.connect(lambda ch, x=x_coor, y=y_coor: self.pressCell([y, x, 'center']))
-        print('time for loading is', time() - s_t)
+        #print('time for loading is', time() - s_t)
 
     def moveWalls(self, delta_x, delta_y, zoom=0):                            # moves all walls on given deltas
         s_t = time()
@@ -327,7 +327,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 if x_index != self.size_x and y_index != self.size_y:
                     self.wallsButtons[y_index][x_index]['center']['core'].move(
                         const_move['x'] + e + x_index * ew, const_move['y'] + e + y_index * ew)
-        print('time for loading is', time() - s_t)
+        #print('time for loading is', time() - s_t)
 
     def mouseMoveEvent(self, e):                                                # accepts mouse events
         x = e.x()   # mouse x
@@ -345,7 +345,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         numDegrees = event.angleDelta().y() / 8
         numSteps = numDegrees / 15
         self.mouse_scroll_counter += numSteps
-        print(self.mouse_scroll_counter)
+        #print(self.mouse_scroll_counter)
         if self.mouse_scroll_counter > 1:
             self.zoomIn()
             self.mouse_scroll_counter = 0
@@ -396,7 +396,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
     # accepts mouse click on cell to setup start and finish positions
     def pressCell(self, coors):
-        print('pressed', coors)
+        #print('pressed', coors)
         y, x, side = coors
         bs = self.wallsButtons[y][x][side]["style"]
         if bs == self.cells_styles["empty"]:
@@ -413,7 +413,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
     def pressWall(self, coors):                                                  # accepts mouse click on wall
         y, x, side = coors
-        print('pr wall', coors)
+        #print('pr wall', coors)
         if self.wallsButtons[y][x][side]["style"] == self.walls_styles['empty']:
             self.wallsButtons[y][x][side]["style"] = self.walls_styles['filled']
             self.wallsButtons[y][x][side]['value'] = 1
@@ -453,7 +453,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
                 self, "Выберите место, чтобы сохранить ваше поле", "new_field.xml", "Fields (*.xml)", options=options)
         if fileName:
-            print(fileName)
+            #print(fileName)
             if fileName[::-1][0:4] != '.xml'[::-1]:
                 fileName += '.xml'
             file_map = open(fileName, 'w')

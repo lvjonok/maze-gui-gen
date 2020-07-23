@@ -27,7 +27,7 @@ class Ui_MainWindow(object):
         except AttributeError:
             bp = os.path.abspath(".")
             icos = os.path.join(bp, "source/maze.ico")
-        print(icos)
+#        print(icos)
         icon = QtGui.QIcon(icos)  # "source/maze.png")
         icon.addPixmap(QtGui.QPixmap("../../../../.designer/maze.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
