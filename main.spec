@@ -4,7 +4,6 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-            pathex=['/home/leo/Documents/projects/maze-gui-gen'],
             binaries=[],
             datas=[     ("source/app_screenshots/out_en_1.png", "source/app_screenshots/out_en_1.png"),
                         ("source/app_screenshots/out_en_2.png", "source/app_screenshots/out_en_2.png"), 
