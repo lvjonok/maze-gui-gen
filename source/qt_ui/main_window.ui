@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>maze-map-gui-generator</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../../../.designer/maze.ico</normaloff>../../../../.designer/maze.ico</iconset>
+  </property>
   <property name="autoFillBackground">
    <bool>true</bool>
   </property>
@@ -58,8 +62,17 @@
     <addaction name="actionexport_adjacency_map"/>
     <addaction name="separator"/>
     <addaction name="actionsettings"/>
+    <addaction name="actioninformation"/>
+   </widget>
+   <widget class="QMenu" name="menulan">
+    <property name="title">
+     <string>Language selection/ Выбор языка</string>
+    </property>
+    <addaction name="actionen"/>
+    <addaction name="actionru"/>
    </widget>
    <addaction name="menutools"/>
+   <addaction name="menulan"/>
   </widget>
   <action name="actioncreate_map">
    <property name="text">
@@ -94,6 +107,21 @@
   <action name="actionfill_this_map">
    <property name="text">
     <string>fill this map</string>
+   </property>
+  </action>
+  <action name="actioninformation">
+   <property name="text">
+    <string>tutorial</string>
+   </property>
+  </action>
+  <action name="actionen">
+   <property name="text">
+    <string>en</string>
+   </property>
+  </action>
+  <action name="actionru">
+   <property name="text">
+    <string>ru</string>
    </property>
   </action>
  </widget>
