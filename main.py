@@ -45,14 +45,14 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         # o_size = [event.oldSize().width(), event.oldSize().height()]
         c_size = [event.size().width(), event.size().height()]
 
-        if c_size[0]/1.75 <= c_size[1]:
-            self.tutorialImage.setGeometry(0, 0, c_size[0], c_size[0]/1.75)
+        if c_size[0] / 1.75 <= c_size[1]:
+            self.tutorialImage.setGeometry(0, 0, c_size[0], c_size[0] / 1.75)
         else:
-            new_left_x = (c_size[0] - c_size[1] * 1.75)//2
+            new_left_x = (c_size[0] - c_size[1] * 1.75) // 2
             self.tutorialImage.setGeometry(new_left_x, 0, c_size[1] * 1.75, c_size[1])
 
-        self.b_nextImage.move(c_size[0] - 20, 240/600 * c_size[1])
-        self.b_previousImage.move(0, 240/600 * c_size[1])
+        self.b_nextImage.move(c_size[0] - 20, 240 / 600 * c_size[1])
+        self.b_previousImage.move(0, 240 / 600 * c_size[1])
 
     def nextImage(self):
         self.current_image += 1
@@ -77,7 +77,8 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
             return os.path.join(bp, "out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
         except AttributeError:      # sys._MEIPASS uses when code was builded in app
             bp = os.path.abspath(".")
-            return os.path.join(bp, "source/app_screenshots/out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
+            return os.path.join(bp, "source/app_screenshots/out_" + str(self.locale_language) +
+                                "_" + str(self.current_image) + ".png")
 
 
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
@@ -88,7 +89,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.colorLabel.mousePressEvent = (self.controlColor)
         self.telegramChannel.mousePressEvent = (self.copyLink)
         self.colorLine = "000000"
-        self.colorLabel.setStyleSheet('QLabel {background-color: #'+str(self.colorLine)+';}')
+        self.colorLabel.setStyleSheet('QLabel {background-color: #' + str(self.colorLine) + ';}')
         self.lineSlider.valueChanged.connect(self.updateValueLine)
         self.mazeSlider.valueChanged.connect(self.updateValueMaze)
 
@@ -126,7 +127,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         if color:
             rgb = (color.getRgb()[0:3])
             hex_color = self.rgb_to_hex(rgb)
-            self.colorLabel.setStyleSheet('QLabel {background-color: #'+str(hex_color)+';}')
+            self.colorLabel.setStyleSheet('QLabel {background-color: #' + str(hex_color) + ';}')
             self.colorLine = hex_color
 
     def setRussian(self):
@@ -232,8 +233,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             return
 
         min_size = 90
-        window_sizes = [self.width()//(self.size_x + 1), self.height()//(self.size_y + 1)]
-        self.ui_scale = (max(min(window_sizes), min_size))/min_size
+        window_sizes = [self.width() // (self.size_x + 1), self.height() // (self.size_y + 1)]
+        self.ui_scale = (max(min(window_sizes), min_size)) / min_size
         self.ui_x = 0
         self.ui_y = 0
         self.displayWalls()
@@ -364,8 +365,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.wallsButtons = []
 
         min_size = 60
-        window_sizes = [self.width()//(x_len + 1), self.height()//(y_len + 1)]
-        self.ui_scale = (max(min(window_sizes), min_size))/min_size
+        window_sizes = [self.width() // (x_len + 1), self.height() // (y_len + 1)]
+        self.ui_scale = (max(min(window_sizes), min_size)) / min_size
 
         for y_index in range(y_len + 1):
             self.wallsButtons.append([0] * (x_len + 1))
@@ -429,16 +430,16 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 vertex = y_i * self.size_x + x_i
                 if not adj_map[vertex][0]:
                     doc['root']['world']['colorFields']['line'].append(
-                        (self.getXML_line(def_size // 2 + x_i * def_size, def_size//2 + y_i * def_size, 0, -def_size//2)))
+                        (self.getXML_line(def_size // 2 + x_i * def_size, def_size // 2 + y_i * def_size, 0, -def_size // 2)))
                 if not adj_map[vertex][1]:
                     doc['root']['world']['colorFields']['line'].append(
-                        (self.getXML_line(def_size // 2 + x_i * def_size, def_size//2 + y_i * def_size, def_size//2, 0)))
+                        (self.getXML_line(def_size // 2 + x_i * def_size, def_size // 2 + y_i * def_size, def_size // 2, 0)))
                 if not adj_map[vertex][2]:
                     doc['root']['world']['colorFields']['line'].append(
-                        (self.getXML_line(def_size // 2 + x_i * def_size, def_size//2 + y_i * def_size, 0, def_size//2)))
+                        (self.getXML_line(def_size // 2 + x_i * def_size, def_size // 2 + y_i * def_size, 0, def_size // 2)))
                 if not adj_map[vertex][3]:
                     doc['root']['world']['colorFields']['line'].append(
-                        (self.getXML_line(def_size // 2 + x_i * def_size, def_size//2 + y_i * def_size, -def_size//2, 0)))
+                        (self.getXML_line(def_size // 2 + x_i * def_size, def_size // 2 + y_i * def_size, -def_size // 2, 0)))
         # print(xmltodict.unparse(doc, pretty=True))
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
@@ -532,19 +533,20 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             y, x = start_coors
             doc['root']['world']['regions']['region'].append(self.getXML_start(
                 x * def_size, y * def_size, def_size, def_size, start_id))
-            in_s = {'@regionId': 'start_'+str(start_id), '@objectId': 'robot1'}
+            in_s = {'@regionId': 'start_' + str(start_id), '@objectId': 'robot1'}
             doc['root']['constraints']['constraint']['conditions']['inside'].append(in_s)
             last_start_coor = start_coors
         for finish_id, finish_coors in enumerate(self.finish_id_container):
             y, x = finish_coors
             doc['root']['world']['regions']['region'].append(self.getXML_finish(
                 x * def_size, y * def_size, def_size, def_size, finish_id))
-            in_s = {'@regionId': 'finish_'+str(finish_id), '@objectId': 'robot1'}
+            in_s = {'@regionId': 'finish_' + str(finish_id), '@objectId': 'robot1'}
             doc['root']['constraints']['event'][1]['conditions']['inside'].append(in_s)
         y, x = last_start_coor
         k = def_size // 50
         disp = def_size // k
-        doc['root']['robots']['robot']['@position'] = str(x * def_size + 25 * (k-1))+":"+str(y * def_size + 25 * (k-1))
+        doc['root']['robots']['robot']['@position'] = str(x * def_size +
+                                                          25 * (k - 1)) + ":" + str(y * def_size + 25 * (k - 1))
         doc['root']['robots']['robot']['startPosition']['@x'] = str(x * def_size + 25 * k)
         doc['root']['robots']['robot']['startPosition']['@y'] = str(y * def_size + 25 * k)
         return doc
@@ -567,7 +569,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         out_dict['@fill-style'] = 'none'
         out_dict['@begin'] = str(x_start) + ":" + str(y_start)
         out_dict['@end'] = str(x_start + x_len) + ":" + str(y_start + y_len)
-        out_dict['@id'] = '{wall'+str(self.walls_id_xml)+'}'
+        out_dict['@id'] = '{wall' + str(self.walls_id_xml) + '}'
         out_dict['@stroke-style'] = 'solid'
         out_dict['@fill'] = str(self.settingsWindow.colorLine)
         out_dict['@stroke'] = str(self.settingsWindow.colorLine)

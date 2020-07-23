@@ -57,7 +57,7 @@ class Graph:
                 try:
                     self.map[current_vertex][next_vertex] = 1
                     self.map[next_vertex][current_vertex] = 1
-                except:
+                except BaseException:
                     raise ZeroDivisionError(current_vertex, next_vertex)
                 visited.append(next_vertex)
                 queue.append(next_vertex)
