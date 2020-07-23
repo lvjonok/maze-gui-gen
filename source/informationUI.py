@@ -31,8 +31,9 @@ class Ui_InformationWidget(object):
         self.b_previousImage.setObjectName("b_previousImage")
         self.retranslateUi(InformationWidget)
         QtCore.QMetaObject.connectSlotsByName(InformationWidget)
+
     def retranslateUi(self, InformationWidget):
-        _translate = QtCore.QCoreApplication.translate  
+        _translate = QtCore.QCoreApplication.translate
         InformationWidget.setWindowTitle(_translate("InformationWidget", "Tutorial"))
         self.b_nextImage.setText(_translate("InformationWidget", "N"))
         self.b_previousImage.setText(_translate("InformationWidget", "P"))

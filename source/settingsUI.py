@@ -69,24 +69,24 @@ class Ui_settingsForm(object):
         self.gridLayout.addWidget(self.lineCellSizeValue, 1, 2, 1, 2)
         self.lineSlider = QtWidgets.QSlider(self.groupBox)
         self.lineSlider.setStyleSheet("QSlider::groove:vertical {\n"
-"    background: red;\n"
-"    position: absolute; /* absolutely position 4px from the left and right of the widget. setting margins on the widget should work too... */\n"
-"    left: 4px; right: 4px;\n"
-"}\n"
-"\n"
-"QSlider::handle:vertical {\n"
-"    height: 10px;\n"
-"    background: green;\n"
-"    margin: 0 -4px; /* expand outside the groove */\n"
-"}\n"
-"\n"
-"QSlider::add-page:vertical {\n"
-"    background: white;\n"
-"}\n"
-"\n"
-"QSlider::sub-page:vertical {\n"
-"    background: pink;\n"
-"}")
+                                      "    background: red;\n"
+                                      "    position: absolute; /* absolutely position 4px from the left and right of the widget. setting margins on the widget should work too... */\n"
+                                      "    left: 4px; right: 4px;\n"
+                                      "}\n"
+                                      "\n"
+                                      "QSlider::handle:vertical {\n"
+                                      "    height: 10px;\n"
+                                      "    background: green;\n"
+                                      "    margin: 0 -4px; /* expand outside the groove */\n"
+                                      "}\n"
+                                      "\n"
+                                      "QSlider::add-page:vertical {\n"
+                                      "    background: white;\n"
+                                      "}\n"
+                                      "\n"
+                                      "QSlider::sub-page:vertical {\n"
+                                      "    background: pink;\n"
+                                      "}")
         self.lineSlider.setMinimum(1)
         self.lineSlider.setMaximum(30)
         self.lineSlider.setProperty("value", 2)
@@ -135,7 +135,7 @@ class Ui_settingsForm(object):
         sizePolicy.setHeightForWidth(self.colorLabel.sizePolicy().hasHeightForWidth())
         self.colorLabel.setSizePolicy(sizePolicy)
         self.colorLabel.setStyleSheet("QLabel {background-color: rgb(0, 0, 0);}\n"
-"")
+                                      "")
         self.colorLabel.setText("")
         self.colorLabel.setObjectName("colorLabel")
         self.gridLayout.addWidget(self.colorLabel, 6, 1, 1, 3)
@@ -154,10 +154,14 @@ class Ui_settingsForm(object):
         self.timelimitLabel.setText(_translate("settingsForm", "Timelimit for excersize"))
         self.lineColorLabel.setText(_translate("settingsForm", "Line color"))
         self.lineCellSizeLabel.setText(_translate("settingsForm", "Line cell size (in Trik Studio cells)"))
-        self.lineCellSizeValue.setText(_translate("settingsForm", "<html><head/><body><p align=\"center\">2</p></body></html>"))
+        self.lineCellSizeValue.setText(_translate(
+            "settingsForm", "<html><head/><body><p align=\"center\">2</p></body></html>"))
         self.lineSlider.setToolTip(_translate("settingsForm", "<html><head/><body><p><br/></p></body></html>"))
-        self.mazeCellSizeValue.setText(_translate("settingsForm", "<html><head/><body><p align=\"center\">3</p></body></html>"))
+        self.mazeCellSizeValue.setText(_translate(
+            "settingsForm", "<html><head/><body><p align=\"center\">3</p></body></html>"))
         self.MazeLoopsLabel.setText(_translate("settingsForm", "Map with loops"))
-        self.InfoLabel.setText(_translate("settingsForm", "<html><head/><body><p align=\"center\">For any issues contact me on telegram: @robot_lev</p></body></html>"))
+        self.InfoLabel.setText(_translate(
+            "settingsForm", "<html><head/><body><p align=\"center\">For any issues contact me on telegram: @robot_lev</p></body></html>"))
         self.mazeSlider.setToolTip(_translate("settingsForm", "<html><head/><body><p><br/></p></body></html>"))
-        self.telegramChannel.setText(_translate("settingsForm", "<html><head/><body><p align=\"center\">press to copy link to telegram channel: https://t.me/maze_gui_gen</p></body></html>"))
+        self.telegramChannel.setText(_translate(
+            "settingsForm", "<html><head/><body><p align=\"center\">press to copy link to telegram channel: https://t.me/maze_gui_gen</p></body></html>"))
