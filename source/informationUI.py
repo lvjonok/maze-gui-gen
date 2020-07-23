@@ -16,9 +16,14 @@ class Ui_InformationWidget(object):
         InformationWidget.setObjectName("InformationWidget")
         InformationWidget.resize(900, 600)
         InformationWidget.setMinimumSize(QtCore.QSize(900, 600))
-        # InformationWidget.setMaximumSize(QtCore.QSize(99999, 99999))
+        InformationWidget.setMaximumSize(QtCore.QSize(99999, 99999))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("../maze.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        InformationWidget.setWindowIcon(icon)
+        InformationWidget.setStyleSheet("QWidget {background-color:rgb(255, 255, 255)}")
         self.tutorialImage = QtWidgets.QLabel(InformationWidget)
         self.tutorialImage.setGeometry(QtCore.QRect(0, 0, 900, 600))
+        self.tutorialImage.setStyleSheet("QLabel {\'background-color\':rgb(255, 255, 255)}")
         self.tutorialImage.setText("")
         self.tutorialImage.setPixmap(QtGui.QPixmap("app_screenshots/out_1.png"))
         self.tutorialImage.setScaledContents(True)
@@ -29,6 +34,7 @@ class Ui_InformationWidget(object):
         self.b_previousImage = QtWidgets.QPushButton(InformationWidget)
         self.b_previousImage.setGeometry(QtCore.QRect(0, 240, 20, 101))
         self.b_previousImage.setObjectName("b_previousImage")
+
         self.retranslateUi(InformationWidget)
         QtCore.QMetaObject.connectSlotsByName(InformationWidget)
 

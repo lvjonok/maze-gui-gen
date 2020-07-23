@@ -25,6 +25,13 @@
   <property name="windowTitle">
    <string>Tutorial</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../maze.ico</normaloff>../maze.ico</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {background-color:rgb(255, 255, 255)}</string>
+  </property>
   <widget class="QLabel" name="tutorialImage">
    <property name="geometry">
     <rect>
@@ -33,6 +40,9 @@
      <width>900</width>
      <height>600</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {'background-color':rgb(255, 255, 255)}</string>
    </property>
    <property name="text">
     <string/>
