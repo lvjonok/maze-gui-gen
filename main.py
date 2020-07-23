@@ -14,12 +14,18 @@ from PyQt5 import QtGui, QtWidgets
 # from PyQt5.QtCore import *
 # from PyQt5.QtGui import *
 
+import source.aboutUI as aboutUI
 import source.empty_field as ef
 import source.Graph as Graph
 import source.informationUI as informationUI
 import source.screen as screen  # Это наш конвертированный файл дизайна
 import source.settingsUI as settingsUI
 
+
+class AboutWindow(QtWidgets.QWidget, aboutUI.Ui_aboutWidget):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
 
 class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
     def __init__(self):
@@ -182,6 +188,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.settingsWindow.hide()                   
         self.informationWindow = InformationWindow()
         self.informationWindow.hide()
+        self.aboutWindow = AboutWindow()
+        self.aboutWindow.hide()
         self.reloadWindow()
         self.size_x = 5
         self.size_y = 5
@@ -286,6 +294,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.actionZoomIn.triggered.connect(self.zoomIn)
         self.actionZoomOut.triggered.connect(self.zoomOut)
         self.setMouseTracking(True)
+
+        self.actionAboutApplication.triggered.connect(self.aboutWindow.show)
+
         if self.locale_language == 'ru':
             self.setRussian()
         else:
