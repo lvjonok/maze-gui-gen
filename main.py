@@ -109,10 +109,10 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.MazeLoopsCheckBox.stateChanged.connect(self.updateValueMazeLoops)
         self.excersizeTime.timeChanged.connect(self.updateValueTimeLimit)
 
-        self.lineSlider.setValue(self.settings.value('lineCellSizeValue', type = int))
-        self.mazeSlider.setValue(self.settings.value('mazeCellSizeValue', type = int))
-        self.MazeLoopsCheckBox.setCheckState(self.settings.value('mazeLoopsValue', type = QtCore.Qt.CheckState))
-        self.excersizeTime.setTime(self.settings.value('timeLimitValue', type = QtCore.QTime))
+        self.lineSlider.setValue(self.settings.value('lineCellSizeValue', type=int))
+        self.mazeSlider.setValue(self.settings.value('mazeCellSizeValue', type=int))
+        self.MazeLoopsCheckBox.setCheckState(self.settings.value('mazeLoopsValue', type=QtCore.Qt.CheckState))
+        self.excersizeTime.setTime(self.settings.value('timeLimitValue', type=QtCore.QTime))
 
     def copyLink(self, event):
         pyperclip.copy('https://t.me/maze_gui_gen')
