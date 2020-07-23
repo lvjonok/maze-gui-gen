@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
             bp = os.path.abspath(".")
             icos = os.path.join(bp, "source/maze.ico")
         print(icos)
-        icon = QtGui.QIcon(icos) # "source/maze.png")
+        icon = QtGui.QIcon(icos)  # "source/maze.png")
         icon.addPixmap(QtGui.QPixmap("../../../../.designer/maze.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setAutoFillBackground(True)
