@@ -1,0 +1,49 @@
+clone_depth: 1
+configuration: release
+environment:
+  global:
+    PYTHON_VERSION: 38
+    executable_name: maze-gui-gen.exe
+  matrix:
+  - PYTHON_VERSION: 35
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+
+init:
+  - set PYTHON_PATH=C:\Python%PYTHON_VERSION%
+#   - set PATH=%SystemRoot%;%SystemRoot%\system32;%SystemRoot%\system32\WindowsPowerShell\v1.0;C:\Program Files\AppVeyor\BuildAgent\;%PYTHON_PATH%
+  - set PATH=%PYTHON_PATH%;%PATH%
+  - python -V
+
+install:
+  - python -m pip install -U pip wheel setuptools
+  - python -m pip install -r requirements_dev.txt
+#TODO:
+#install UPX from  http://upx.sourceforge.net/download/...
+  - echo No UPX.
+
+before_build:
+  - python -m pip freeze
+
+build_script:
+  - python -m PyInstaller main.spec
+
+test_script:
+  - echo %cd%
+  - dir dist 
+
+#Can be downloaded from Artifacts web-page
+artifacts:
+ - path: dist/$(executable_name)
+   name: $(executable_name)-py$(PYTHON_VERSION)
+
+deploy:
+  - provider: Environment
+    name: github-release
+    github_release_artifact: $(executable_name)
+    on:
+#      PYTHON_VERSION: 3.8
+      CONFIGURATION: release
+      APPVEYOR_REPO_TAG: true
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+
