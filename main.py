@@ -10,8 +10,8 @@ from time import time
 
 import pyperclip
 import xmltodict
-from PyQt5 import QtGui, QtWidgets
-# from PyQt5.QtCore import *
+from PyQt5 import QtGui, QtWidgets, QtCore
+from PyQt5.QtCore import QSettings
 # from PyQt5.QtGui import *
 
 import source.aboutUI as aboutUI
@@ -30,11 +30,13 @@ class AboutWindow(QtWidgets.QWidget, aboutUI.Ui_aboutWidget):
 class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
     def __init__(self):
         super().__init__()
+        settings = QSettings("trik-maze-gui-gen", "preferences")
+
         self.current_image = 1
         self.setupUi(self)
         self.b_nextImage.clicked.connect(self.nextImage)
         self.b_previousImage.clicked.connect(self.previousImage)
-        self.locale_language = 'ru'
+        self.locale_language = settings.value('locale', 'ru')
         self.displayImage()
         self.shortcut_n_img = QtWidgets.QShortcut(QtGui.QKeySequence('Right'), self)
         self.shortcut_p_img = QtWidgets.QShortcut(QtGui.QKeySequence('Left'), self)
@@ -90,25 +92,51 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.setRussian()
+        self.settings = QSettings("trik-maze-gui-gen", "preferences")
+
+        if self.settings.value('locale', 'ru') == 'en':
+            self.setEnglish()
+        else:
+            self.setRussian()
+
         self.colorLabel.mousePressEvent = (self.controlColor)
         self.telegramChannel.mousePressEvent = (self.copyLink)
-        self.colorLine = "000000"
+        self.colorLine = self.settings.value('colorLineValue', '000000')
         self.colorLabel.setStyleSheet('QLabel {background-color: #' + str(self.colorLine) + ';}')
+
         self.lineSlider.valueChanged.connect(self.updateValueLine)
         self.mazeSlider.valueChanged.connect(self.updateValueMaze)
+        self.MazeLoopsCheckBox.stateChanged.connect(self.updateValueMazeLoops)
+        self.excersizeTime.timeChanged.connect(self.updateValueTimeLimit)
+
+        self.lineSlider.setValue(self.settings.value('lineCellSizeValue', type=int))
+        self.mazeSlider.setValue(self.settings.value('mazeCellSizeValue', type=int))
+        self.MazeLoopsCheckBox.setCheckState(self.settings.value('mazeLoopsValue', type=QtCore.Qt.CheckState))
+        self.excersizeTime.setTime(self.settings.value('timeLimitValue', type=QtCore.QTime))
 
     def copyLink(self, event):
         pyperclip.copy('https://t.me/maze_gui_gen')
 
     def updateValueMaze(self):
         # <html><head/><body><p align="center">2</p></body></html>
-        self.mazeCellSizeValue.setText("<html><head/><body><p align=\"center\">" +
-                                       str(self.getSliderMaze()) + "</p></body></html>")
+        value = "<html><head/><body><p align=\"center\">" + str(self.getSliderMaze()) + "</p></body></html>"
+        self.mazeCellSizeValue.setText(value)
+        self.settings.setValue('mazeCellSizeValue', self.mazeSlider.value())
+        self.settings.sync()
 
     def updateValueLine(self):
-        self.lineCellSizeValue.setText("<html><head/><body><p align=\"center\">" +
-                                       str(self.getSliderLine()) + "</p></body></html>")
+        value = "<html><head/><body><p align=\"center\">" + str(self.getSliderLine()) + "</p></body></html>"
+        self.lineCellSizeValue.setText(value)
+        self.settings.setValue('lineCellSizeValue', self.lineSlider.value())
+        self.settings.sync()
+
+    def updateValueMazeLoops(self):
+        self.settings.setValue('mazeLoopsValue', self.MazeLoopsCheckBox.checkState())
+        self.settings.sync()
+
+    def updateValueTimeLimit(self):
+        self.settings.setValue('timeLimitValue', self.excersizeTime.time())
+        self.settings.sync()
 
     def getSliderMaze(self) -> int:
         return self.mazeSlider.value()
@@ -134,6 +162,8 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
             hex_color = self.rgb_to_hex(rgb)
             self.colorLabel.setStyleSheet('QLabel {background-color: #' + str(hex_color) + ';}')
             self.colorLine = hex_color
+            self.settings.setValue('colorLineValue', hex_color)
+            self.settings.sync()
 
     def setRussian(self):
         self.MazeLoopsLabel.setText('Лабиринт с циклами')
@@ -166,7 +196,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             icos = "source/maze.ico"
         self.setWindowIcon(QtGui.QIcon(icos))
         self.setMouseTracking(True)
-        self.locale_language = 'ru'
+        self.locale_language = QSettings("trik-maze-gui-gen", "preferences").value('locale', 'ru')
         self.mouse_scroll_counter = 0   # uses to count scaling
         self.ui_x = 0                   # uses to move all map
         self.ui_y = 0
@@ -200,6 +230,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.displayWalls()
 
     def setRussian(self):
+        settings = QSettings("trik-maze-gui-gen", "preferences")
+        settings.setValue('locale', 'ru')
+        settings.sync()
+
         self.settingsWindow.setRussian()
         self.informationWindow.locale_language = 'ru'
         self.informationWindow.displayImage()
@@ -226,6 +260,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.actionAboutApplication.setText('О программе maze-gui-generator')
 
     def setEnglish(self):
+        settings = QSettings("trik-maze-gui-gen", "preferences")
+        settings.setValue('locale', 'en')
+        settings.sync()
+
         self.settingsWindow.setEnglish()
         self.informationWindow.locale_language = 'en'
         self.informationWindow.displayImage()
@@ -297,10 +335,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         self.actionAboutApplication.triggered.connect(self.aboutWindow.show)
 
-        if self.locale_language == 'ru':
-            self.setRussian()
-        else:
+        if self.locale_language == 'en':
             self.setEnglish()
+        else:
+            self.setRussian()
 
     def zoomIn(self):                                                        # zooms in map
         SCALE_DELTA = 0.1
