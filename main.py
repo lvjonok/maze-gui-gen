@@ -26,6 +26,15 @@ class AboutWindow(QtWidgets.QWidget, aboutUI.Ui_aboutWidget):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.actionAgree.clicked.connect(self.close)
+        # can close window by pressing Enter
+        self.shortcutClose = QtWidgets.QShortcut(QtGui.QKeySequence('Return'), self)
+        self.shortcutClose.activated.connect(self.close)
+
+        self.telegramChannel.mousePressEvent = (self.copyLink)
+
+    def copyLink(self, event):
+        pyperclip.copy('https://t.me/maze_gui_gen')
 
 class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
     def __init__(self):
@@ -44,6 +53,9 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         self.shortcut_p_img.activated.connect(self.previousImage)
         self.shortcut_n_img_k.activated.connect(self.nextImage)
         self.shortcut_p_img_k.activated.connect(self.previousImage)
+        # can close window by pressing Enter
+        self.shortcutClose = QtWidgets.QShortcut(QtGui.QKeySequence('Return'), self)
+        self.shortcutClose.activated.connect(self.close)
 
     def resizeEvent(self, event):
         # o_size = [event.oldSize().width(), event.oldSize().height()]
@@ -92,39 +104,43 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.setupUi(self)
         self.setRussian()
         self.colorLabel.mousePressEvent = (self.controlColor)
-        self.telegramChannel.mousePressEvent = (self.copyLink)
         self.colorLine = "000000"
         self.colorLabel.setStyleSheet('QLabel {background-color: #' + str(self.colorLine) + ';}')
-        self.lineSlider.valueChanged.connect(self.updateValueLine)
-        self.mazeSlider.valueChanged.connect(self.updateValueMaze)
 
-    def copyLink(self, event):
-        pyperclip.copy('https://t.me/maze_gui_gen')
+        self.lineCellSizeSlider.valueChanged.connect(self.updateValueLineCellSize)
+        self.linePixelSizeSlider.valueChanged.connect(self.updateValueLinePixelSize)
+        self.mazeCellSizeSlider.valueChanged.connect(self.updateValueMazeCellSize)
 
-    def updateValueMaze(self):
-        # <html><head/><body><p align="center">2</p></body></html>
+    def updateValueLinePixelSize(self):         # updates label with line pixel size
+        self.linePixelSizeValue.setText("<html><head/><body><p align=\"center\">" +
+                                       str(self.getSliderLinePixelSize()) + "</p></body></html>")
+
+    def updateValueMazeCellSize(self):          # updates label with maze cell size
         self.mazeCellSizeValue.setText("<html><head/><body><p align=\"center\">" +
-                                       str(self.getSliderMaze()) + "</p></body></html>")
+                                       str(self.getSliderMazeCellSize()) + "</p></body></html>")
 
-    def updateValueLine(self):
+    def updateValueLineCellSize(self):          # updates label with line cell size
         self.lineCellSizeValue.setText("<html><head/><body><p align=\"center\">" +
-                                       str(self.getSliderLine()) + "</p></body></html>")
-
-    def getSliderMaze(self) -> int:
-        return self.mazeSlider.value()
+                                       str(self.getSliderLineCellSize()) + "</p></body></html>")
 
     def rgb_to_hex(self, rgb):
         return '%02x%02x%02x' % rgb
 
-    def getSliderLine(self) -> int:
-        return self.lineSlider.value()
+    def getSliderMazeCellSize(self) -> int:
+        return self.mazeCellSizeSlider.value()
+
+    def getSliderLinePixelSize(self) -> int:
+        return self.linePixelSizeSlider.value()
+
+    def getSliderLineCellSize(self) -> int:
+        return self.lineCellSizeSlider.value()
 
     def getMazeCheckBox(self):
         return self.MazeLoopsCheckBox.isChecked()
 
     def getTimelimit(self, event):
         v = self.excersizeTime.time().toString()
-        v = [int(vi) for vi in v.split(':')][1:3]
+        v = [int(vi) for vi in v.split(':')][1:3]       # 0 - hours, 1 - minutes, 2 - seconds
         return v
 
     def controlColor(self, event):
@@ -142,8 +158,8 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.mazeCellSizeLabel.setText('Размер ячейки для лабиринта')
         self.timelimitLabel.setText('Временное ограничение для задания')
         self.lineColorLabel.setText('Цвет линии')
-        self.InfoLabel.setText('По вопросам и проблемам свяжитесь со мной в telegram: @robot_lev')
-        self.telegramChannel.setText('Нажмите, чтобы скопировать ссылку на telegram канал: https://t.me/maze_gui_gen')
+        # self.InfoLabel.setText('По вопросам и проблемам свяжитесь со мной в telegram: @robot_lev')
+        # self.telegramChannel.setText('Нажмите, чтобы скопировать ссылку на telegram канал: https://t.me/maze_gui_gen')
 
     def setEnglish(self):
         self.MazeLoopsLabel.setText('Maze with loops')
@@ -152,8 +168,8 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.mazeCellSizeLabel.setText('Maze cell size')
         self.timelimitLabel.setText('Timelimit for excersize')
         self.lineColorLabel.setText('Line color')
-        self.InfoLabel.setText('For any issues contact me on telegram: @robot_lev')
-        self.telegramChannel.setText('Press to copy link to telegram channel: https://t.me/maze_gui_gen')
+        # self.InfoLabel.setText('For any issues contact me on telegram: @robot_lev')
+        # self.telegramChannel.setText('Press to copy link to telegram channel: https://t.me/maze_gui_gen')
 
 
 class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
@@ -224,7 +240,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         self.menuHelp.setTitle('Справка')
         self.actionTutorial.setText('Помощь \u2026')
-        self.actionAboutApplication.setText('О программе maze-gui-generator')
+        self.actionAboutApplication.setText('О программе maze-gui-generator \u2026')
 
     def setEnglish(self):
         self.locale_language = 'en'
@@ -251,7 +267,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         self.menuHelp.setTitle('Help')
         self.actionTutorial.setText('Small help \u2026')
-        self.actionAboutApplication.setText('About maze-gui-generator')
+        self.actionAboutApplication.setText('About maze-gui-generator \u2026')
 
     def closeEvent(self, event):
         self.settingsWindow.close()
@@ -463,10 +479,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.wallsButtons[y][x][side]["core"].setStyleSheet(self.wallsButtons[y][x][side]["style"])
 
     def generateXML_line(self):                                                 # generates XML file with lines
-        def_size = self.settingsWindow.getSliderLine() * 50
+        sliderLineCellValue = self.settingsWindow.getSliderLineCellSize()
+        def_size = sliderLineCellValue * 50
         adj_map = self.generateAdjMap()
-        # empty_field_file = Path("source/fields/empty_field.xml")
-        doc = self.prepareField(self.settingsWindow.getSliderLine() * 50)
+        doc = self.prepareField(sliderLineCellValue * 50)
         doc['root']['world']['colorFields'] = {'line': []}
         for y_i in range(self.size_y):
             for x_i in range(self.size_x):
@@ -501,11 +517,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             file_map.close()
 
     def generateXML_maze(self):                                                 # generates XML file with maze
-        def_size = self.settingsWindow.getSliderMaze() * 50
+        sliderMazeCellValue = self.settingsWindow.getSliderMazeCellSize()
+        def_size = sliderMazeCellValue * 50
         adj_map = self.generateAdjMap()
-        # empty_field_file = Path("source/fields/empty_field.xml")
-
-        doc = self.prepareField(self.settingsWindow.getSliderMaze() * 50)
+        doc = self.prepareField(sliderMazeCellValue * 50)
 
         doc['root']['world']['walls'] = {'wall': []}
         for y_i in range(self.size_y):
@@ -607,7 +622,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
     def getXML_line(self, x_start, y_start, x_len, y_len):                      # generates dict describing line
         out_dict = {}
-        out_dict['@stroke-width'] = '6'
+        out_dict['@stroke-width'] = str(self.settingsWindow.getSliderLinePixelSize())
         out_dict['@fill-style'] = 'none'
         out_dict['@begin'] = str(x_start) + ":" + str(y_start)
         out_dict['@end'] = str(x_start + x_len) + ":" + str(y_start + y_len)
