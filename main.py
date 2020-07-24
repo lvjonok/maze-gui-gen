@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+"""!/usr/bin/env python3"""
 
 # import collections
 # import json
@@ -185,7 +185,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         }
         self.wallsButtons = []
         self.settingsWindow = SettingsWindow()
-        self.settingsWindow.hide()                   
+        self.settingsWindow.hide()
         self.informationWindow = InformationWindow()
         self.informationWindow.hide()
         self.aboutWindow = AboutWindow()
@@ -691,7 +691,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             file_map = open(fileName, 'w')
             file_map.write(
                 'Map: vertex -> [upper wall, right wall, bottom wall, left wall]\n' +
-                '1 if wall exists and 0 if there\'s no wall.' + 
+                '1 if wall exists and 0 if there\'s no wall.' +
                 'One line - one vertex starting from 0\n')
             for line in adj_map:
                 file_map.write(str(line) + ',\n')
@@ -727,8 +727,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             else:
                 text, ok = QtWidgets.QInputDialog.getText(
                     self, 'Создание карты', 'Введите размеры карты через пробел: "y x"\n' +
-                        'Текущая карта будет обнулена!!!\n' +
-                        'Максимальный размер карты ограничен 2000 клетками')
+                    'Текущая карта будет обнулена!!!\n' +
+                    'Максимальный размер карты ограничен 2000 клетками')
             if ok:
                 try:
                     y_size, x_size = [int(dim) for dim in text.split()]
