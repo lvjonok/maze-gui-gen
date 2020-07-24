@@ -54,7 +54,7 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="b_nextImage">
+  <widget class="QToolButton" name="b_nextImage">
    <property name="geometry">
     <rect>
      <x>880</x>
@@ -66,8 +66,11 @@
    <property name="text">
     <string>N</string>
    </property>
+   <property name="arrowType">
+    <enum>Qt::RightArrow</enum>
+   </property>
   </widget>
-  <widget class="QPushButton" name="b_previousImage">
+  <widget class="QToolButton" name="b_previousImage">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -78,6 +81,9 @@
    </property>
    <property name="text">
     <string>P</string>
+   </property>
+   <property name="arrowType">
+    <enum>Qt::LeftArrow</enum>
    </property>
   </widget>
  </widget>
