@@ -41,39 +41,30 @@
       <string>Settings for fields generation</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="3" column="1">
-       <widget class="QSlider" name="mazeCellSizeSlider">
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>30</number>
-        </property>
-        <property name="value">
-         <number>3</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+      <item row="5" column="0">
+       <widget class="QLabel" name="timelimitLabel">
+        <property name="text">
+         <string>Timelimit for excersize</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="1" colspan="3">
-       <widget class="QLabel" name="colorLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Ignored" vsizetype="Maximum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QLabel {background-color: rgb(0, 0, 0);}
-</string>
-        </property>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lineCellSizeLabel">
         <property name="text">
-         <string/>
+         <string>Line cell size (in Trik Studio cells)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSlider" name="linePixelSizeSlider">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="value">
+         <number>6</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
@@ -81,6 +72,46 @@
        <widget class="QLabel" name="lineColorLabel">
         <property name="text">
          <string>Line color</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="mazeCellSizeLabel">
+        <property name="text">
+         <string>Maze cell size (in Trik Studio cells)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1" colspan="3">
+       <widget class="QTimeEdit" name="excersizeTime">
+        <property name="currentSection">
+         <enum>QDateTimeEdit::MinuteSection</enum>
+        </property>
+        <property name="displayFormat">
+         <string>mm:ss</string>
+        </property>
+        <property name="timeSpec">
+         <enum>Qt::LocalTime</enum>
+        </property>
+        <property name="time">
+         <time>
+          <hour>0</hour>
+          <minute>59</minute>
+          <second>59</second>
+         </time>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QLabel" name="MazeLoopsLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Map with loops</string>
         </property>
        </widget>
       </item>
@@ -106,23 +137,23 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lineCellSizeLabel">
+      <item row="8" column="0">
+       <widget class="QPushButton" name="applyChangesButton">
         <property name="text">
-         <string>Line cell size (in Trik Studio cells)</string>
+         <string>Apply changes</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="QLabel" name="MazeLoopsLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+      <item row="2" column="0">
+       <widget class="QLabel" name="linePixelSizeLabel">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>17</height>
+         </size>
         </property>
         <property name="text">
-         <string>Map with loops</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Line width (pixels)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
@@ -169,37 +200,29 @@ QSlider::sub-page:vertical {
         </property>
        </widget>
       </item>
-      <item row="3" column="2" colspan="2">
-       <widget class="QLabel" name="mazeCellSizeValue">
+      <item row="2" column="2" colspan="2">
+       <widget class="QLabel" name="linePixelSizeValue">
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;6&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="timelimitLabel">
-        <property name="text">
-         <string>Timelimit for excersize</string>
+      <item row="3" column="1">
+       <widget class="QSlider" name="mazeCellSizeSlider">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
-       </widget>
-      </item>
-      <item row="5" column="1" colspan="3">
-       <widget class="QTimeEdit" name="excersizeTime">
-        <property name="currentSection">
-         <enum>QDateTimeEdit::MinuteSection</enum>
+        <property name="minimum">
+         <number>1</number>
         </property>
-        <property name="displayFormat">
-         <string>mm:ss</string>
+        <property name="maximum">
+         <number>30</number>
         </property>
-        <property name="timeSpec">
-         <enum>Qt::LocalTime</enum>
+        <property name="value">
+         <number>3</number>
         </property>
-        <property name="time">
-         <time>
-          <hour>0</hour>
-          <minute>59</minute>
-          <second>59</second>
-         </time>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
@@ -219,43 +242,27 @@ QSlider::sub-page:vertical {
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="mazeCellSizeLabel">
+      <item row="7" column="1" colspan="3">
+       <widget class="QLabel" name="colorLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Ignored" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel {background-color: rgb(0, 0, 0);}
+</string>
+        </property>
         <property name="text">
-         <string>Maze cell size (in Trik Studio cells)</string>
+         <string/>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="linePixelSizeLabel">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>17</height>
-         </size>
-        </property>
+      <item row="3" column="2" colspan="2">
+       <widget class="QLabel" name="mazeCellSizeValue">
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Line width (pixels)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QSlider" name="linePixelSizeSlider">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="value">
-         <number>6</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2" colspan="2">
-       <widget class="QLabel" name="linePixelSizeValue">
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;6&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>

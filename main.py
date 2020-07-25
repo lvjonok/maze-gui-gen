@@ -10,7 +10,7 @@ from time import time
 
 import pyperclip
 import xmltodict
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtGui, QtWidgets, QtCore
 # from PyQt5.QtCore import *
 # from PyQt5.QtGui import *
 
@@ -21,10 +21,26 @@ import source.informationUI as informationUI
 import source.screen as screen  # Это наш конвертированный файл дизайна
 import source.settingsUI as settingsUI
 
+class AppSettings:
+    def __init__(self):
+        self.settings = QtCore.QSettings('maze-gui-generator')
+
+    def getSettings(self, param):
+        return self.settings.value(param)
+
+    def updateSettings(self, param, value):
+        self.settings.setValue(param, value)
+
+    def sync(self):
+        self.settings.sync()
+
 
 class AboutWindow(QtWidgets.QWidget, aboutUI.Ui_aboutWidget):
     def __init__(self):
         super().__init__()
+
+        self.settings = AppSettings()
+
         self.setupUi(self)
         self.actionAgree.clicked.connect(self.close)
         # can close window by pressing Enter
@@ -36,9 +52,13 @@ class AboutWindow(QtWidgets.QWidget, aboutUI.Ui_aboutWidget):
     def copyLink(self, event):
         pyperclip.copy('https://t.me/maze_gui_gen')
 
+
 class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
     def __init__(self):
         super().__init__()
+
+        self.settings = AppSettings()
+
         self.current_image = 1
         self.setupUi(self)
         self.b_nextImage.clicked.connect(self.nextImage)
@@ -101,27 +121,97 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
     def __init__(self):
         super().__init__()
+
+        self.settings = AppSettings()
+
         self.setupUi(self)
-        self.setRussian()
         self.colorLabel.mousePressEvent = (self.controlColor)
-        self.colorLine = "000000"
-        self.colorLabel.setStyleSheet('QLabel {background-color: #' + str(self.colorLine) + ';}')
 
         self.lineCellSizeSlider.valueChanged.connect(self.updateValueLineCellSize)
         self.linePixelSizeSlider.valueChanged.connect(self.updateValueLinePixelSize)
         self.mazeCellSizeSlider.valueChanged.connect(self.updateValueMazeCellSize)
+        self.MazeLoopsCheckBox.stateChanged.connect(self.updateValueMazeLoopsCheckBox)
+        self.excersizeTime.timeChanged.connect(self.updateValueExcersizeTimelimit)
+        self.applyChangesButton.clicked.connect(self.applyChanges)
+
+        self.updateWidgetsOnStart()
+
+    def updateWidgetsOnStart(self):
+        time_set = self.settings.getSettings('valueExcersizeTimelimit')
+        if time_set:
+            time_set = list(map(int, time_set))
+            self.excersizeTime.setTime(QtCore.QTime(0, time_set[0], second=time_set[1]))
+        else:
+            self.excersizeTime.setTime(QtCore.QTime(0, 59, second=59))
+
+        color_set = self.settings.getSettings('valueColorLine')
+        if color_set:
+            self.colorLine = color_set
+        else:
+            self.colorLine = "000000"
+        self.colorLabel.setStyleSheet('QLabel {background-color: #' + str(self.colorLine) + ';}')
+
+        params = [
+            self.settings.getSettings('valueLinePixelSize'),
+            self.settings.getSettings('valueLineCellSize'),
+            self.settings.getSettings('valueMazeCellSize')
+        ]
+
+        if params[0]:
+            self.linePixelSizeSlider.setValue(int(params[0]))
+        else:
+            self.linePixelSizeSlider.setValue(6)            # standart line width is 6 px
+
+        if params[1]:
+            self.lineCellSizeSlider.setValue(int(params[1]))
+        else:
+            self.lineCellSizeSlider.setValue(2)             # standart line width is 2 cells
+
+        if params[2]:
+            self.mazeCellSizeSlider.setValue(int(params[2]))
+        else:
+            self.mazeCellSizeSlider.setValue(3)             # standart line width is 3 cells
+
+        loops_set = self.settings.getSettings('valueMazeLoopsCheckBox')
+        if loops_set:
+            self.MazeLoopsCheckBox.setChecked(loops_set == "true")
+
+    def applyChanges(self):
+        self.settings.sync()
+        msg = QtWidgets.QMessageBox()
+        if self.locale_language == 'en':
+            msg.setText('Your settings were saved!')
+            msg.setWindowTitle('Information')
+        else:
+            msg.setText('Ваши настройки были сохранены')
+            msg.setWindowTitle('Информация')
+        msg.setIcon(QtWidgets.QMessageBox.Information)
+        msg.exec_()
+        self.close()
 
     def updateValueLinePixelSize(self):         # updates label with line pixel size
+        value = self.getSliderLinePixelSize()
         self.linePixelSizeValue.setText("<html><head/><body><p align=\"center\">" +
-                                       str(self.getSliderLinePixelSize()) + "</p></body></html>")
+                                        str(value) + "</p></body></html>")
+        self.settings.updateSettings('valueLinePixelSize', value)
 
     def updateValueMazeCellSize(self):          # updates label with maze cell size
+        value = self.getSliderMazeCellSize()
         self.mazeCellSizeValue.setText("<html><head/><body><p align=\"center\">" +
-                                       str(self.getSliderMazeCellSize()) + "</p></body></html>")
+                                       str(value) + "</p></body></html>")
+        self.settings.updateSettings('valueMazeCellSize', value)
 
     def updateValueLineCellSize(self):          # updates label with line cell size
+        value = self.getSliderLineCellSize()
         self.lineCellSizeValue.setText("<html><head/><body><p align=\"center\">" +
-                                       str(self.getSliderLineCellSize()) + "</p></body></html>")
+                                       str(value) + "</p></body></html>")
+        self.settings.updateSettings('valueLineCellSize', value)
+
+    def updateValueMazeLoopsCheckBox(self):
+        self.settings.updateSettings('valueMazeLoopsCheckBox', self.MazeLoopsCheckBox.isChecked())
+
+    def updateValueExcersizeTimelimit(self):
+        self.settings.updateSettings('valueExcersizeTimelimit', self.getTimelimit())
 
     def rgb_to_hex(self, rgb):
         return '%02x%02x%02x' % rgb
@@ -138,7 +228,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
     def getMazeCheckBox(self):
         return self.MazeLoopsCheckBox.isChecked()
 
-    def getTimelimit(self, event):
+    def getTimelimit(self):
         v = self.excersizeTime.time().toString()
         v = [int(vi) for vi in v.split(':')][1:3]       # 0 - hours, 1 - minutes, 2 - seconds
         return v
@@ -150,24 +240,31 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
             hex_color = self.rgb_to_hex(rgb)
             self.colorLabel.setStyleSheet('QLabel {background-color: #' + str(hex_color) + ';}')
             self.colorLine = hex_color
+            self.settings.updateSettings('valueColorLine', hex_color)
 
     def setRussian(self):
+        self.locale_language = 'ru'
         self.MazeLoopsLabel.setText('Лабиринт с циклами')
         self.groupBox.setTitle('Настройки для генерирования полей')
         self.lineCellSizeLabel.setText('Размер ячейки с линией')
+        self.linePixelSizeLabel.setText('Ширина линии')
         self.mazeCellSizeLabel.setText('Размер ячейки для лабиринта')
         self.timelimitLabel.setText('Временное ограничение для задания')
         self.lineColorLabel.setText('Цвет линии')
+        self.applyChangesButton.setText('Применить изменения')
         # self.InfoLabel.setText('По вопросам и проблемам свяжитесь со мной в telegram: @robot_lev')
         # self.telegramChannel.setText('Нажмите, чтобы скопировать ссылку на telegram канал: https://t.me/maze_gui_gen')
 
     def setEnglish(self):
+        self.locale_language = 'en'
         self.MazeLoopsLabel.setText('Maze with loops')
         self.groupBox.setTitle('Settings for fields generation')
         self.lineCellSizeLabel.setText('Line cell size')
+        self.linePixelSizeLabel.setText('Line width')
         self.mazeCellSizeLabel.setText('Maze cell size')
         self.timelimitLabel.setText('Timelimit for excersize')
         self.lineColorLabel.setText('Line color')
+        self.applyChangesButton.setText('Apply changes')
         # self.InfoLabel.setText('For any issues contact me on telegram: @robot_lev')
         # self.telegramChannel.setText('Press to copy link to telegram channel: https://t.me/maze_gui_gen')
 
@@ -175,6 +272,9 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
 class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     def __init__(self):
         super().__init__()
+
+        self.settings = AppSettings()
+
         try:
             bp = sys._MEIPASS
             icos = os.path.join(bp, "source/maze.ico")
@@ -182,7 +282,6 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             icos = "source/maze.ico"
         self.setWindowIcon(QtGui.QIcon(icos))
         self.setMouseTracking(True)
-        self.locale_language = 'ru'
         self.mouse_scroll_counter = 0   # uses to count scaling
         self.ui_x = 0                   # uses to move all map
         self.ui_y = 0
@@ -200,12 +299,22 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             "finish": 'QPushButton {background-color: #e86f6f;}',
         }
         self.wallsButtons = []
+
         self.settingsWindow = SettingsWindow()
         self.settingsWindow.hide()
+
         self.informationWindow = InformationWindow()
         self.informationWindow.hide()
+
         self.aboutWindow = AboutWindow()
         self.aboutWindow.hide()
+
+        lang_set = self.settings.getSettings('locale_language')
+        if lang_set:
+            self.locale_language = lang_set
+        else:
+            self.locale_language = 'ru'
+
         self.reloadWindow()
         self.size_x = 5
         self.size_y = 5
@@ -216,6 +325,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.displayWalls()
 
     def setRussian(self):
+        self.settings.updateSettings('locale_language', 'ru')
+        self.settings.sync()
+
         self.locale_language = 'ru'
         self.settingsWindow.setRussian()
         self.informationWindow.locale_language = 'ru'
@@ -243,6 +355,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.actionAboutApplication.setText('О программе maze-gui-generator \u2026')
 
     def setEnglish(self):
+        self.settings.updateSettings('locale_language', 'en')
+        self.settings.sync()
+
         self.locale_language = 'en'
         self.settingsWindow.setEnglish()
         self.informationWindow.locale_language = 'en'
@@ -582,7 +697,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         except KeyError:
             pass
         try:
-            min_sec = self.settingsWindow.getTimelimit(None)
+            min_sec = self.settingsWindow.getTimelimit()
             doc['root']['constraints']['timelimit']['@value'] = (min_sec[0] * 60 + min_sec[1]) * 1000
         except KeyError:
             pass
