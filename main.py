@@ -52,6 +52,28 @@ class AboutWindow(QtWidgets.QWidget, aboutUI.Ui_aboutWidget):
     def copyLink(self, event):
         pyperclip.copy('https://t.me/maze_gui_gen')
 
+    def setRussian(self):
+        self.locale_language = 'ru'
+        self.InfoLabel.setText('<html><head/><body><p align="center">'\
+                                'По вопросам свяжитесь со мной в telegram: @robot_lev'\
+                                '</p></body></html>')
+        self.telegramChannel.setText('<html><head/><body><p align="center">'
+                                     'Нажмите, чтобы скопировать ссылку на telegram канал:'\
+                                     '</p><p align="center">'\
+                                     'https://t.me/maze_gui_gen'\
+                                     '</p></body></html>')
+
+    def setEnglish(self):
+        self.locale_language = 'en'
+        self.InfoLabel.setText('<html><head/><body><p align="center">'\
+                                'For any issues contact me on telegram: @robot_lev'\
+                                '</p></body></html>')
+        self.telegramChannel.setText('<html><head/><body><p align="center">'
+                                     'Press to copy link to telegram channel:'\
+                                     '</p><p align="center">'\
+                                     'https://t.me/maze_gui_gen'\
+                                     '</p></body></html>')
+
 
 class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
     def __init__(self):
@@ -252,8 +274,6 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.timelimitLabel.setText('Временное ограничение для задания')
         self.lineColorLabel.setText('Цвет линии')
         self.applyChangesButton.setText('Применить изменения')
-        # self.InfoLabel.setText('По вопросам и проблемам свяжитесь со мной в telegram: @robot_lev')
-        # self.telegramChannel.setText('Нажмите, чтобы скопировать ссылку на telegram канал: https://t.me/maze_gui_gen')
 
     def setEnglish(self):
         self.locale_language = 'en'
@@ -265,8 +285,6 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.timelimitLabel.setText('Timelimit for excersize')
         self.lineColorLabel.setText('Line color')
         self.applyChangesButton.setText('Apply changes')
-        # self.InfoLabel.setText('For any issues contact me on telegram: @robot_lev')
-        # self.telegramChannel.setText('Press to copy link to telegram channel: https://t.me/maze_gui_gen')
 
 
 class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
@@ -329,6 +347,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.settings.sync()
 
         self.locale_language = 'ru'
+        self.aboutWindow.setRussian()
         self.settingsWindow.setRussian()
         self.informationWindow.locale_language = 'ru'
         self.informationWindow.displayImage()
@@ -359,6 +378,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.settings.sync()
 
         self.locale_language = 'en'
+        self.aboutWindow.setEnglish()
         self.settingsWindow.setEnglish()
         self.informationWindow.locale_language = 'en'
         self.informationWindow.displayImage()
