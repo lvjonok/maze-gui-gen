@@ -615,14 +615,24 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     doc['root']['world']['colorFields']['line'].append(
                         (self.getXML_line(def_size // 2 + x_i * def_size, def_size // 2 + y_i * def_size, -def_size // 2, 0)))
         # print(xmltodict.unparse(doc, pretty=True))
+
+        if self.locale_language == 'ru':
+            info_caption = 'Выберите файл для сохранения вашего поля'
+        else:
+            info_caption = 'Select file to save field to'
+
+        saved_last_directory = self.settings.getSettings('valueSavedLastDirectory')
+        if saved_last_directory:
+            dir_path = os.path.join(saved_last_directory, 'new_field.xml')
+        else:
+            dir_path = os.path.join(sys.path[0], 'new_field.xml')      # 0 index is needed path
+
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        if self.locale_language == 'en':
-            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
-                self, "Select file to save field to", "new_field.xml", "Fields (*.xml)", options=options)
-        else:
-            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
-                self, "Выберите файл для сохранения вашего поля", "new_field.xml", "Fields (*.xml)", options=options)
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self, caption=info_caption,
+                                                            directory=dir_path,
+                                                            filter="Fields (*.xml)",
+                                                            options=options)
         if fileName:
             #print(fileName)
             if fileName[::-1][0:4] != '.xml'[::-1]:
@@ -630,6 +640,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             file_map = open(fileName, 'w')
             file_map.write(xmltodict.unparse(doc, pretty=True))
             file_map.close()
+
+            # get head of a path and update as last directory
+            self.settings.updateSettings('valueSavedLastDirectory', os.path.split(fileName)[0])
 
     def generateXML_maze(self):                                                 # generates XML file with maze
         sliderMazeCellValue = self.settingsWindow.getSliderMazeCellSize()
@@ -654,21 +667,34 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     doc['root']['world']['walls']['wall'].append(
                         (self.getXML_wall(x_i * def_size, y_i * def_size, 0, def_size)))
         # print(xmltodict.unparse(doc, pretty=True))
+
+        if self.locale_language == 'ru':
+            info_caption = 'Выберите файл для сохранения вашего поля'
+        else:
+            info_caption = 'Select file to save field to'
+
+        saved_last_directory = self.settings.getSettings('valueSavedLastDirectory')
+        if saved_last_directory:
+            dir_path = os.path.join(saved_last_directory, 'new_field.xml')
+        else:
+            dir_path = os.path.join(sys.path[0], 'new_field.xml')      # 0 index is needed path
+
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        if self.locale_language == 'en':
-            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
-                self, "Select file to save field to", "new_field.xml", "Fields (*.xml)", options=options)
-        else:
-            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
-                self, "Выберите файл для сохранения вашего поля", "new_field.xml", "Fields (*.xml)", options=options)
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self, caption=info_caption,
+                                                            directory=dir_path,
+                                                            filter="Fields (*.xml)",
+                                                            options=options)
         if fileName:
-            # print(fileName)
+            #print(fileName)
             if fileName[::-1][0:4] != '.xml'[::-1]:
                 fileName += '.xml'
             file_map = open(fileName, 'w')
             file_map.write(xmltodict.unparse(doc, pretty=True))
             file_map.close()
+
+            # get head of a path and update as last directory
+            self.settings.updateSettings('valueSavedLastDirectory', os.path.split(fileName)[0])
 
     def prepareField(self, def_size):                                           # returns field with updated start and finish
         self.updateFinishStartID()
@@ -806,14 +832,25 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
     def saveAdjMap(self):                                                       # trigger to save maps to file
         adj_map = self.generateAdjMap()
+
+        if self.locale_language == 'ru':
+            info_caption = 'Выберите файл для сохранения вашей матрицы'
+        else:
+            info_caption = 'Select file to save map to'
+
+        saved_last_directory = self.settings.getSettings('valueSavedLastDirectory')
+        if saved_last_directory:
+            dir_path = os.path.join(saved_last_directory, 'my_map.txt')
+        else:
+            dir_path = os.path.join(sys.path[0], 'my_map.txt')      # 0 index is needed path
+
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        if self.locale_language == 'en':
-            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
-                self, "Select file to save map to", "my_map", "Text Files (*.txt)", options=options)
-        else:
-            fileName, _ = QtWidgets.QFileDialog.getSaveFileName(
-                self, "Выберите файл для сохранения вашей матрицы", "my_map", "Text Files (*.txt)", options=options)
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self, caption=info_caption,
+                                                            directory=dir_path,
+                                                            filter="Text Files (*.txt)",
+                                                            options=options)
+
         if fileName:
             # print(fileName)
             if fileName[::-1][0:4] != '.txt'[::-1]:
@@ -830,6 +867,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             for line in self.convertMap(adj_map):
                 file_map.write(str(line) + ",\n")
             file_map.close()
+
+            # get head of a path and update as last directory
+            self.settings.updateSettings('valueSavedLastDirectory', os.path.split(fileName)[0])
 
     # convert map from vertex-> adjanced vertices to vertex -> all vertices
     def convertMap(self, adj_map):
