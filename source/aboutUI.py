@@ -15,8 +15,8 @@ class Ui_aboutWidget(object):
     def setupUi(self, aboutWidget):
         aboutWidget.setObjectName("aboutWidget")
         aboutWidget.resize(439, 517)
-        aboutWidget.setMinimumSize(QtCore.QSize(429, 257))
-        aboutWidget.setMaximumSize(QtCore.QSize(700, 700))
+        aboutWidget.setMinimumSize(QtCore.QSize(439, 517))
+        aboutWidget.setMaximumSize(QtCore.QSize(439, 517))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("../maze.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         aboutWidget.setWindowIcon(icon)
