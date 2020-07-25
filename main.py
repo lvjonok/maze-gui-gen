@@ -769,8 +769,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         out_dict['@end'] = str(x_start + x_len) + ":" + str(y_start + y_len)
         out_dict['@id'] = '{wall' + str(self.walls_id_xml) + '}'
         out_dict['@stroke-style'] = 'solid'
-        out_dict['@fill'] = str(self.settingsWindow.colorLine)
-        out_dict['@stroke'] = str(self.settingsWindow.colorLine)
+        out_dict['@fill'] = "#" + str(self.settingsWindow.colorLine)
+        out_dict['@stroke'] = "#" + str(self.settingsWindow.colorLine)
         self.walls_id_xml += 1
         return out_dict
 
