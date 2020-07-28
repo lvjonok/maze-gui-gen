@@ -22,11 +22,12 @@ import source.screen as screen  # Это наш конвертированный
 import source.settingsUI as settingsUI
 
 if getattr(sys, 'frozen', False):   # running as compiled
-    MEDIA_DIRECTORY = os.path.join(sys._MEIPASS, 'source', # pylint: disable=protected-access, no-member
+    MEDIA_DIRECTORY = os.path.join(sys._MEIPASS, 'source',  # pylint: disable=protected-access, no-member
                                    'media')
 else:
     MEDIA_DIRECTORY = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'source',
                                    'media')
+
 
 class AppSettings:
     def __init__(self):
@@ -51,10 +52,12 @@ class AboutWindow(QtWidgets.QWidget, aboutUI.Ui_aboutWidget):
         self.setupUi(self)
         self.actionAgree.clicked.connect(self.close)
         # can close window by pressing Enter
-        self.shortcutClose = QtWidgets.QShortcut(QtGui.QKeySequence('Return'), self)
+        self.shortcutClose = QtWidgets.QShortcut(
+            QtGui.QKeySequence('Return'), self)
         self.shortcutClose.activated.connect(self.close)
         # can close window by pressing Esc
-        self.shortcutCloseE = QtWidgets.QShortcut(QtGui.QKeySequence('Esc'), self)
+        self.shortcutCloseE = QtWidgets.QShortcut(
+            QtGui.QKeySequence('Esc'), self)
         self.shortcutCloseE.activated.connect(self.close)
 
         self.telegramChannel.mousePressEvent = (self.copyLink)
@@ -64,24 +67,24 @@ class AboutWindow(QtWidgets.QWidget, aboutUI.Ui_aboutWidget):
 
     def setRussian(self):
         self.locale_language = 'ru'
-        self.InfoLabel.setText('<html><head/><body><p align="center">'\
-                                'По вопросам свяжитесь со мной в telegram: @robot_lev'\
-                                '</p></body></html>')
+        self.InfoLabel.setText('<html><head/><body><p align="center">'
+                               'По вопросам свяжитесь со мной в telegram: @robot_lev'
+                               '</p></body></html>')
         self.telegramChannel.setText('<html><head/><body><p align="center">'
-                                     'Нажмите, чтобы скопировать ссылку на telegram канал:'\
-                                     '</p><p align="center">'\
-                                     'https://t.me/maze_gui_gen'\
+                                     'Нажмите, чтобы скопировать ссылку на telegram канал:'
+                                     '</p><p align="center">'
+                                     'https://t.me/maze_gui_gen'
                                      '</p></body></html>')
 
     def setEnglish(self):
         self.locale_language = 'en'
-        self.InfoLabel.setText('<html><head/><body><p align="center">'\
-                                'For any issues contact me on telegram: @robot_lev'\
-                                '</p></body></html>')
+        self.InfoLabel.setText('<html><head/><body><p align="center">'
+                               'For any issues contact me on telegram: @robot_lev'
+                               '</p></body></html>')
         self.telegramChannel.setText('<html><head/><body><p align="center">'
-                                     'Press to copy link to telegram channel:'\
-                                     '</p><p align="center">'\
-                                     'https://t.me/maze_gui_gen'\
+                                     'Press to copy link to telegram channel:'
+                                     '</p><p align="center">'
+                                     'https://t.me/maze_gui_gen'
                                      '</p></body></html>')
 
 
@@ -97,27 +100,34 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         self.b_previousImage.clicked.connect(self.previousImage)
         self.locale_language = 'ru'
         self.displayImage()
-        self.shortcut_n_img = QtWidgets.QShortcut(QtGui.QKeySequence('Right'), self)
-        self.shortcut_p_img = QtWidgets.QShortcut(QtGui.QKeySequence('Left'), self)
-        self.shortcut_n_img_k = QtWidgets.QShortcut(QtGui.QKeySequence('n'), self)
-        self.shortcut_p_img_k = QtWidgets.QShortcut(QtGui.QKeySequence('p'), self)
+        self.shortcut_n_img = QtWidgets.QShortcut(
+            QtGui.QKeySequence('Right'), self)
+        self.shortcut_p_img = QtWidgets.QShortcut(
+            QtGui.QKeySequence('Left'), self)
+        self.shortcut_n_img_k = QtWidgets.QShortcut(
+            QtGui.QKeySequence('n'), self)
+        self.shortcut_p_img_k = QtWidgets.QShortcut(
+            QtGui.QKeySequence('p'), self)
         self.shortcut_n_img.activated.connect(self.nextImage)
         self.shortcut_p_img.activated.connect(self.previousImage)
         self.shortcut_n_img_k.activated.connect(self.nextImage)
         self.shortcut_p_img_k.activated.connect(self.previousImage)
         # can close window by pressing Enter
-        self.shortcutClose = QtWidgets.QShortcut(QtGui.QKeySequence('Return'), self)
+        self.shortcutClose = QtWidgets.QShortcut(
+            QtGui.QKeySequence('Return'), self)
         self.shortcutClose.activated.connect(self.close)
         # can close window by pressing Esc
-        self.shortcutCloseE = QtWidgets.QShortcut(QtGui.QKeySequence('Esc'), self)
+        self.shortcutCloseE = QtWidgets.QShortcut(
+            QtGui.QKeySequence('Esc'), self)
         self.shortcutCloseE.activated.connect(self.close)
 
     def resizeEvent(self, event):
         # o_size = [event.oldSize().width(), event.oldSize().height()]
         c_size = [event.size().width(), event.size().height()]
         min_size = min(c_size)
-        self.tutorialImage.setGeometry(c_size[0]//2 - min_size//2, 0, min_size, min_size)
-        
+        self.tutorialImage.setGeometry(
+            c_size[0]//2 - min_size//2, 0, min_size, min_size)
+
         self.b_nextImage.move(c_size[0] - 20, round(240 / 600 * c_size[1]))
         self.b_previousImage.move(0, round(240 / 600 * c_size[1]))
 
@@ -139,7 +149,7 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         self.tutorialImage.setPixmap(QtGui.QPixmap(path))
 
     def getImagePath(self):
-        return os.path.join(MEDIA_DIRECTORY, 
+        return os.path.join(MEDIA_DIRECTORY,
                             "out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
 
 
@@ -152,11 +162,16 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.setupUi(self)
         self.colorLabel.mousePressEvent = (self.controlColor)
 
-        self.lineCellSizeSlider.valueChanged.connect(self.updateValueLineCellSize)
-        self.linePixelSizeSlider.valueChanged.connect(self.updateValueLinePixelSize)
-        self.mazeCellSizeSlider.valueChanged.connect(self.updateValueMazeCellSize)
-        self.MazeLoopsCheckBox.stateChanged.connect(self.updateValueMazeLoopsCheckBox)
-        self.excersizeTime.timeChanged.connect(self.updateValueExcersizeTimelimit)
+        self.lineCellSizeSlider.valueChanged.connect(
+            self.updateValueLineCellSize)
+        self.linePixelSizeSlider.valueChanged.connect(
+            self.updateValueLinePixelSize)
+        self.mazeCellSizeSlider.valueChanged.connect(
+            self.updateValueMazeCellSize)
+        self.MazeLoopsCheckBox.stateChanged.connect(
+            self.updateValueMazeLoopsCheckBox)
+        self.excersizeTime.timeChanged.connect(
+            self.updateValueExcersizeTimelimit)
         self.applyChangesButton.clicked.connect(self.applyChanges)
 
         self.updateWidgetsOnStart()
@@ -165,7 +180,8 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         time_set = self.settings.getSettings('valueExcersizeTimelimit')
         if time_set:
             time_set = list(map(int, time_set))
-            self.excersizeTime.setTime(QtCore.QTime(0, time_set[0], second=time_set[1]))
+            self.excersizeTime.setTime(QtCore.QTime(
+                0, time_set[0], second=time_set[1]))
         else:
             self.excersizeTime.setTime(QtCore.QTime(0, 59, second=59))
 
@@ -174,7 +190,8 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
             self.colorLine = color_set
         else:
             self.colorLine = "000000"
-        self.colorLabel.setStyleSheet('QLabel {background-color: #' + str(self.colorLine) + ';}')
+        self.colorLabel.setStyleSheet(
+            'QLabel {background-color: #' + str(self.colorLine) + ';}')
 
         params = [
             self.settings.getSettings('valueLinePixelSize'),
@@ -185,17 +202,20 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         if params[0]:
             self.linePixelSizeSlider.setValue(int(params[0]))
         else:
-            self.linePixelSizeSlider.setValue(6)            # standart line width is 6 px
+            # standart line width is 6 px
+            self.linePixelSizeSlider.setValue(6)
 
         if params[1]:
             self.lineCellSizeSlider.setValue(int(params[1]))
         else:
-            self.lineCellSizeSlider.setValue(2)             # standart line width is 2 cells
+            # standart line width is 2 cells
+            self.lineCellSizeSlider.setValue(2)
 
         if params[2]:
             self.mazeCellSizeSlider.setValue(int(params[2]))
         else:
-            self.mazeCellSizeSlider.setValue(3)             # standart line width is 3 cells
+            # standart line width is 3 cells
+            self.mazeCellSizeSlider.setValue(3)
 
         loops_set = self.settings.getSettings('valueMazeLoopsCheckBox')
         if loops_set:
@@ -214,29 +234,34 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         msg.exec_()
         self.close()
 
-    def updateValueLinePixelSize(self):         # updates label with line pixel size
+    # updates label with line pixel size
+    def updateValueLinePixelSize(self):
         value = self.getSliderLinePixelSize()
         self.linePixelSizeValue.setText("<html><head/><body><p align=\"center\">" +
                                         str(value) + "</p></body></html>")
         self.settings.updateSettings('valueLinePixelSize', value)
 
-    def updateValueMazeCellSize(self):          # updates label with maze cell size
+    # updates label with maze cell size
+    def updateValueMazeCellSize(self):
         value = self.getSliderMazeCellSize()
         self.mazeCellSizeValue.setText("<html><head/><body><p align=\"center\">" +
                                        str(value) + "</p></body></html>")
         self.settings.updateSettings('valueMazeCellSize', value)
 
-    def updateValueLineCellSize(self):          # updates label with line cell size
+    # updates label with line cell size
+    def updateValueLineCellSize(self):
         value = self.getSliderLineCellSize()
         self.lineCellSizeValue.setText("<html><head/><body><p align=\"center\">" +
                                        str(value) + "</p></body></html>")
         self.settings.updateSettings('valueLineCellSize', value)
 
     def updateValueMazeLoopsCheckBox(self):
-        self.settings.updateSettings('valueMazeLoopsCheckBox', self.MazeLoopsCheckBox.isChecked())
+        self.settings.updateSettings(
+            'valueMazeLoopsCheckBox', self.MazeLoopsCheckBox.isChecked())
 
     def updateValueExcersizeTimelimit(self):
-        self.settings.updateSettings('valueExcersizeTimelimit', self.getTimelimit())
+        self.settings.updateSettings(
+            'valueExcersizeTimelimit', self.getTimelimit())
 
     def rgb_to_hex(self, rgb):
         return '%02x%02x%02x' % rgb
@@ -255,7 +280,8 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
 
     def getTimelimit(self):
         v = self.excersizeTime.time().toString()
-        v = [int(vi) for vi in v.split(':')][1:3]       # 0 - hours, 1 - minutes, 2 - seconds
+        # 0 - hours, 1 - minutes, 2 - seconds
+        v = [int(vi) for vi in v.split(':')][1:3]
         return v
 
     def controlColor(self, event):
@@ -263,7 +289,8 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         if color:
             rgb = (color.getRgb()[0:3])
             hex_color = self.rgb_to_hex(rgb)
-            self.colorLabel.setStyleSheet('QLabel {background-color: #' + str(hex_color) + ';}')
+            self.colorLabel.setStyleSheet(
+                'QLabel {background-color: #' + str(hex_color) + ';}')
             self.colorLine = hex_color
             self.settings.updateSettings('valueColorLine', hex_color)
 
@@ -350,7 +377,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.menuFile.setTitle('Файл')
         self.actionExportXmlMaze.setText('Сохранить поле с лабиринтом \u2026')
         self.actionExportXmlLineMap.setText('Сохранить поле с линиями \u2026')
-        self.actionExportAdjacencyMap.setText('Сохранить матрицу смежности \u2026')
+        self.actionExportAdjacencyMap.setText(
+            'Сохранить матрицу смежности \u2026')
 
         self.menuView.setTitle('Вид')
         self.actionZoomIn.setText('Приблизить')
@@ -366,7 +394,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         self.menuHelp.setTitle('Справка')
         self.actionTutorial.setText('Помощь \u2026')
-        self.actionAboutApplication.setText('О программе maze-gui-generator \u2026')
+        self.actionAboutApplication.setText(
+            'О программе maze-gui-generator \u2026')
 
     def setEnglish(self):
         self.settings.updateSettings('locale_language', 'en')
@@ -413,13 +442,15 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             return
 
         min_size = 90
-        window_sizes = [self.width() // (self.size_x + 1), self.height() // (self.size_y + 1)]
+        window_sizes = [self.width() // (self.size_x + 1),
+                        self.height() // (self.size_y + 1)]
         self.ui_scale = round((max(min(window_sizes), min_size)) / min_size)
         self.ui_x = 0
         self.ui_y = 0
         self.displayWalls()
 
-    def reloadWindow(self):                                                     # clears window and adds triggers
+    # clears window and adds triggers
+    def reloadWindow(self):
         self.setupUi(self)
 
         # actions for file menu
@@ -436,7 +467,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         # actions for file menu
         self.actionCreateMap.triggered.connect(self.generateMap_init)
-        self.actionFillMap.triggered.connect(lambda ch, filled=1: self.generateMap_init(filled))
+        self.actionFillMap.triggered.connect(
+            lambda ch, filled=1: self.generateMap_init(filled))
         self.actionRandomMap.triggered.connect(self.randomGraph)
 
         # actions for view menu
@@ -452,11 +484,13 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.setEnglish()
 
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(os.path.join(MEDIA_DIRECTORY, "ru.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(os.path.join(
+            MEDIA_DIRECTORY, "ru.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionRu.setIcon(icon1)
 
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(os.path.join(MEDIA_DIRECTORY, "en.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap(os.path.join(
+            MEDIA_DIRECTORY, "en.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionEn.setIcon(icon2)
 
         icos = os.path.join(MEDIA_DIRECTORY, 'maze.ico')
@@ -489,31 +523,44 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     self.wallsButtons[y_coor][x_coor]['left']['core'] = left_button
                     left_button.setGeometry(screen.QtCore.QRect(
                         const_move['x'] + x_coor * ew, const_move['y'] + e + y_coor * ew, e, w))
-                    left_button.setObjectName("b_" + str(y_coor) + "_" + str(x_coor) + "_left")
-                    left_button.setStyleSheet(self.wallsButtons[y_coor][x_coor]['left']['style'])
-                    left_button.clicked.connect(lambda ch, x=x_coor, y=y_coor: self.pressWall([y, x, 'left']))
+                    left_button.setObjectName(
+                        "b_" + str(y_coor) + "_" + str(x_coor) + "_left")
+                    left_button.setStyleSheet(
+                        self.wallsButtons[y_coor][x_coor]['left']['style'])
+                    left_button.clicked.connect(
+                        lambda ch, x=x_coor, y=y_coor: self.pressWall([y, x, 'left']))
                 if x_coor != self.size_x:
                     up_button = QtWidgets.QPushButton(self.pool)
                     self.wallsButtons[y_coor][x_coor]['up']['core'] = up_button
                     up_button.setGeometry(screen.QtCore.QRect(
                         const_move['x'] + e + x_coor * ew, const_move['y'] + y_coor * ew, w, e))
-                    up_button.setObjectName("b_" + str(y_coor) + "_" + str(x_coor) + "_up")
-                    up_button.setStyleSheet(self.wallsButtons[y_coor][x_coor]['up']['style'])
-                    up_button.clicked.connect(lambda ch, x=x_coor, y=y_coor: self.pressWall([y, x, 'up']))
+                    up_button.setObjectName(
+                        "b_" + str(y_coor) + "_" + str(x_coor) + "_up")
+                    up_button.setStyleSheet(
+                        self.wallsButtons[y_coor][x_coor]['up']['style'])
+                    up_button.clicked.connect(
+                        lambda ch, x=x_coor, y=y_coor: self.pressWall([y, x, 'up']))
                 if x_coor != self.size_x and y_coor != self.size_y:
-                    center_button = QtWidgets.QPushButton(str(y_coor * self.size_x + x_coor), self.pool)
+                    center_button = QtWidgets.QPushButton(
+                        str(y_coor * self.size_x + x_coor), self.pool)
                     self.wallsButtons[y_coor][x_coor]['center']['core'] = center_button
                     center_button.setGeometry(screen.QtCore.QRect(
                         const_move['x'] + e + x_coor * ew, const_move['y'] + e + y_coor * ew, w, w))
-                    center_button.setObjectName("b_" + str(y_coor) + "_" + str(x_coor) + "_center")
-                    center_button.setStyleSheet(self.wallsButtons[y_coor][x_coor]['center']['style'])
-                    center_button.clicked.connect(lambda ch, x=x_coor, y=y_coor: self.pressCell([y, x, 'center']))
+                    center_button.setObjectName(
+                        "b_" + str(y_coor) + "_" + str(x_coor) + "_center")
+                    center_button.setStyleSheet(
+                        self.wallsButtons[y_coor][x_coor]['center']['style'])
+                    center_button.clicked.connect(
+                        lambda ch, x=x_coor, y=y_coor: self.pressCell([y, x, 'center']))
         #print('time for loading is', time() - s_t)
 
-    def moveWalls(self, delta_x, delta_y):                            # moves all walls on given deltas
+    # moves all walls on given deltas
+    def moveWalls(self, delta_x, delta_y):
         const_move = {'x': 30 + delta_x, 'y': 30 + delta_y}
-        ew = round((self.wall_size + self.empty_part_size) * self.ui_scale)     # distance between cells center
-        e = round(self.empty_part_size * self.ui_scale)                         # scaled empty size between cells
+        ew = round((self.wall_size + self.empty_part_size) *
+                   self.ui_scale)     # distance between cells center
+        # scaled empty size between cells
+        e = round(self.empty_part_size * self.ui_scale)
         for y_index in range(self.size_y + 1):
             for x_index in range(self.size_x + 1):
                 if y_index != self.size_y:
@@ -527,7 +574,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                         const_move['x'] + e + x_index * ew, const_move['y'] + e + y_index * ew)
         #print('time for loading is', time() - s_t)
 
-    def mouseMoveEvent(self, e):                                                # accepts mouse events
+    # accepts mouse events
+    def mouseMoveEvent(self, e):
         x = e.x()   # mouse x
         y = e.y()   # mouse y
         if time() - self.ui_last_time < 0.2:        # random time)
@@ -543,7 +591,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         numDegrees = event.angleDelta().y() / 8
         numSteps = numDegrees / 15
         self.mouse_scroll_counter += numSteps
-        #print(self.mouse_scroll_counter)
+        # print(self.mouse_scroll_counter)
         if self.mouse_scroll_counter > 1:
             self.zoomIn()
             self.mouse_scroll_counter = 0
@@ -551,25 +599,30 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.zoomOut()
             self.mouse_scroll_counter = 0
 
-    def randomGraph(self):                                                      # trigger to random map
+    # trigger to random map
+    def randomGraph(self):
         r_g = Graph.Graph(self.size_x, self.size_y)
-        r_g.generateGraph(Graph.randint(0, self.size_x * self.size_y - 1), self.settingsWindow.getMazeCheckBox())
+        r_g.generateGraph(Graph.randint(
+            0, self.size_x * self.size_y - 1), self.settingsWindow.getMazeCheckBox())
         _map = r_g.getMapVertexList()
         # for v in _map:
         #     print(v)
         self.setWalls(_map)
 
-    def generateWallsButtons(self, x_len, y_len, filled=False):               # generates self.wallsButtons with given size
+    # generates self.wallsButtons with given size
+    def generateWallsButtons(self, x_len, y_len, filled=False):
         self.wallsButtons = []
 
         min_size = 60
-        window_sizes = [self.width() // (x_len + 1), self.height() // (y_len + 1)]
+        window_sizes = [self.width() // (x_len + 1),
+                        self.height() // (y_len + 1)]
         self.ui_scale = (max(min(window_sizes), min_size)) / min_size
 
         for y_index in range(y_len + 1):
             self.wallsButtons.append([0] * (x_len + 1))
             for x_index in range(x_len + 1):
-                self.wallsButtons[y_index][x_index] = {}  # contains two buttons: one up, one left
+                # contains two buttons: one up, one left
+                self.wallsButtons[y_index][x_index] = {}
                 if y_index != y_len:
                     self.wallsButtons[y_index][x_index]['left'] = {
                         'style': self.walls_styles['empty'],
@@ -609,7 +662,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         bs = self.wallsButtons[y][x][side]["style"]
         self.wallsButtons[y][x][side]["core"].setStyleSheet(bs)
 
-    def pressWall(self, coors):                                                  # accepts mouse click on wall
+    # accepts mouse click on wall
+    def pressWall(self, coors):
         y, x, side = coors
         #print('pr wall', coors)
         if self.wallsButtons[y][x][side]["style"] == self.walls_styles['empty']:
@@ -618,9 +672,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         elif self.wallsButtons[y][x][side]["style"] == self.walls_styles['filled']:
             self.wallsButtons[y][x][side]["style"] = self.walls_styles['empty']
             self.wallsButtons[y][x][side]['value'] = 0
-        self.wallsButtons[y][x][side]["core"].setStyleSheet(self.wallsButtons[y][x][side]["style"])
+        self.wallsButtons[y][x][side]["core"].setStyleSheet(
+            self.wallsButtons[y][x][side]["style"])
 
-    def generateXML_line(self):                                                 # generates XML file with lines
+    # generates XML file with lines
+    def generateXML_line(self):
         sliderLineCellValue = self.settingsWindow.getSliderLineCellSize()
         def_size = sliderLineCellValue * 50
         adj_map = self.generateAdjMap()
@@ -648,11 +704,13 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         else:
             info_caption = 'Select file to save field to'
 
-        saved_last_directory = self.settings.getSettings('valueSavedLastDirectory')
+        saved_last_directory = self.settings.getSettings(
+            'valueSavedLastDirectory')
         if saved_last_directory:
             dir_path = os.path.join(saved_last_directory, 'new_field.xml')
         else:
-            dir_path = os.path.join(sys.path[0], 'new_field.xml')      # 0 index is needed path
+            # 0 index is needed path
+            dir_path = os.path.join(sys.path[0], 'new_field.xml')
 
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
@@ -661,7 +719,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                                                             filter="Fields (*.xml)",
                                                             options=options)
         if fileName:
-            #print(fileName)
+            # print(fileName)
             if fileName[::-1][0:4] != '.xml'[::-1]:
                 fileName += '.xml'
             file_map = open(fileName, 'w')
@@ -669,9 +727,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             file_map.close()
 
             # get head of a path and update as last directory
-            self.settings.updateSettings('valueSavedLastDirectory', os.path.split(fileName)[0])
+            self.settings.updateSettings(
+                'valueSavedLastDirectory', os.path.split(fileName)[0])
 
-    def generateXML_maze(self):                                                 # generates XML file with maze
+    # generates XML file with maze
+    def generateXML_maze(self):
         sliderMazeCellValue = self.settingsWindow.getSliderMazeCellSize()
         def_size = sliderMazeCellValue * 50
         adj_map = self.generateAdjMap()
@@ -700,11 +760,13 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         else:
             info_caption = 'Select file to save field to'
 
-        saved_last_directory = self.settings.getSettings('valueSavedLastDirectory')
+        saved_last_directory = self.settings.getSettings(
+            'valueSavedLastDirectory')
         if saved_last_directory:
             dir_path = os.path.join(saved_last_directory, 'new_field.xml')
         else:
-            dir_path = os.path.join(sys.path[0], 'new_field.xml')      # 0 index is needed path
+            # 0 index is needed path
+            dir_path = os.path.join(sys.path[0], 'new_field.xml')
 
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
@@ -713,7 +775,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                                                             filter="Fields (*.xml)",
                                                             options=options)
         if fileName:
-            #print(fileName)
+            # print(fileName)
             if fileName[::-1][0:4] != '.xml'[::-1]:
                 fileName += '.xml'
             file_map = open(fileName, 'w')
@@ -721,9 +783,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             file_map.close()
 
             # get head of a path and update as last directory
-            self.settings.updateSettings('valueSavedLastDirectory', os.path.split(fileName)[0])
+            self.settings.updateSettings(
+                'valueSavedLastDirectory', os.path.split(fileName)[0])
 
-    def prepareField(self, def_size):                                           # returns field with updated start and finish
+    # returns field with updated start and finish
+    def prepareField(self, def_size):
         self.updateFinishStartID()
         field_template = ""
         if len(self.start_id_container) > 0 and len(self.finish_id_container) > 0:
@@ -751,7 +815,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             pass
         try:
             min_sec = self.settingsWindow.getTimelimit()
-            doc['root']['constraints']['timelimit']['@value'] = (min_sec[0] * 60 + min_sec[1]) * 1000
+            doc['root']['constraints']['timelimit']['@value'] = (
+                min_sec[0] * 60 + min_sec[1]) * 1000
         except KeyError:
             pass
         last_start_coor = [0, 0]
@@ -759,21 +824,27 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             y, x = start_coors
             doc['root']['world']['regions']['region'].append(self.getXML_start(
                 x * def_size, y * def_size, def_size, def_size, start_id))
-            in_s = {'@regionId': 'start_' + str(start_id), '@objectId': 'robot1'}
-            doc['root']['constraints']['constraint']['conditions']['inside'].append(in_s)
+            in_s = {'@regionId': 'start_' +
+                    str(start_id), '@objectId': 'robot1'}
+            doc['root']['constraints']['constraint']['conditions']['inside'].append(
+                in_s)
             last_start_coor = start_coors
         for finish_id, finish_coors in enumerate(self.finish_id_container):
             y, x = finish_coors
             doc['root']['world']['regions']['region'].append(self.getXML_finish(
                 x * def_size, y * def_size, def_size, def_size, finish_id))
-            in_s = {'@regionId': 'finish_' + str(finish_id), '@objectId': 'robot1'}
-            doc['root']['constraints']['event'][1]['conditions']['inside'].append(in_s)
+            in_s = {'@regionId': 'finish_' +
+                    str(finish_id), '@objectId': 'robot1'}
+            doc['root']['constraints']['event'][1]['conditions']['inside'].append(
+                in_s)
         y, x = last_start_coor
         k = def_size // 50
         doc['root']['robots']['robot']['@position'] = str(x * def_size +
                                                           25 * (k - 1)) + ":" + str(y * def_size + 25 * (k - 1))
-        doc['root']['robots']['robot']['startPosition']['@x'] = str(x * def_size + 25 * k)
-        doc['root']['robots']['robot']['startPosition']['@y'] = str(y * def_size + 25 * k)
+        doc['root']['robots']['robot']['startPosition']['@x'] = str(
+            x * def_size + 25 * k)
+        doc['root']['robots']['robot']['startPosition']['@y'] = str(
+            y * def_size + 25 * k)
         return doc
 
     def updateFinishStartID(self):
@@ -788,9 +859,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     # finish button
                     self.finish_id_container.append([y_index, x_index])
 
-    def getXML_line(self, x_start, y_start, x_len, y_len):                      # generates dict describing line
+    # generates dict describing line
+    def getXML_line(self, x_start, y_start, x_len, y_len):
         out_dict = {}
-        out_dict['@stroke-width'] = str(self.settingsWindow.getSliderLinePixelSize())
+        out_dict['@stroke-width'] = str(
+            self.settingsWindow.getSliderLinePixelSize())
         out_dict['@fill-style'] = 'none'
         out_dict['@begin'] = str(x_start) + ":" + str(y_start)
         out_dict['@end'] = str(x_start + x_len) + ":" + str(y_start + y_len)
@@ -801,7 +874,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.walls_id_xml += 1
         return out_dict
 
-    def getXML_wall(self, x_start, y_start, x_len, y_len):                      # generates dict describing wall
+    # generates dict describing wall
+    def getXML_wall(self, x_start, y_start, x_len, y_len):
         out_dict = {}
         out_dict['@id'] = "{wall" + str(self.walls_id_xml) + "}"
         out_dict['@begin'] = str(x_start) + ":" + str(y_start)
@@ -809,7 +883,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.walls_id_xml += 1
         return out_dict
 
-    def getXML_start(self, x_start, y_start, x_len, y_len, zone_id=0):               # generates dict describing start rectangle
+    # generates dict describing start rectangle
+    def getXML_start(self, x_start, y_start, x_len, y_len, zone_id=0):
         out_dict = {}
         out_dict['@visible'] = "true"
         out_dict['@id'] = "start_" + str(zone_id)
@@ -848,16 +923,21 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         for y_index in range(self.size_y):
             for x_index in range(self.size_x):
                 adj_map.append([])
-                adj_map[current_vertex].append(self.wallsButtons[y_index][x_index]['up']['value'])
-                adj_map[current_vertex].append(self.wallsButtons[y_index][x_index + 1]['left']['value'])
-                adj_map[current_vertex].append(self.wallsButtons[y_index + 1][x_index]['up']['value'])
-                adj_map[current_vertex].append(self.wallsButtons[y_index][x_index]['left']['value'])
+                adj_map[current_vertex].append(
+                    self.wallsButtons[y_index][x_index]['up']['value'])
+                adj_map[current_vertex].append(
+                    self.wallsButtons[y_index][x_index + 1]['left']['value'])
+                adj_map[current_vertex].append(
+                    self.wallsButtons[y_index + 1][x_index]['up']['value'])
+                adj_map[current_vertex].append(
+                    self.wallsButtons[y_index][x_index]['left']['value'])
                 # print(adj_map[current_vertex])
                 current_vertex += 1
         self.adj_map = adj_map
         return adj_map
 
-    def saveAdjMap(self):                                                       # trigger to save maps to file
+    # trigger to save maps to file
+    def saveAdjMap(self):
         adj_map = self.generateAdjMap()
 
         if self.locale_language == 'ru':
@@ -865,11 +945,13 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         else:
             info_caption = 'Select file to save map to'
 
-        saved_last_directory = self.settings.getSettings('valueSavedLastDirectory')
+        saved_last_directory = self.settings.getSettings(
+            'valueSavedLastDirectory')
         if saved_last_directory:
             dir_path = os.path.join(saved_last_directory, 'my_map.txt')
         else:
-            dir_path = os.path.join(sys.path[0], 'my_map.txt')      # 0 index is needed path
+            # 0 index is needed path
+            dir_path = os.path.join(sys.path[0], 'my_map.txt')
 
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
@@ -896,7 +978,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             file_map.close()
 
             # get head of a path and update as last directory
-            self.settings.updateSettings('valueSavedLastDirectory', os.path.split(fileName)[0])
+            self.settings.updateSettings(
+                'valueSavedLastDirectory', os.path.split(fileName)[0])
 
     # convert map from vertex-> adjanced vertices to vertex -> all vertices
     def convertMap(self, adj_map):
@@ -914,7 +997,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 new_map[vertex_i][vertex_i - 1] = 1 - adj[3]
         return new_map
 
-    def generateMap_init(self, flag=0):                                       # trigger to create a new map
+    # trigger to create a new map
+    def generateMap_init(self, flag=0):
         if flag == 0:
             if self.locale_language == 'en':
                 text, ok = QtWidgets.QInputDialog.getText(
@@ -942,10 +1026,12 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             else:
                 return False
         elif flag == 1:
-            self.setWalls([[0, 0, 0, 0] for i in range(self.size_x * self.size_y)])
+            self.setWalls([[0, 0, 0, 0]
+                           for i in range(self.size_x * self.size_y)])
         self.displayWalls()
 
-    def setWalls(self, mapVertexList):                                          # sets map to real walls
+    # sets map to real walls
+    def setWalls(self, mapVertexList):
         current_vertex = 0
         for y_index in range(self.size_y):
             for x_index in range(self.size_x):
@@ -963,12 +1049,16 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 # print(current_vertex)
                 if mapVertexList[current_vertex][1] != 1:
                     # print('filled')
-                    self.wallsButtons[y_index][x_index + 1]['left']['value'] = 1
-                    self.wallsButtons[y_index][x_index + 1]['left']["style"] = self.walls_styles['filled']
+                    self.wallsButtons[y_index][x_index +
+                                               1]['left']['value'] = 1
+                    self.wallsButtons[y_index][x_index +
+                                               1]['left']["style"] = self.walls_styles['filled']
                 else:
                     # print('empty')
-                    self.wallsButtons[y_index][x_index + 1]['left']['value'] = 0
-                    self.wallsButtons[y_index][x_index + 1]['left']["style"] = self.walls_styles['empty']
+                    self.wallsButtons[y_index][x_index +
+                                               1]['left']['value'] = 0
+                    self.wallsButtons[y_index][x_index +
+                                               1]['left']["style"] = self.walls_styles['empty']
                 self.wallsButtons[y_index][x_index +
                                            1]['left']["core"].setStyleSheet(self.wallsButtons[y_index][x_index +
                                                                                                        1]['left']["style"])
@@ -976,10 +1066,12 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 # direction 2
                 if mapVertexList[current_vertex][2] != 1:
                     self.wallsButtons[y_index + 1][x_index]['up']['value'] = 1
-                    self.wallsButtons[y_index + 1][x_index]['up']["style"] = self.walls_styles['filled']
+                    self.wallsButtons[y_index +
+                                      1][x_index]['up']["style"] = self.walls_styles['filled']
                 else:
                     self.wallsButtons[y_index + 1][x_index]['up']['value'] = 0
-                    self.wallsButtons[y_index + 1][x_index]['up']["style"] = self.walls_styles['empty']
+                    self.wallsButtons[y_index +
+                                      1][x_index]['up']["style"] = self.walls_styles['empty']
                 self.wallsButtons[y_index + 1][x_index]['up']["core"].setStyleSheet(
                     self.wallsButtons[y_index + 1][x_index]['up']["style"])
 
