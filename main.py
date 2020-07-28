@@ -53,6 +53,9 @@ class AboutWindow(QtWidgets.QWidget, aboutUI.Ui_aboutWidget):
         # can close window by pressing Enter
         self.shortcutClose = QtWidgets.QShortcut(QtGui.QKeySequence('Return'), self)
         self.shortcutClose.activated.connect(self.close)
+        # can close window by pressing Esc
+        self.shortcutCloseE = QtWidgets.QShortcut(QtGui.QKeySequence('Esc'), self)
+        self.shortcutCloseE.activated.connect(self.close)
 
         self.telegramChannel.mousePressEvent = (self.copyLink)
 
@@ -105,17 +108,16 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         # can close window by pressing Enter
         self.shortcutClose = QtWidgets.QShortcut(QtGui.QKeySequence('Return'), self)
         self.shortcutClose.activated.connect(self.close)
+        # can close window by pressing Esc
+        self.shortcutCloseE = QtWidgets.QShortcut(QtGui.QKeySequence('Esc'), self)
+        self.shortcutCloseE.activated.connect(self.close)
 
     def resizeEvent(self, event):
         # o_size = [event.oldSize().width(), event.oldSize().height()]
         c_size = [event.size().width(), event.size().height()]
-
-        if c_size[0] / 1.75 <= c_size[1]:
-            self.tutorialImage.setGeometry(0, 0, c_size[0], c_size[0] // 1.75)
-        else:
-            new_left_x = (c_size[0] - c_size[1] * 1.75) // 2
-            self.tutorialImage.setGeometry(new_left_x, 0, round(c_size[1] * 1.75), c_size[1])
-
+        min_size = min(c_size)
+        self.tutorialImage.setGeometry(c_size[0]//2 - min_size//2, 0, min_size, min_size)
+        
         self.b_nextImage.move(c_size[0] - 20, round(240 / 600 * c_size[1]))
         self.b_previousImage.move(0, round(240 / 600 * c_size[1]))
 
@@ -400,6 +402,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     def closeEvent(self, event):
         self.settingsWindow.close()
         self.informationWindow.close()
+        self.aboutWindow.close()
         self.close()
 
     def resizeEvent(self, event):
