@@ -21,6 +21,13 @@ import source.informationUI as informationUI
 import source.screen as screen  # Это наш конвертированный файл дизайна
 import source.settingsUI as settingsUI
 
+if getattr(sys, 'frozen', False):   # running as compiled
+    MEDIA_DIRECTORY = os.path.join(sys._MEIPASS, 'source', # pylint: disable=protected-access, no-member
+                                   'media')
+else:
+    MEDIA_DIRECTORY = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'source',
+                                   'media')
+
 class AppSettings:
     def __init__(self):
         self.settings = QtCore.QSettings('maze-gui-generator')
@@ -130,14 +137,8 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         self.tutorialImage.setPixmap(QtGui.QPixmap(path))
 
     def getImagePath(self):
-        try:
-            bp = sys._MEIPASS
-            return os.path.join(bp, "out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
-        except AttributeError:      # sys._MEIPASS uses when code was builded in app
-            bp = os.path.abspath(".")
-            # print(bp)
-            return os.path.join(bp, "source/app_screenshots/out_" + str(self.locale_language) +
-                                "_" + str(self.current_image) + ".png")
+        return os.path.join(MEDIA_DIRECTORY, 
+                            "out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
 
 
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
@@ -290,15 +291,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
 class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     def __init__(self):
         super().__init__()
-
         self.settings = AppSettings()
-
-        try:
-            bp = sys._MEIPASS
-            icos = os.path.join(bp, "source/maze.ico")
-        except AttributeError:      # sys._MEIPASS uses when code was builded in app
-            icos = "source/maze.ico"
-        self.setWindowIcon(QtGui.QIcon(icos))
         self.setMouseTracking(True)
         self.mouse_scroll_counter = 0   # uses to count scaling
         self.ui_x = 0                   # uses to move all map
@@ -353,16 +346,16 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.informationWindow.displayImage()
 
         self.menuFile.setTitle('Файл')
-        self.actionExportXmlMaze.setText('Сохранить поле с лабиринтом')
-        self.actionExportXmlLineMap.setText('Сохранить поле с линиями')
-        self.actionExportAdjacencyMap.setText('Сохранить матрицу смежности')
+        self.actionExportXmlMaze.setText('Сохранить поле с лабиринтом \u2026')
+        self.actionExportXmlLineMap.setText('Сохранить поле с линиями \u2026')
+        self.actionExportAdjacencyMap.setText('Сохранить матрицу смежности \u2026')
 
         self.menuView.setTitle('Вид')
         self.actionZoomIn.setText('Приблизить')
         self.actionZoomOut.setText('Отдалить')
 
         self.menuTools.setTitle('Инструменты')
-        self.actionCreateMap.setText('Создать карту')
+        self.actionCreateMap.setText('Создать карту \u2026')
         self.actionRandomMap.setText('Случайно расставить стенки')
         self.actionFillMap.setText('Заполнить карту стенками')
 
@@ -384,16 +377,16 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.informationWindow.displayImage()
 
         self.menuFile.setTitle('File')
-        self.actionExportXmlMaze.setText('Export maze map')
-        self.actionExportXmlLineMap.setText('Export line map')
-        self.actionExportAdjacencyMap.setText('Export adjacency matrix')
+        self.actionExportXmlMaze.setText('Export maze map \u2026')
+        self.actionExportXmlLineMap.setText('Export line map \u2026')
+        self.actionExportAdjacencyMap.setText('Export adjacency matrix \u2026')
 
         self.menuView.setTitle('View')
         self.actionZoomIn.setText('Zoom in')
         self.actionZoomOut.setText('Zoom out')
 
         self.menuTools.setTitle('Tools')
-        self.actionCreateMap.setText('Create a map')
+        self.actionCreateMap.setText('Create a map \u2026')
         self.actionRandomMap.setText('Random this map')
         self.actionFillMap.setText('Fill this map')
 
@@ -454,6 +447,17 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.setRussian()
         else:
             self.setEnglish()
+
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(os.path.join(MEDIA_DIRECTORY, "ru.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionRu.setIcon(icon1)
+
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(os.path.join(MEDIA_DIRECTORY, "en.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionEn.setIcon(icon2)
+
+        icos = os.path.join(MEDIA_DIRECTORY, 'maze.ico')
+        self.setWindowIcon(QtGui.QIcon(icos))
 
     def zoomIn(self):                                                        # zooms in map
         SCALE_DELTA = 0.1
