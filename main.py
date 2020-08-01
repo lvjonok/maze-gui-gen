@@ -133,14 +133,14 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
 
     def nextImage(self):
         self.current_image += 1
-        if self.current_image > 3:
+        if self.current_image > 7:
             self.current_image = 1
         self.displayImage()
 
     def previousImage(self):
         self.current_image -= 1
         if self.current_image < 1:
-            self.current_image = 3
+            self.current_image = 7
         self.displayImage()
 
     def displayImage(self):
@@ -492,6 +492,31 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         icon2.addPixmap(QtGui.QPixmap(os.path.join(
             MEDIA_DIRECTORY, "en.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionEn.setIcon(icon2)
+
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(os.path.join(
+            MEDIA_DIRECTORY, "settings.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionSettings.setIcon(icon3)
+
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap(os.path.join(
+            MEDIA_DIRECTORY, "zoomin.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionZoomIn.setIcon(icon4)
+
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap(os.path.join(
+            MEDIA_DIRECTORY, "zoomout.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionZoomOut.setIcon(icon5)
+
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap(os.path.join(
+            MEDIA_DIRECTORY, "help.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionTutorial.setIcon(icon6)
+
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap(os.path.join(
+            MEDIA_DIRECTORY, "information.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionAboutApplication.setIcon(icon7)
 
         icos = os.path.join(MEDIA_DIRECTORY, 'maze.ico')
         self.setWindowIcon(QtGui.QIcon(icos))
