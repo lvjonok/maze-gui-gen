@@ -38,12 +38,14 @@ artifacts:
    name: $(executable_name)-py$(PYTHON_VERSION)
 
 deploy:
-  - provider: Environment
-    name: github-release
-    github_release_artifact: $(executable_name)
-    on:
-#      PYTHON_VERSION: 3.8
-      CONFIGURATION: release
-      APPVEYOR_REPO_TAG: true
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-
+  release: maze-gui-gen $(APPVEYOR_REPO_TAG_NAME)
+  provider: GitHub
+  auth_token:
+    secure: yc/iJWVe0j6l06U2iejzBBYPQPKVkUsv8MtXaHHhay2bfMS43J2gQjimZVz1eJ4i # your encrypted token from GitHub
+  artifact: dist/maze-gui-gen.exe            # upload all NuGet packages to release assets
+  draft: true
+  prerelease: false
+  on:
+    # branch: master                 # release from master branch only
+    APPVEYOR_REPO_TAG: true        # deploy on tag push only
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015

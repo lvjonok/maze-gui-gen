@@ -7,8 +7,13 @@ addons:
     - upx
   apt:
     packages:
+    - python3-dev
     - python3-pip #installs also python3
     - upx-ucl
+    - python3-pyqt5 
+    - pyqt5-dev-tools
+    - qttools5-dev-tools
+
 
 matrix:
   include:
@@ -32,6 +37,8 @@ before_install:
 # init correct installation environment here
   - true
 
+
+
 install:
   - python3 -m pip install -U pip wheel setuptools
   - python3 -m pip install -r requirements_dev.txt
@@ -41,3 +48,15 @@ script:
 after_script:
   - ls -la dist/*
 
+deploy:
+  name: maze-gui-gen $TRAVIS_TAG
+  provider: releases
+  file: dist/maze-gui-gen
+  skip_cleanup: true
+  draft: true
+  api_key: $GITHUB_TOKEN
+  on:
+    python: 3.8
+    # branch: travis-test
+    tags: true
+    

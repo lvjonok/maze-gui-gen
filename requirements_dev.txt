@@ -1,4 +1,4 @@
 # Additional requirements for development stage
 -r requirements.txt
 pylint
-pyinstaller
+pyinstaller==3.6
