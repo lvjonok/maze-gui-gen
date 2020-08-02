@@ -1,4 +1,4 @@
-"""Module contains """
+"""Module contains settings window class"""
 
 from PyQt5 import QtCore, QtWidgets
 
