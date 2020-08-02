@@ -1,5 +1,7 @@
+"""Module provides utilities to work with graphs"""
+
 from random import randint, shuffle
-import sys
+# import sys
 # sys.setrecursionlimit(50000)
 
 
@@ -75,3 +77,20 @@ class Graph:
                 if nv != -1:
                     out[vertex][d] = self.map[vertex][nv]
         return out
+
+
+def convertMap(size_x, size_y, adj_map):
+    """Convert map from vertex-> adjanced vertices to vertex -> all vertices"""
+    am_v = size_x * size_y
+    new_map = [[0] * am_v for i in range(am_v)]
+    for vertex_i, adj in enumerate(adj_map):
+        # print('cur v', vertex_i, adj)
+        if 0 <= vertex_i - size_x <= am_v - 1:
+            new_map[vertex_i][vertex_i - size_x] = 1 - adj[0]
+        if 0 <= vertex_i + 1 <= am_v - 1 and vertex_i % size_x != size_x - 1:
+            new_map[vertex_i][vertex_i + 1] = 1 - adj[1]
+        if 0 <= vertex_i + size_x <= am_v - 1:
+            new_map[vertex_i][vertex_i + size_x] = 1 - adj[2]
+        if 0 <= vertex_i - 1 <= am_v - 1 and vertex_i % size_x != 0:
+            new_map[vertex_i][vertex_i - 1] = 1 - adj[3]
+    return new_map
