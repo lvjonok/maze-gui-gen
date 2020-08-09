@@ -1,2 +1,10 @@
 theme: jekyll-theme-cayman
 show_downloads: true
+
+title: maze-gui-gen
+google-analytics: UA-174937787-1
+
+github:
+  url_windows_release: https://github.com/lvjonok/maze-gui-gen/releases/download/1.2/maze-gui-gen.exe
+  url_linux_release: https://github.com/lvjonok/maze-gui-gen/releases/download/1.2/maze-gui-gen
+  
