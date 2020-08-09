@@ -1,1 +1,5 @@
 /_site
+/pyqt
+/source/__pycache__
+/source/py_ui/
+/source/tools
