@@ -1,37 +1,31 @@
-## Welcome to GitHub Pages
+# maze-gui-gen
 
-You can use the [editor on GitHub](https://github.com/lvjonok/maze-gui-gen/edit/gh-pages/docs/index.md) to maintain and preview the content for your website in Markdown files.
+**А вы сможете создать упражнение для Трик Студио за 30 секунд?**
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Я создал кроссплатформенное приложение, которое может помочь учителям и ученикам, которые работают с симулятором Трик Студио, сгенерировать поля программно, вместо того, чтобы вручную изменять (.xml) файл.
 
-### Markdown
+**Что для этого нужно?**
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+1. Скачиваете программу
+1. Создаете карту с размером, который вам нужен (Инструменты - Создать карту)
+1. Самостоятельно выбираете куда поставить "стенки" или генерируете рандомно (Инструменты - Случайно расставить стенки)
+1. Нажимаете один раз на любую клетку, чтобы сделать её стартовой, дважды, чтобы указать на финиш.
+1. Чтобы сохранить карту с лабиринтом выбираете (Инструменты - Экспортировать поле с лабиринтом), для лабиринта в виде линий (Инструменты - Экспортировать поле с линиями)
+1. Открываете Трик Студио и загружаете свою модель мира.
+1. Круто, теперь вы создали упражнение.
 
-```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
+**Подробнее о возможностях программы.**
 
-- Bulleted
-- List
+1. Для удобства можно увеличивать и уменьшать размер карты колёсиком мыши или (Ctrl + Plus, Ctrl + Minus).
+1. Если у вас большая карта, то можно перемещаться по ней, перетаскивая мышкой, чтобы минимизировать задержки при отрисовке, максимальный размер карты - 2000 ячеек.
+1. Количество стартовых и финишных зон не ограничено, каждая из них будет функционировать
+![ru 1](/source/app_screenshots/out_ru_1.png)
+1. Вы можете также экспортировать матрицу смежности, чтобы вставить её в свою программу и продолжить изучение теории графов (Инструменты - Экспортировать матрицы смежностей)
 
-1. Numbered
-2. List
+**Более гибкая генерация полей и дополнительные настройки.**
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/lvjonok/maze-gui-gen/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+1. В окне настроек можно выбрать размер одной ячейки для лабиринта со стенками и с линиями отдельно (система измерения - ячейка Трик Студио)
+1. Для лабиринта с линиями в настройках можно отдельно выбирать цвет линии, по умолчанию - чёрный.
+1. Ограничение по времени выполнения тоже можно отдельно настроить (первое число - минуты, второе - секунды)
+![ru 3](/source/app_screenshots/out_ru_3.png)
