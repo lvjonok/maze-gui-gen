@@ -151,11 +151,11 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
     def setRussian(self):
         self.locale_language = 'ru'
         self.MazeLoopsLabel.setText('Лабиринт с циклами')
-        self.groupBox.setTitle('Настройки для генерирования полей')
+        self.groupBox.setTitle('Настройки для генерации полей')
         self.lineCellSizeLabel.setText('Размер ячейки с линией')
         self.linePixelSizeLabel.setText('Ширина линии')
         self.mazeCellSizeLabel.setText('Размер ячейки для лабиринта')
-        self.timelimitLabel.setText('Временное ограничение для задания')
+        self.timelimitLabel.setText('Временное ограничение для задания (MM:SS)')
         self.lineColorLabel.setText('Цвет линии')
         self.applyChangesButton.setText('Применить изменения')
 
@@ -166,6 +166,6 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.lineCellSizeLabel.setText('Line cell size')
         self.linePixelSizeLabel.setText('Line width')
         self.mazeCellSizeLabel.setText('Maze cell size')
-        self.timelimitLabel.setText('Timelimit for excersize')
+        self.timelimitLabel.setText('Timelimit for excersize (MM:SS)')
         self.lineColorLabel.setText('Line color')
         self.applyChangesButton.setText('Apply changes')
