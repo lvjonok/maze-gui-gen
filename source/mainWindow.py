@@ -17,6 +17,7 @@ from source.tools.app_settings import (  # pylint: disable=import-error
     AppSettings, getMediaDirectory)
 import source.tools.Graph as Graph # pylint: disable=import-error
 from source.tools.Generator import FieldGenerator  # pylint: disable=import-error
+from source.tools.Command import Command  # pylint: disable=import-error
 
 MEDIA_DIRECTORY = getMediaDirectory()
 
@@ -65,7 +66,15 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.start_id_container = []
         self.finish_id_container = []
         self.generateWallsButtons(5, 5)
+
+        self.CommandAccepter = Command(self.getWallsMatrix(), self.getCenterButtonsMatrix())
+
         self.displayWalls()
+
+        self.shortcutUndo = QtWidgets.QShortcut(
+            QtGui.QKeySequence('Ctrl+Z'), self)
+
+        self.shortcutUndo.activated.connect(self.actionUndo)
 
     def setRussian(self):
         self.settings.updateSettings('locale_language', 'ru')
@@ -154,6 +163,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
     def reloadWindow(self):
         """Clears window and adds triggers"""
+
         self.setupUi(self)
 
         # actions for file menu
@@ -170,8 +180,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         # actions for file menu
         self.actionCreateMap.triggered.connect(self.generateMap_init)
-        self.actionFillMap.triggered.connect(
-            lambda ch, filled=1: self.generateMap_init(filled))
+        self.actionFillMap.triggered.connect(self.fillGraph)
         self.actionRandomMap.triggered.connect(self.randomGraph)
 
         # actions for view menu
@@ -223,6 +232,14 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         icos = os.path.join(MEDIA_DIRECTORY, 'maze.ico')
         self.setWindowIcon(QtGui.QIcon(icos))
+
+    def actionUndo(self):
+        last_state = self.CommandAccepter.getLastState()
+        if not last_state:
+            return last_state
+        self.setWalls(last_state[0])
+        self.setCells(last_state[1])
+        return True
 
     def zoomIn(self):                                                        # zooms in map
         SCALE_DELTA = 0.1
@@ -327,20 +344,33 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.zoomOut()
             self.mouse_scroll_counter = 0
 
+    def fillGraph(self):
+        filled_map = [[1, 1, 1, 1] for i in range(self.size_x * self.size_y)]
+        self.CommandAccepter.setLastState(wl_last_state=filled_map)
+        self.setWalls(filled_map)
+
     # trigger to random map
     def randomGraph(self):
         r_g = Graph.Graph(self.size_x, self.size_y)
         r_g.generateGraph(Graph.randint(
             0, self.size_x * self.size_y - 1), self.settingsWindow.getMazeCheckBox())
         _map = r_g.getMapVertexList()
-        # for v in _map:
-        #     print(v)
+        self.CommandAccepter.setLastState(wl_last_state=_map)
         self.setWalls(_map)
 
     # generates self.wallsButtons with given size
     def generateWallsButtons(self, x_len, y_len, filled=False):
         self.wallsButtons = []
+        """
+            Walls:
+                0 - empty
+                1 - filled
 
+            Cells:
+                0 - empty
+                1 - start zone
+                2 - finish zone
+        """
         min_size = 60
         window_sizes = [self.width() // (x_len + 1),
                         self.height() // (y_len + 1)]
@@ -390,6 +420,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         bs = self.wallsButtons[y][x][side]["style"]
         self.wallsButtons[y][x][side]["core"].setStyleSheet(bs)
 
+        self.CommandAccepter.setLastState(ct_last_state=self.getCenterButtonsMatrix())
+
     # accepts mouse click on wall
     def pressWall(self, coors):
         y, x, side = coors
@@ -402,6 +434,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.wallsButtons[y][x][side]['value'] = 0
         self.wallsButtons[y][x][side]["core"].setStyleSheet(
             self.wallsButtons[y][x][side]["style"])
+
+        self.CommandAccepter.setLastState(wl_last_state=self.getWallsMatrix())
 
     def saveField(self, field):
         if self.locale_language == 'ru':
@@ -438,22 +472,21 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     def generateXML_line(self):
         generator = FieldGenerator(self.size_x, self.size_y, self.settingsWindow.getTimelimit())
         generator.setCellSize(lineCell=self.settingsWindow.getSliderLineCellSize())
-        adj_map = self.generateAdjMap()
-        matrix = self.getMatrixFromButtons()
+        adj_map = self.getWallsMatrix()
+        matrix = self.getCenterButtonsMatrix()
         field = generator.getFieldLineMaze(adj_map, matrix)
         self.saveField(field)
-
 
     # generates XML file with maze
     def generateXML_maze(self):
         generator = FieldGenerator(self.size_x, self.size_y, self.settingsWindow.getTimelimit())
         generator.setCellSize(mazeCell=self.settingsWindow.getSliderMazeCellSize())
-        adj_map = self.generateAdjMap()
-        matrix = self.getMatrixFromButtons()
+        adj_map = self.getWallsMatrix()
+        matrix = self.getCenterButtonsMatrix()
         field = generator.getFieldMaze(adj_map, matrix)
         self.saveField(field)
 
-    def generateAdjMap(self):
+    def getWallsMatrix(self):
         """Generates map vertex->adjanced vertices from wallsButtons"""
         adj_map = []  # vertex -> others 0 1 2 3
         current_vertex = 0
@@ -468,14 +501,13 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     self.wallsButtons[y_index + 1][x_index]['up']['value'])
                 adj_map[current_vertex].append(
                     self.wallsButtons[y_index][x_index]['left']['value'])
-                # print(adj_map[current_vertex])
                 current_vertex += 1
         self.adj_map = adj_map
         return adj_map
 
     # trigger to save maps to file
     def saveAdjMap(self):
-        adj_map = self.generateAdjMap()
+        adj_map = self.getWallsMatrix()
 
         if self.locale_language == 'ru':
             info_caption = 'Выберите файл для сохранения вашей матрицы'
@@ -518,7 +550,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.settings.updateSettings(
                 'valueSavedLastDirectory', os.path.split(fileName)[0])
 
-    def getMatrixFromButtons(self):
+    def getCenterButtonsMatrix(self):
         """Returns matrix with central buttons values"""
         matrix = []
         for y_index in range(self.size_y):
@@ -528,65 +560,65 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         return matrix
 
     # trigger to create a new map
-    def generateMap_init(self, flag=0):
-        if flag == 0:
-            if self.locale_language == 'en':
-                text, ok = QtWidgets.QInputDialog.getText(
-                    self, 'Create a map', 'Write map sizes separated by whitespace\n' +
-                    'Current map will be erased!!!\n' +
-                    'Maximum maze size is 2000 cells')
-            else:
-                text, ok = QtWidgets.QInputDialog.getText(
-                    self, 'Создание карты', 'Введите размеры карты через пробел: "y x"\n' +
-                    'Текущая карта будет обнулена!!!\n' +
-                    'Максимальный размер карты ограничен 2000 клетками')
-            if ok:
-                try:
-                    y_size, x_size = [int(dim) for dim in text.split()]
-                except ValueError:
-                    return False
-                x_size = abs(x_size)
-                y_size = abs(y_size)
-                if (x_size * y_size) > 2000:
-                    return False
-                self.reloadWindow()
-                self.size_x = x_size
-                self.size_y = y_size
-                self.generateWallsButtons(x_size, y_size, flag)
-            else:
+    def generateMap_init(self):
+        if self.locale_language == 'en':
+            text, ok = QtWidgets.QInputDialog.getText(
+                self, 'Create a map', 'Write map sizes separated by whitespace\n' +
+                'Current map will be erased!!!\n' +
+                'Maximum maze size is 2000 cells')
+        else:
+            text, ok = QtWidgets.QInputDialog.getText(
+                self, 'Создание карты', 'Введите размеры карты через пробел: "y x"\n' +
+                'Текущая карта будет обнулена!!!\n' +
+                'Максимальный размер карты ограничен 2000 клетками')
+        if ok:
+            try:
+                y_size, x_size = [int(dim) for dim in text.split()]
+            except ValueError:
                 return False
-        elif flag == 1:
-            self.setWalls([[0, 0, 0, 0]
-                           for i in range(self.size_x * self.size_y)])
+            x_size = abs(x_size)
+            y_size = abs(y_size)
+            if (x_size * y_size) > 2000:
+                return False
+            self.reloadWindow()
+            self.size_x = x_size
+            self.size_y = y_size
+            self.generateWallsButtons(x_size, y_size, 0)
+            self.CommandAccepter.resetHistory()
+            self.CommandAccepter.setLastState(
+                wl_last_state=self.getWallsMatrix(),
+                ct_last_state=self.getCenterButtonsMatrix()
+            )
+        else:
+            return False
         self.displayWalls()
 
     # sets map to real walls
     def setWalls(self, mapVertexList):
+        """Function accepts matrix(vertex->list of four adjacenced vertices) and applies to real map"""
         current_vertex = 0
         for y_index in range(self.size_y):
             for x_index in range(self.size_x):
                 # direction 0
-                if mapVertexList[current_vertex][0] != 1:       # if there is no way
-                    self.wallsButtons[y_index][x_index]['up']['value'] = 1
+                if mapVertexList[current_vertex][0] == Graph.WALLS_STATES["filled"]:       # if there is no way
+                    self.wallsButtons[y_index][x_index]['up']['value'] = Graph.WALLS_STATES["filled"]
                     self.wallsButtons[y_index][x_index]['up']["style"] = self.walls_styles['filled']
                 else:                                           # way exists
-                    self.wallsButtons[y_index][x_index]['up']['value'] = 0
+                    self.wallsButtons[y_index][x_index]['up']['value'] = Graph.WALLS_STATES["empty"]
                     self.wallsButtons[y_index][x_index]['up']["style"] = self.walls_styles['empty']
                 self.wallsButtons[y_index][x_index]['up']["core"].setStyleSheet(
                     self.wallsButtons[y_index][x_index]['up']["style"])
 
                 # direction 1
-                # print(current_vertex)
-                if mapVertexList[current_vertex][1] != 1:
-                    # print('filled')
+                if mapVertexList[current_vertex][1] == Graph.WALLS_STATES["filled"]:
                     self.wallsButtons[y_index][x_index +
-                                               1]['left']['value'] = 1
+                                               1]['left']['value'] = Graph.WALLS_STATES["filled"]
                     self.wallsButtons[y_index][x_index +
                                                1]['left']["style"] = self.walls_styles['filled']
                 else:
                     # print('empty')
                     self.wallsButtons[y_index][x_index +
-                                               1]['left']['value'] = 0
+                                               1]['left']['value'] = Graph.WALLS_STATES["empty"]
                     self.wallsButtons[y_index][x_index +
                                                1]['left']["style"] = self.walls_styles['empty']
                 self.wallsButtons[y_index][x_index +
@@ -594,24 +626,40 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                                                                                                        1]['left']["style"])
 
                 # direction 2
-                if mapVertexList[current_vertex][2] != 1:
-                    self.wallsButtons[y_index + 1][x_index]['up']['value'] = 1
+                if mapVertexList[current_vertex][2] == Graph.WALLS_STATES["filled"]:
+                    self.wallsButtons[y_index + 1][x_index]['up']['value'] = Graph.WALLS_STATES["filled"]
                     self.wallsButtons[y_index +
                                       1][x_index]['up']["style"] = self.walls_styles['filled']
                 else:
-                    self.wallsButtons[y_index + 1][x_index]['up']['value'] = 0
+                    self.wallsButtons[y_index + 1][x_index]['up']['value'] = Graph.WALLS_STATES["empty"]
                     self.wallsButtons[y_index +
                                       1][x_index]['up']["style"] = self.walls_styles['empty']
                 self.wallsButtons[y_index + 1][x_index]['up']["core"].setStyleSheet(
                     self.wallsButtons[y_index + 1][x_index]['up']["style"])
 
                 # direction 3
-                if mapVertexList[current_vertex][3] != 1:
-                    self.wallsButtons[y_index][x_index]['left']['value'] = 1
+                if mapVertexList[current_vertex][3] == Graph.WALLS_STATES["filled"]:
+                    self.wallsButtons[y_index][x_index]['left']['value'] = Graph.WALLS_STATES["filled"]
                     self.wallsButtons[y_index][x_index]['left']["style"] = self.walls_styles['filled']
                 else:
-                    self.wallsButtons[y_index][x_index]['left']['value'] = 0
+                    self.wallsButtons[y_index][x_index]['left']['value'] = Graph.WALLS_STATES["empty"]
                     self.wallsButtons[y_index][x_index]['left']["style"] = self.walls_styles['empty']
                 self.wallsButtons[y_index][x_index]['left']["core"].setStyleSheet(
                     self.wallsButtons[y_index][x_index]['left']["style"])
                 current_vertex += 1
+
+    def setCells(self, cellsMatrix):
+        """Function accepts matrix of center buttons values and applies them to real map"""
+        for y_index in range(self.size_y):
+            for x_index in range(self.size_x):
+                self.wallsButtons[y_index][x_index]['center']['value'] = cellsMatrix[y_index][x_index]
+                if cellsMatrix[y_index][x_index] == 0:
+                    self.wallsButtons[y_index][x_index]['center']['style'] = self.cells_styles['empty']
+                if cellsMatrix[y_index][x_index] == 1:
+                    self.wallsButtons[y_index][x_index]['center']['style'] = self.cells_styles['start']
+                if cellsMatrix[y_index][x_index] == 2:
+                    self.wallsButtons[y_index][x_index]['center']['style'] = self.cells_styles['finish']
+
+                self.wallsButtons[y_index][x_index]['center']['core'].setStyleSheet(
+                    self.wallsButtons[y_index][x_index]['center']['style']
+                )
