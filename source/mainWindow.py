@@ -76,6 +76,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         self.shortcutUndo.activated.connect(self.actionUndo)
 
+        self.shortcutUndo = QtWidgets.QShortcut(
+            QtGui.QKeySequence('Ctrl+Shift+Z'), self)
+
+        self.shortcutUndo.activated.connect(self.actionRedo)
+
     def setRussian(self):
         self.settings.updateSettings('locale_language', 'ru')
         self.settings.sync()
@@ -233,8 +238,16 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         icos = os.path.join(MEDIA_DIRECTORY, 'maze.ico')
         self.setWindowIcon(QtGui.QIcon(icos))
 
+    def actionRedo(self):
+        last_state = self.CommandAccepter.redo()
+        if not last_state:
+            return last_state
+        self.setWalls(last_state[0])
+        self.setCells(last_state[1])
+        return True
+
     def actionUndo(self):
-        last_state = self.CommandAccepter.getLastState()
+        last_state = self.CommandAccepter.undo()
         if not last_state:
             return last_state
         self.setWalls(last_state[0])
