@@ -71,15 +71,15 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         self.displayWalls()
 
-        self.shortcutUndo = QtWidgets.QShortcut(
-            QtGui.QKeySequence('Ctrl+Z'), self)
+        # self.shortcutUndo = QtWidgets.QShortcut(
+        #     QtGui.QKeySequence('Ctrl+Z'), self)
 
-        self.shortcutUndo.activated.connect(self.actionUndo)
+        # self.shortcutUndo.activated.connect(self.executeUndo)
 
-        self.shortcutUndo = QtWidgets.QShortcut(
-            QtGui.QKeySequence('Ctrl+Shift+Z'), self)
+        # self.shortcutUndo = QtWidgets.QShortcut(
+        #     QtGui.QKeySequence('Ctrl+Shift+Z'), self)
 
-        self.shortcutUndo.activated.connect(self.actionRedo)
+        # self.shortcutUndo.activated.connect(self.executeRedo)
 
     def setRussian(self):
         self.settings.updateSettings('locale_language', 'ru')
@@ -96,6 +96,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.actionExportXmlLineMap.setText('Сохранить поле с линиями \u2026')
         self.actionExportAdjacencyMap.setText(
             'Сохранить матрицу смежности \u2026')
+
+        self.menuEdit.setTitle('Правка')
+        self.actionUndo.setText('Отменить')
+        self.actionRedo.setText('Повторить')
 
         self.menuView.setTitle('Вид')
         self.actionZoomIn.setText('Приблизить')
@@ -128,6 +132,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.actionExportXmlMaze.setText('Export maze map \u2026')
         self.actionExportXmlLineMap.setText('Export line map \u2026')
         self.actionExportAdjacencyMap.setText('Export adjacency matrix \u2026')
+
+        self.menuEdit.setTitle('Edit')
+        self.actionUndo.setText('Undo')
+        self.actionRedo.setText('Redo')
 
         self.menuView.setTitle('View')
         self.actionZoomIn.setText('Zoom in')
@@ -176,6 +184,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.actionExportXmlLineMap.triggered.connect(self.generateXML_line)
         self.actionExportAdjacencyMap.triggered.connect(self.saveAdjMap)
 
+        # actions for edit menu
+        self.actionRedo.triggered.connect(self.executeRedo)
+        self.actionUndo.triggered.connect(self.executeUndo)
+
         # actions for language selection
         self.actionRu.triggered.connect(self.setRussian)
         self.actionEn.triggered.connect(self.setEnglish)
@@ -183,7 +195,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.actionSettings.triggered.connect(self.settingsWindow.show)
         self.actionTutorial.triggered.connect(self.informationWindow.show)
 
-        # actions for file menu
+        # actions for tools menu
         self.actionCreateMap.triggered.connect(self.generateMap_init)
         self.actionFillMap.triggered.connect(self.fillGraph)
         self.actionRandomMap.triggered.connect(self.randomGraph)
@@ -235,10 +247,20 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             MEDIA_DIRECTORY, "information.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionAboutApplication.setIcon(icon7)
 
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap(os.path.join(
+            MEDIA_DIRECTORY, "undo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionUndo.setIcon(icon8)
+
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(QtGui.QPixmap(os.path.join(
+            MEDIA_DIRECTORY, "redo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionRedo.setIcon(icon9)
+
         icos = os.path.join(MEDIA_DIRECTORY, 'maze.ico')
         self.setWindowIcon(QtGui.QIcon(icos))
 
-    def actionRedo(self):
+    def executeRedo(self):
         last_state = self.CommandAccepter.redo()
         if not last_state:
             return last_state
@@ -246,7 +268,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.setCells(last_state[1])
         return True
 
-    def actionUndo(self):
+    def executeUndo(self):
         last_state = self.CommandAccepter.undo()
         if not last_state:
             return last_state
