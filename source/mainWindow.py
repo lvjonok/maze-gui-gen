@@ -29,8 +29,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.mouse_scroll_counter = 0   # uses to count scaling
         self.ui_x = 0                   # uses to move all map
         self.ui_y = 0
-        self.ui_scale = 1               # initialize scale
+        self.ui_scale = 1.5               # initialize scale
         self.wall_size = 40             # center button size
+        self.basic_min_size = 60        # coeffitient for buttons size generation (greater value -> less buttons size)
         self.empty_part_size = 10       # distance between center buttons
         self.ui_last_x = 0
         self.ui_last_y = 0
@@ -71,16 +72,6 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         self.displayWalls()
 
-        # self.shortcutUndo = QtWidgets.QShortcut(
-        #     QtGui.QKeySequence('Ctrl+Z'), self)
-
-        # self.shortcutUndo.activated.connect(self.executeUndo)
-
-        # self.shortcutUndo = QtWidgets.QShortcut(
-        #     QtGui.QKeySequence('Ctrl+Shift+Z'), self)
-
-        # self.shortcutUndo.activated.connect(self.executeRedo)
-
     def setRussian(self):
         self.settings.updateSettings('locale_language', 'ru')
         self.settings.sync()
@@ -112,6 +103,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         self.menuSettings.setTitle('Настройки')
         self.actionSettings.setText('Настройки \u2026')
+        self.menuLanguage_selection.setTitle('Язык')
+        # self.menuLanguage_selection.setIcon()
 
         self.menuHelp.setTitle('Справка')
         self.actionTutorial.setText('Помощь \u2026')
@@ -148,6 +141,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         self.menuSettings.setTitle('Settings')
         self.actionSettings.setText('Preferences \u2026')
+        self.menuLanguage_selection.setTitle('Language')
 
         self.menuHelp.setTitle('Help')
         self.actionTutorial.setText('Small help \u2026')
@@ -166,10 +160,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         if abs(c_size[0] - o_size[0]) < 50 or abs(c_size[1] - o_size[1]) < 50:
             return
 
-        min_size = 90
+        min_size = self.basic_min_size
         window_sizes = [self.width() // (self.size_x + 1),
                         self.height() // (self.size_y + 1)]
-        self.ui_scale = round((max(min(window_sizes), min_size)) / min_size)
+        self.ui_scale = ((max(min(window_sizes), min_size)) / min_size)
         self.ui_x = 0
         self.ui_y = 0
         self.displayWalls()
@@ -256,6 +250,12 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         icon9.addPixmap(QtGui.QPixmap(os.path.join(
             MEDIA_DIRECTORY, "redo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionRedo.setIcon(icon9)
+
+        icon10 = QtGui.QIcon()
+        icon10.addPixmap(QtGui.QPixmap(os.path.join(
+            MEDIA_DIRECTORY, "lan.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.menuLanguage_selection.setIcon(icon10)
+
 
         icos = os.path.join(MEDIA_DIRECTORY, 'maze.ico')
         self.setWindowIcon(QtGui.QIcon(icos))
@@ -406,11 +406,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 1 - start zone
                 2 - finish zone
         """
-        min_size = 60
+        min_size = self.basic_min_size
         window_sizes = [self.width() // (x_len + 1),
                         self.height() // (y_len + 1)]
         self.ui_scale = (max(min(window_sizes), min_size)) / min_size
-
         for y_index in range(y_len + 1):
             self.wallsButtons.append([0] * (x_len + 1))
             for x_index in range(x_len + 1):
@@ -505,7 +504,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 'valueSavedLastDirectory', os.path.split(fileName)[0])
 
     def generateXML_line(self):
-        generator = FieldGenerator(self.size_x, self.size_y, self.settingsWindow.getTimelimit())
+        generator = FieldGenerator(self.size_x, self.size_y, self.settingsWindow.getTimelimit(), self.settingsWindow.getRoboticsKit())
         generator.setCellSize(lineCell=self.settingsWindow.getSliderLineCellSize())
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
@@ -514,7 +513,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
     # generates XML file with maze
     def generateXML_maze(self):
-        generator = FieldGenerator(self.size_x, self.size_y, self.settingsWindow.getTimelimit())
+        generator = FieldGenerator(self.size_x, self.size_y, self.settingsWindow.getTimelimit(), self.settingsWindow.getRoboticsKit())
         generator.setCellSize(mazeCell=self.settingsWindow.getSliderMazeCellSize())
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
