@@ -66,7 +66,7 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
 
     def displayImage(self):
         path = self.getImagePath()
-        print(path)
+        # print(path)
         self.tutorialImage.setPixmap(QtGui.QPixmap(path))
 
     def getImagePath(self):

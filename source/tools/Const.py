@@ -1,3 +1,15 @@
+"""Module contains some constants for Application"""
+
+ROBOTICS_KITS = [
+    'TRIK',
+    'Lego EV3'
+]
+
+ROBOTICS_KIT_TO_ID = {
+    "TRIK" : "trikKitRobot",
+    "Lego EV3" : "ev3KitUsbRobot"
+}
+
 EMPTY_FIELD_STR = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\
 <root>\
         <world>\

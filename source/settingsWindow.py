@@ -5,7 +5,7 @@ from PyQt5 import QtCore, QtWidgets
 import source.py_ui.settingsUI as settingsUI  # pylint: disable=import-error
 from source.tools.app_settings import \
     AppSettings  # pylint: disable=import-error
-
+import source.tools.Const as const  # pylint: disable=import-error
 
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
     def __init__(self):
@@ -27,6 +27,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.excersizeTime.timeChanged.connect(
             self.updateValueExcersizeTimelimit)
         self.applyChangesButton.clicked.connect(self.applyChanges)
+        self.roboticsKitList.activated.connect(self.updateRoboticsKit)
 
         self.updateWidgetsOnStart()
 
@@ -74,6 +75,10 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         loops_set = self.settings.getSettings('valueMazeLoopsCheckBox')
         if loops_set:
             self.MazeLoopsCheckBox.setChecked(loops_set == "true")
+
+        robotics_kit = self.settings.getSettings('roboticsKit')
+        if robotics_kit:
+            self.roboticsKitList.setCurrentIndex(const.ROBOTICS_KITS.index(robotics_kit))
 
     def applyChanges(self):
         self.settings.sync()
@@ -148,8 +153,16 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
             self.colorLine = hex_color
             self.settings.updateSettings('valueColorLine', hex_color)
 
+    def updateRoboticsKit(self, event):
+        self.roboticsKit = self.getRoboticsKit()
+        self.settings.updateSettings('roboticsKit', self.roboticsKit)
+
+    def getRoboticsKit(self) -> str:
+        return str(self.roboticsKitList.currentText())
+
     def setRussian(self):
         self.locale_language = 'ru'
+        self.roboticsKitLabel.setText('Платформа')
         self.MazeLoopsLabel.setText('Лабиринт с циклами')
         self.groupBox.setTitle('Настройки для генерации полей')
         self.lineCellSizeLabel.setText('Размер ячейки с линией')
@@ -161,6 +174,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
 
     def setEnglish(self):
         self.locale_language = 'en'
+        self.roboticsKitLabel.setText('Robotics construction kit')
         self.MazeLoopsLabel.setText('Maze with loops')
         self.groupBox.setTitle('Settings for fields generation')
         self.lineCellSizeLabel.setText('Line cell size')

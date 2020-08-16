@@ -1,11 +1,11 @@
 """The module provides conversion map to XML field"""
 
 import xmltodict
-import source.tools.empty_field as emptyFieldContainer  # pylint: disable=import-error
+import source.tools.Const as const  # pylint: disable=import-error
 # from source.tools.Graph import convertMap # pylint: disable=import-error
 
 class FieldGenerator:
-    def __init__(self, x: int, y: int, timelimit: list):
+    def __init__(self, x: int, y: int, timelimit: list, robot_kit: str):
         """
             The constructor for Field Generator class
 
@@ -23,6 +23,7 @@ class FieldGenerator:
         self.timelimit = timelimit
         self.cell_size_line = -1
         self.cell_size_maze = -1
+        self.robot_id = const.ROBOTICS_KIT_TO_ID[robot_kit]
 
     def setCellSize(self, lineCell=False, mazeCell=False):
         if lineCell:
@@ -186,13 +187,13 @@ class FieldGenerator:
         self.updateFinishStartID(matrix)
         field_template = ""
         if len(self.start_id_container) > 0 and len(self.finish_id_container) > 0:
-            field_template = emptyFieldContainer.FIELD_START_FINISH_STR
+            field_template = const.FIELD_START_FINISH_STR
         elif len(self.start_id_container) > 0:
-            field_template = emptyFieldContainer.FIELD_START_STR
+            field_template = const.FIELD_START_STR
         elif len(self.finish_id_container) > 0:
-            field_template = emptyFieldContainer.FIELD_FINISH_STR
+            field_template = const.FIELD_FINISH_STR
         else:
-            field_template = emptyFieldContainer.EMPTY_FIELD_STR
+            field_template = const.EMPTY_FIELD_STR
 
         doc = xmltodict.parse(field_template, process_namespaces=True)
 
@@ -234,6 +235,7 @@ class FieldGenerator:
                 in_s)
         y, x = last_start_coor
         k = default_size // 50
+        doc['root']['robots']['robot']['@id'] = self.robot_id
         doc['root']['robots']['robot']['@position'] = str(x * default_size +
                                                           25 * (k - 1)) + ":" + str(y * default_size + 25 * (k - 1))
         doc['root']['robots']['robot']['startPosition']['@x'] = str(
