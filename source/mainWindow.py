@@ -5,7 +5,7 @@ import sys
 from time import time
 import xmltodict
 
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtGui, QtWidgets, QtCore
 
 import source.py_ui.screen as screen  # pylint: disable=import-error
 from source.aboutWindow import AboutWindow  # pylint: disable=import-error
@@ -18,6 +18,7 @@ from source.tools.app_settings import (  # pylint: disable=import-error
 import source.tools.Graph as Graph # pylint: disable=import-error
 from source.tools.Generator import FieldGenerator  # pylint: disable=import-error
 from source.tools.Command import Command  # pylint: disable=import-error
+import source.tools.Const as const  # pylint: disable=import-error
 
 MEDIA_DIRECTORY = getMediaDirectory()
 
@@ -42,6 +43,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             "empty": 'QPushButton {background-color: #FFFFFF;}',
             "start": 'QPushButton {background-color: #2d7cd6;}',
             "finish": 'QPushButton {background-color: #e86f6f;}',
+            "warzone": 'QPushButton {background-color: #fff199;}'
         }
         self.wallsButtons = []
 
@@ -442,15 +444,36 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         #print('pressed', coors)
         y, x, side = coors
         bs = self.wallsButtons[y][x][side]["style"]
-        if bs == self.cells_styles["empty"]:
-            self.wallsButtons[y][x][side]["style"] = self.cells_styles["start"]
-            self.wallsButtons[y][x][side]["value"] = 1
-        elif bs == self.cells_styles["start"]:
+
+        modifiers = QtWidgets.QApplication.keyboardModifiers()
+        if modifiers == QtCore.Qt.ShiftModifier:
+            # print('Shift+Click')
             self.wallsButtons[y][x][side]["style"] = self.cells_styles["finish"]
             self.wallsButtons[y][x][side]["value"] = 2
-        elif bs == self.cells_styles["finish"]:
-            self.wallsButtons[y][x][side]["style"] = self.cells_styles["empty"]
-            self.wallsButtons[y][x][side]["value"] = 0
+        elif modifiers == QtCore.Qt.ControlModifier:
+            # print('Control+Click')
+            self.wallsButtons[y][x][side]["style"] = self.cells_styles["start"]
+            self.wallsButtons[y][x][side]["value"] = 1
+        elif modifiers == (QtCore.Qt.ControlModifier |
+                           QtCore.Qt.ShiftModifier):
+            # print('Control+Shift+Click')
+            self.wallsButtons[y][x][side]["style"] = self.cells_styles["warzone"]
+            self.wallsButtons[y][x][side]["value"] = 3
+        else:
+            # print('Click')
+
+            if bs == self.cells_styles["empty"]:
+                self.wallsButtons[y][x][side]["style"] = self.cells_styles["start"]
+                self.wallsButtons[y][x][side]["value"] = 1
+            elif bs == self.cells_styles["start"]:
+                self.wallsButtons[y][x][side]["style"] = self.cells_styles["finish"]
+                self.wallsButtons[y][x][side]["value"] = 2
+            elif bs == self.cells_styles["finish"]:
+                self.wallsButtons[y][x][side]["style"] = self.cells_styles["warzone"]
+                self.wallsButtons[y][x][side]["value"] = 3
+            elif bs == self.cells_styles["warzone"]:
+                self.wallsButtons[y][x][side]["style"] = self.cells_styles["empty"]
+                self.wallsButtons[y][x][side]["value"] = 0
         bs = self.wallsButtons[y][x][side]["style"]
         self.wallsButtons[y][x][side]["core"].setStyleSheet(bs)
 
@@ -496,7 +519,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             if fileName[::-1][0:4] != '.xml'[::-1]:
                 fileName += '.xml'
             file_map = open(fileName, 'w')
-            file_map.write(xmltodict.unparse(field, pretty=True))
+            file_map.write(const.NOTIFICATION + xmltodict.unparse(field, pretty=True))
             file_map.close()
 
             # get head of a path and update as last directory
@@ -504,8 +527,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 'valueSavedLastDirectory', os.path.split(fileName)[0])
 
     def generateXML_line(self):
-        generator = FieldGenerator(self.size_x, self.size_y, self.settingsWindow.getTimelimit(), self.settingsWindow.getRoboticsKit())
-        generator.setCellSize(lineCell=self.settingsWindow.getSliderLineCellSize())
+        generation_settings = self.settingsWindow.getGenerationSettings()
+        generation_settings['x'] = self.size_x
+        generation_settings['y'] = self.size_y
+        generator = FieldGenerator(generation_settings)
+        # generator.setCellSize(lineCell=self.settingsWindow.getSliderLineCellSize())
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
         field = generator.getFieldLineMaze(adj_map, matrix)
@@ -513,8 +539,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
     # generates XML file with maze
     def generateXML_maze(self):
-        generator = FieldGenerator(self.size_x, self.size_y, self.settingsWindow.getTimelimit(), self.settingsWindow.getRoboticsKit())
-        generator.setCellSize(mazeCell=self.settingsWindow.getSliderMazeCellSize())
+        generation_settings = self.settingsWindow.getGenerationSettings()
+        generation_settings['x'] = self.size_x
+        generation_settings['y'] = self.size_y
+        generator = FieldGenerator(generation_settings)
+        # generator.setCellSize(mazeCell=self.settingsWindow.getSliderMazeCellSize())
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
         field = generator.getFieldMaze(adj_map, matrix)

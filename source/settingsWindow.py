@@ -14,7 +14,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.settings = AppSettings()
 
         self.setupUi(self)
-        self.colorLabel.mousePressEvent = (self.controlColor)
+        self.colorLabel.mousePressEvent = (self.updateValueColorLine)
 
         self.lineCellSizeSlider.valueChanged.connect(
             self.updateValueLineCellSize)
@@ -39,46 +39,63 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
                 0, time_set[0], second=time_set[1]))
         else:
             self.excersizeTime.setTime(QtCore.QTime(0, 59, second=59))
+            self.updateValueExcersizeTimelimit()
 
         color_set = self.settings.getSettings('valueColorLine')
         if color_set:
             self.colorLine = color_set
         else:
             self.colorLine = "000000"
+            self.settings.updateSettings('valueColorLine', self.color_line)
+
         self.colorLabel.setStyleSheet(
-            'QLabel {background-color: #' + str(self.colorLine) + ';}')
+            'QLabel {background-color: #' + str(self.colorLine) + ';}'
+        )
 
         params = [
-            self.settings.getSettings('valueLinePixelSize'),
-            self.settings.getSettings('valueLineCellSize'),
-            self.settings.getSettings('valueMazeCellSize')
+            'valueLinePixelSize',
+            'valueLineCellSize',
+            'valueMazeCellSize'
         ]
 
-        if params[0]:
-            self.linePixelSizeSlider.setValue(int(params[0]))
+        values = [self.settings.getSettings(param) for param in params]
+
+        if values[0]:
+            self.linePixelSizeSlider.setValue(int(values[0]))
         else:
             # standart line width is 6 px
             self.linePixelSizeSlider.setValue(6)
+            self.settings.updateSettings(params[0], 6)
 
-        if params[1]:
-            self.lineCellSizeSlider.setValue(int(params[1]))
+        if values[1]:
+            self.lineCellSizeSlider.setValue(int(values[1]))
         else:
             # standart line width is 2 cells
             self.lineCellSizeSlider.setValue(2)
+            self.settings.updateSettings(params[1], 2)
 
-        if params[2]:
-            self.mazeCellSizeSlider.setValue(int(params[2]))
+        if values[2]:
+            self.mazeCellSizeSlider.setValue(int(values[2]))
         else:
             # standart line width is 3 cells
             self.mazeCellSizeSlider.setValue(3)
+            self.settings.updateSettings(params[2], 3)
 
         loops_set = self.settings.getSettings('valueMazeLoopsCheckBox')
         if loops_set:
             self.MazeLoopsCheckBox.setChecked(loops_set == "true")
+        else:
+            self.MazeLoopsCheckBox.setChecked(False)
+            self.settings.updateSettings('valueMazeLoopsCheckBox', False)
 
         robotics_kit = self.settings.getSettings('roboticsKit')
         if robotics_kit:
             self.roboticsKitList.setCurrentIndex(const.ROBOTICS_KITS.index(robotics_kit))
+        else:
+            self.roboticsKitList.setCurrentIndex(0)
+            self.updateRoboticsKit(None)
+        
+        self.settings.sync()
 
     def applyChanges(self):
         self.settings.sync()
@@ -143,7 +160,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         v = [int(vi) for vi in v.split(':')][1:3]
         return v
 
-    def controlColor(self, event):
+    def updateValueColorLine(self, event):
         color = QtWidgets.QColorDialog.getColor()
         if color:
             rgb = (color.getRgb()[0:3])
@@ -183,3 +200,16 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.timelimitLabel.setText('Timelimit for excersize (MM:SS)')
         self.lineColorLabel.setText('Line color')
         self.applyChangesButton.setText('Apply changes')
+
+    def getGenerationSettings(self) -> dict:
+        """
+            Function returns applied settings for every key in Const.FIELD_GENERATOR_SETTINGS_KEYS
+        """
+        keys: list = const.FIELD_GENERATOR_SETTINGS_KEYS
+        out_dict: dict = {}
+
+        for key in keys:
+            value = self.settings.getSettings(key)
+            if value:
+                out_dict[key] = value
+        return out_dict
