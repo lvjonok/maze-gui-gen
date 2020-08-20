@@ -32,20 +32,23 @@ class AboutWindow(QtWidgets.QWidget, aboutUI.Ui_aboutWidget):
 
     def setRussian(self):
         self.locale_language = 'ru'
-        self.InfoLabel.setText('<html><head/><body><p align="center">'
-                               'По вопросам свяжитесь со мной в telegram: @robot_lev'
-                               '</p></body></html>')
-        self.telegramChannel.setText('<html><head/><body><p align="center">'
-                                     'Нажмите, чтобы скопировать ссылку на telegram канал:'
-                                     '</p><p align="center">'
-                                     'https://t.me/maze_gui_gen'
-                                     '</p></body></html>')
+        self.InfoLabel.setText(
+            '<html><head/><body><p align="center">'
+            'По вопросам свяжитесь со мной в telegram: @robot_lev'
+            '</p></body></html>')
+        self.telegramChannel.setText(
+            '<html><head/><body><p align="center">'
+            'Нажмите, чтобы скопировать ссылку на telegram канал:'
+            '</p><p align="center">'
+            'https://t.me/maze_gui_gen'
+            '</p></body></html>')
 
     def setEnglish(self):
         self.locale_language = 'en'
-        self.InfoLabel.setText('<html><head/><body><p align="center">'
-                               'For any issues contact me on telegram: @robot_lev'
-                               '</p></body></html>')
+        self.InfoLabel.setText(
+            '<html><head/><body><p align="center">'
+            'For any issues contact me on telegram: @robot_lev'
+            '</p></body></html>')
         self.telegramChannel.setText('<html><head/><body><p align="center">'
                                      'Press to copy link to telegram channel:'
                                      '</p><p align="center">'

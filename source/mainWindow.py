@@ -15,12 +15,13 @@ from source.settingsWindow import \
     SettingsWindow  # pylint: disable=import-error
 from source.tools.app_settings import (  # pylint: disable=import-error
     AppSettings, getMediaDirectory)
-import source.tools.Graph as Graph # pylint: disable=import-error
+import source.tools.Graph as Graph  # pylint: disable=import-error
 from source.tools.Generator import FieldGenerator  # pylint: disable=import-error
 from source.tools.Command import Command  # pylint: disable=import-error
 import source.tools.Const as const  # pylint: disable=import-error
 
 MEDIA_DIRECTORY = getMediaDirectory()
+
 
 class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     def __init__(self):
@@ -32,13 +33,16 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.ui_y = 0
         self.ui_scale = 1.5               # initialize scale
         self.wall_size = 40             # center button size
-        self.basic_min_size = 60        # coeffitient for buttons size generation (greater value -> less buttons size)
+        # coeffitient for buttons size generation (greater value -> less
+        # buttons size)
+        self.basic_min_size = 60
         self.empty_part_size = 10       # distance between center buttons
         self.ui_last_x = 0
         self.ui_last_y = 0
         self.ui_last_time = time()
-        self.walls_styles = {"empty": "QPushButton {background-color: #FFFFFF;}",
-                             "filled": "QPushButton {background-color: #FFFF00;}"}
+        self.walls_styles = {
+            "empty": "QPushButton {background-color: #FFFFFF;}",
+            "filled": "QPushButton {background-color: #FFFF00;}"}
         self.cells_styles = {
             "empty": 'QPushButton {background-color: #FFFFFF;}',
             "start": 'QPushButton {background-color: #2d7cd6;}',
@@ -70,7 +74,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.finish_id_container = []
         self.generateWallsButtons(5, 5)
 
-        self.CommandAccepter = Command(self.getWallsMatrix(), self.getCenterButtonsMatrix())
+        self.CommandAccepter = Command(
+            self.getWallsMatrix(), self.getCenterButtonsMatrix())
 
         self.displayWalls()
 
@@ -219,18 +224,33 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.actionEn.setIcon(icon2)
 
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(os.path.join(
-            MEDIA_DIRECTORY, "settings.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3.addPixmap(
+            QtGui.QPixmap(
+                os.path.join(
+                    MEDIA_DIRECTORY,
+                    "settings.png")),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off)
         self.actionSettings.setIcon(icon3)
 
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(os.path.join(
-            MEDIA_DIRECTORY, "zoomin.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon4.addPixmap(
+            QtGui.QPixmap(
+                os.path.join(
+                    MEDIA_DIRECTORY,
+                    "zoomin.png")),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off)
         self.actionZoomIn.setIcon(icon4)
 
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(os.path.join(
-            MEDIA_DIRECTORY, "zoomout.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon5.addPixmap(
+            QtGui.QPixmap(
+                os.path.join(
+                    MEDIA_DIRECTORY,
+                    "zoomout.png")),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off)
         self.actionZoomOut.setIcon(icon5)
 
         icon6 = QtGui.QIcon()
@@ -239,8 +259,13 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         self.actionTutorial.setIcon(icon6)
 
         icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap(os.path.join(
-            MEDIA_DIRECTORY, "information.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon7.addPixmap(
+            QtGui.QPixmap(
+                os.path.join(
+                    MEDIA_DIRECTORY,
+                    "information.png")),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off)
         self.actionAboutApplication.setIcon(icon7)
 
         icon8 = QtGui.QIcon()
@@ -257,7 +282,6 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         icon10.addPixmap(QtGui.QPixmap(os.path.join(
             MEDIA_DIRECTORY, "lan.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.menuLanguage_selection.setIcon(icon10)
-
 
         icos = os.path.join(MEDIA_DIRECTORY, 'maze.ico')
         self.setWindowIcon(QtGui.QIcon(icos))
@@ -303,8 +327,17 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 if y_coor != self.size_y:
                     left_button = QtWidgets.QPushButton(self.pool)
                     self.wallsButtons[y_coor][x_coor]['left']['core'] = left_button
-                    left_button.setGeometry(screen.QtCore.QRect(
-                        const_move['x'] + x_coor * ew, const_move['y'] + e + y_coor * ew, e, w))
+                    left_button.setGeometry(
+                        screen.QtCore.QRect(
+                            const_move['x'] +
+                            x_coor *
+                            ew,
+                            const_move['y'] +
+                            e +
+                            y_coor *
+                            ew,
+                            e,
+                            w))
                     left_button.setObjectName(
                         "b_" + str(y_coor) + "_" + str(x_coor) + "_left")
                     left_button.setStyleSheet(
@@ -314,8 +347,17 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 if x_coor != self.size_x:
                     up_button = QtWidgets.QPushButton(self.pool)
                     self.wallsButtons[y_coor][x_coor]['up']['core'] = up_button
-                    up_button.setGeometry(screen.QtCore.QRect(
-                        const_move['x'] + e + x_coor * ew, const_move['y'] + y_coor * ew, w, e))
+                    up_button.setGeometry(
+                        screen.QtCore.QRect(
+                            const_move['x'] +
+                            e +
+                            x_coor *
+                            ew,
+                            const_move['y'] +
+                            y_coor *
+                            ew,
+                            w,
+                            e))
                     up_button.setObjectName(
                         "b_" + str(y_coor) + "_" + str(x_coor) + "_up")
                     up_button.setStyleSheet(
@@ -326,8 +368,18 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     center_button = QtWidgets.QPushButton(
                         str(y_coor * self.size_x + x_coor), self.pool)
                     self.wallsButtons[y_coor][x_coor]['center']['core'] = center_button
-                    center_button.setGeometry(screen.QtCore.QRect(
-                        const_move['x'] + e + x_coor * ew, const_move['y'] + e + y_coor * ew, w, w))
+                    center_button.setGeometry(
+                        screen.QtCore.QRect(
+                            const_move['x'] +
+                            e +
+                            x_coor *
+                            ew,
+                            const_move['y'] +
+                            e +
+                            y_coor *
+                            ew,
+                            w,
+                            w))
                     center_button.setObjectName(
                         "b_" + str(y_coor) + "_" + str(x_coor) + "_center")
                     center_button.setStyleSheet(
@@ -389,8 +441,13 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
     # trigger to random map
     def randomGraph(self):
         r_g = Graph.Graph(self.size_x, self.size_y)
-        r_g.generateGraph(Graph.randint(
-            0, self.size_x * self.size_y - 1), self.settingsWindow.getMazeCheckBox())
+        r_g.generateGraph(
+            Graph.randint(
+                0,
+                self.size_x *
+                self.size_y -
+                1),
+            self.settingsWindow.getMazeCheckBox())
         _map = r_g.getMapVertexList()
         self.CommandAccepter.setLastState(wl_last_state=_map)
         self.setWalls(_map)
@@ -477,7 +534,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         bs = self.wallsButtons[y][x][side]["style"]
         self.wallsButtons[y][x][side]["core"].setStyleSheet(bs)
 
-        self.CommandAccepter.setLastState(ct_last_state=self.getCenterButtonsMatrix())
+        self.CommandAccepter.setLastState(
+            ct_last_state=self.getCenterButtonsMatrix())
 
     # accepts mouse click on wall
     def pressWall(self, coors):
@@ -519,7 +577,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             if fileName[::-1][0:4] != '.xml'[::-1]:
                 fileName += '.xml'
             file_map = open(fileName, 'w')
-            file_map.write(const.NOTIFICATION + xmltodict.unparse(field, pretty=True))
+            file_map.write(const.NOTIFICATION +
+                           xmltodict.unparse(field, pretty=True))
             file_map.close()
 
             # get head of a path and update as last directory
@@ -619,7 +678,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         for y_index in range(self.size_y):
             matrix.append([])
             for x_index in range(self.size_x):
-                matrix[y_index].append(self.wallsButtons[y_index][x_index]['center']['value'])
+                matrix[y_index].append(
+                    self.wallsButtons[y_index][x_index]['center']['value'])
         return matrix
 
     # trigger to create a new map
@@ -663,7 +723,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         for y_index in range(self.size_y):
             for x_index in range(self.size_x):
                 # direction 0
-                if mapVertexList[current_vertex][0] == Graph.WALLS_STATES["filled"]:       # if there is no way
+                # if there is no way
+                if mapVertexList[current_vertex][0] == Graph.WALLS_STATES["filled"]:
                     self.wallsButtons[y_index][x_index]['up']['value'] = Graph.WALLS_STATES["filled"]
                     self.wallsButtons[y_index][x_index]['up']["style"] = self.walls_styles['filled']
                 else:                                           # way exists
@@ -684,17 +745,18 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                                                1]['left']['value'] = Graph.WALLS_STATES["empty"]
                     self.wallsButtons[y_index][x_index +
                                                1]['left']["style"] = self.walls_styles['empty']
-                self.wallsButtons[y_index][x_index +
-                                           1]['left']["core"].setStyleSheet(self.wallsButtons[y_index][x_index +
-                                                                                                       1]['left']["style"])
+                self.wallsButtons[y_index][x_index + 1]['left']["core"].setStyleSheet(
+                    self.wallsButtons[y_index][x_index + 1]['left']["style"])
 
                 # direction 2
                 if mapVertexList[current_vertex][2] == Graph.WALLS_STATES["filled"]:
-                    self.wallsButtons[y_index + 1][x_index]['up']['value'] = Graph.WALLS_STATES["filled"]
+                    self.wallsButtons[y_index +
+                                      1][x_index]['up']['value'] = Graph.WALLS_STATES["filled"]
                     self.wallsButtons[y_index +
                                       1][x_index]['up']["style"] = self.walls_styles['filled']
                 else:
-                    self.wallsButtons[y_index + 1][x_index]['up']['value'] = Graph.WALLS_STATES["empty"]
+                    self.wallsButtons[y_index +
+                                      1][x_index]['up']['value'] = Graph.WALLS_STATES["empty"]
                     self.wallsButtons[y_index +
                                       1][x_index]['up']["style"] = self.walls_styles['empty']
                 self.wallsButtons[y_index + 1][x_index]['up']["core"].setStyleSheet(
@@ -724,5 +786,4 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                     self.wallsButtons[y_index][x_index]['center']['style'] = self.cells_styles['finish']
 
                 self.wallsButtons[y_index][x_index]['center']['core'].setStyleSheet(
-                    self.wallsButtons[y_index][x_index]['center']['style']
-                )
+                    self.wallsButtons[y_index][x_index]['center']['style'])

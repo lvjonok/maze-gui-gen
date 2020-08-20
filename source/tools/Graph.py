@@ -10,7 +10,8 @@ class Graph:
         self.visited = []
         self.size_x = size_x
         self.size_y = size_y
-        self.map = [[WALLS_STATES["filled"]] * size_x * size_y for i in range(size_y * size_x)]
+        self.map = [[WALLS_STATES["filled"]] * size_x *
+                    size_y for i in range(size_y * size_x)]
 
     def getNextVertex(self, vertex, direction):
         next_vertex = vertex
@@ -82,7 +83,8 @@ class Graph:
             for d in range(4):
                 nv = self.getNextVertex(vertex, d)
                 if nv != -1:    # if vertex exists
-                    out[vertex][d] = self.map[vertex][nv]   # if way is available it will be 0
+                    # if way is available it will be 0
+                    out[vertex][d] = self.map[vertex][nv]
         return out
 
 
@@ -101,7 +103,8 @@ def convertMap(size_x, size_y, adj_map):
             new_map[vertex_i][vertex_i - 1] = adj[3]
     return new_map
 
+
 WALLS_STATES = {
-    "empty" : 0,
-    "filled" : 1
+    "empty": 0,
+    "filled": 1
 }

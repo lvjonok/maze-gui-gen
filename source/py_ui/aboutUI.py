@@ -79,8 +79,12 @@ class Ui_aboutWidget(object):
         aboutWidget.setWindowTitle(_translate(
             "aboutWidget", "About maze-gui-generator"))
         self.labelHelp.setText(_translate("aboutWidget", "<html><head/><body><p align=\"center\"><br/></p><p align=\"center\"><span style=\" font-size:14pt;\">Program: maze-gui-generator</span></p><p align=\"center\"><span style=\" font-size:14pt;\">GUI field generator for TRIK Studio simulator.</span><br/></p><p align=\"center\"><span style=\" font-size:14pt;\">Version: 1.2</span></p><p align=\"center\"><span style=\" font-size:14pt;\">Author: Lev Kozlov</span></p><p align=\"center\"><span style=\" font-size:14pt;\">Contributors: iakov, anastasiia-kornilova, AlexStrNik</span></p><p align=\"center\"><span style=\" font-size:14pt;\">Copyright © 2020 Lev Kozlov</span><br/></p><p align=\"center\"><span style=\" font-size:14pt;\">Licence: Apache 2.0</span></p></body></html>"))
-        self.InfoLabel.setText(_translate(
-            "aboutWidget", "<html><head/><body><p align=\"center\">For any issues contact me on telegram: @robot_lev</p></body></html>"))
-        self.telegramChannel.setText(_translate(
-            "aboutWidget", "<html><head/><body><p align=\"center\">press to copy link to telegram channel: </p><p align=\"center\">https://t.me/maze_gui_gen</p></body></html>"))
+        self.InfoLabel.setText(
+            _translate(
+                "aboutWidget",
+                "<html><head/><body><p align=\"center\">For any issues contact me on telegram: @robot_lev</p></body></html>"))
+        self.telegramChannel.setText(
+            _translate(
+                "aboutWidget",
+                "<html><head/><body><p align=\"center\">press to copy link to telegram channel: </p><p align=\"center\">https://t.me/maze_gui_gen</p></body></html>"))
         self.actionAgree.setText(_translate("aboutWidget", "Ok"))

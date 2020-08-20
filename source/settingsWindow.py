@@ -7,6 +7,7 @@ from source.tools.app_settings import \
     AppSettings  # pylint: disable=import-error
 import source.tools.Const as const  # pylint: disable=import-error
 
+
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
     def __init__(self):
         super().__init__()
@@ -90,11 +91,12 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
 
         robotics_kit = self.settings.getSettings('roboticsKit')
         if robotics_kit:
-            self.roboticsKitList.setCurrentIndex(const.ROBOTICS_KITS.index(robotics_kit))
+            self.roboticsKitList.setCurrentIndex(
+                const.ROBOTICS_KITS.index(robotics_kit))
         else:
             self.roboticsKitList.setCurrentIndex(0)
             self.updateRoboticsKit(None)
-        
+
         self.settings.sync()
 
     def applyChanges(self):
@@ -113,22 +115,28 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
     # updates label with line pixel size
     def updateValueLinePixelSize(self):
         value = self.getSliderLinePixelSize()
-        self.linePixelSizeValue.setText("<html><head/><body><p align=\"center\">" +
-                                        str(value) + "</p></body></html>")
+        self.linePixelSizeValue.setText(
+            "<html><head/><body><p align=\"center\">" +
+            str(value) +
+            "</p></body></html>")
         self.settings.updateSettings('valueLinePixelSize', value)
 
     # updates label with maze cell size
     def updateValueMazeCellSize(self):
         value = self.getSliderMazeCellSize()
-        self.mazeCellSizeValue.setText("<html><head/><body><p align=\"center\">" +
-                                       str(value) + "</p></body></html>")
+        self.mazeCellSizeValue.setText(
+            "<html><head/><body><p align=\"center\">" +
+            str(value) +
+            "</p></body></html>")
         self.settings.updateSettings('valueMazeCellSize', value)
 
     # updates label with line cell size
     def updateValueLineCellSize(self):
         value = self.getSliderLineCellSize()
-        self.lineCellSizeValue.setText("<html><head/><body><p align=\"center\">" +
-                                       str(value) + "</p></body></html>")
+        self.lineCellSizeValue.setText(
+            "<html><head/><body><p align=\"center\">" +
+            str(value) +
+            "</p></body></html>")
         self.settings.updateSettings('valueLineCellSize', value)
 
     def updateValueMazeLoopsCheckBox(self):
@@ -185,7 +193,8 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.lineCellSizeLabel.setText('Размер ячейки с линией')
         self.linePixelSizeLabel.setText('Ширина линии')
         self.mazeCellSizeLabel.setText('Размер ячейки для лабиринта')
-        self.timelimitLabel.setText('Временное ограничение для задания (MM:SS)')
+        self.timelimitLabel.setText(
+            'Временное ограничение для задания (MM:SS)')
         self.lineColorLabel.setText('Цвет линии')
         self.applyChangesButton.setText('Применить изменения')
 

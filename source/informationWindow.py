@@ -9,6 +9,7 @@ from source.tools.app_settings import (  # pylint: disable=import-error
 
 MEDIA_DIRECTORY = getMediaDirectory()
 
+
 class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
     def __init__(self):
         super().__init__()
@@ -47,7 +48,7 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         c_size = [event.size().width(), event.size().height()]
         min_size = min(c_size)
         self.tutorialImage.setGeometry(
-            c_size[0]//2 - min_size//2, 0, min_size, min_size)
+            c_size[0] // 2 - min_size // 2, 0, min_size, min_size)
 
         self.b_nextImage.move(c_size[0] - 20, round(240 / 600 * c_size[1]))
         self.b_previousImage.move(0, round(240 / 600 * c_size[1]))
@@ -70,5 +71,8 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
         self.tutorialImage.setPixmap(QtGui.QPixmap(path))
 
     def getImagePath(self):
-        return os.path.join(MEDIA_DIRECTORY,
-                            "out_" + str(self.locale_language) + "_" + str(self.current_image) + ".png")
+        return os.path.join(MEDIA_DIRECTORY, "out_" +
+                            str(self.locale_language) +
+                            "_" +
+                            str(self.current_image) +
+                            ".png")

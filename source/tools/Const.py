@@ -54,32 +54,33 @@ XML code:
     </equals>
 </conditions>
 """
-DICT_MOTOR_STOP_TRIK = OrderedDict([ ('@glue', 'and'),
-                                              ( 'equals',
-                                                [ OrderedDict([ ( 'objectState',
-                                                                  OrderedDict([ ( '@object',
-                                                                                  'robot1.M1.power')])),
-                                                                ( 'int',
-                                                                  OrderedDict([ ( '@value',
-                                                                                  '0')]))]),
-                                                  OrderedDict([ ( 'objectState',
-                                                                  OrderedDict([ ( '@object',
-                                                                                  'robot1.M2.power')])),
-                                                                ( 'int',
-                                                                  OrderedDict([ ( '@value',
-                                                                                  '0')]))]),
-                                                  OrderedDict([ ( 'objectState',
-                                                                  OrderedDict([ ( '@object',
-                                                                                  'robot1.M3.power')])),
-                                                                ( 'int',
-                                                                  OrderedDict([ ( '@value',
-                                                                                  '0')]))]),
-                                                  OrderedDict([ ( 'objectState',
-                                                                  OrderedDict([ ( '@object',
-                                                                                  'robot1.M4.power')])),
-                                                                ( 'int',
-                                                                  OrderedDict([ ( '@value',
-                                                                                  '0')]))])])])
+DICT_MOTOR_STOP_TRIK = OrderedDict([('@glue',
+                                     'and'),
+                                    ('equals',
+                                     [OrderedDict([('objectState',
+                                                    OrderedDict([('@object',
+                                                                  'robot1.M1.power')])),
+                                                   ('int',
+                                                    OrderedDict([('@value',
+                                                                  '0')]))]),
+                                         OrderedDict([('objectState',
+                                                       OrderedDict([('@object',
+                                                                     'robot1.M2.power')])),
+                                                      ('int',
+                                                       OrderedDict([('@value',
+                                                                     '0')]))]),
+                                         OrderedDict([('objectState',
+                                                       OrderedDict([('@object',
+                                                                     'robot1.M3.power')])),
+                                                      ('int',
+                                                       OrderedDict([('@value',
+                                                                     '0')]))]),
+                                         OrderedDict([('objectState',
+                                                       OrderedDict([('@object',
+                                                                     'robot1.M4.power')])),
+                                                      ('int',
+                                                       OrderedDict([('@value',
+                                                                     '0')]))])])])
 
 """
 Ordered dictionary for XML generation:
@@ -109,32 +110,33 @@ XML code:
     </equals>
 </conditions>
 """
-DICT_MOTOR_STOP_EV3 = OrderedDict([ ('@glue', 'and'),
-                                    ( 'equals',
-                                    [ OrderedDict([ ( 'objectState',
-                                                        OrderedDict([ ( '@object',
-                                                                        'robot1.A_out.power')])),
-                                                    ( 'int',
-                                                        OrderedDict([ ( '@value',
-                                                                        '0')]))]),
-                                        OrderedDict([ ( 'objectState',
-                                                        OrderedDict([ ( '@object',
-                                                                        'robot1.B_out.power')])),
-                                                    ( 'int',
-                                                        OrderedDict([ ( '@value',
-                                                                        '0')]))]),
-                                        OrderedDict([ ( 'objectState',
-                                                        OrderedDict([ ( '@object',
-                                                                        'robot1.C_out.power')])),
-                                                    ( 'int',
-                                                        OrderedDict([ ( '@value',
-                                                                        '0')]))]),
-                                        OrderedDict([ ( 'objectState',
-                                                        OrderedDict([ ( '@object',
-                                                                        'robot1.D_out.power')])),
-                                                    ( 'int',
-                                                        OrderedDict([ ( '@value',
-                                                                        '0')]))])])])
+DICT_MOTOR_STOP_EV3 = OrderedDict([('@glue',
+                                    'and'),
+                                   ('equals',
+                                    [OrderedDict([('objectState',
+                                                   OrderedDict([('@object',
+                                                                 'robot1.A_out.power')])),
+                                                  ('int',
+                                                   OrderedDict([('@value',
+                                                                 '0')]))]),
+                                        OrderedDict([('objectState',
+                                                      OrderedDict([('@object',
+                                                                    'robot1.B_out.power')])),
+                                                     ('int',
+                                                      OrderedDict([('@value',
+                                                                    '0')]))]),
+                                        OrderedDict([('objectState',
+                                                      OrderedDict([('@object',
+                                                                    'robot1.C_out.power')])),
+                                                     ('int',
+                                                      OrderedDict([('@value',
+                                                                    '0')]))]),
+                                        OrderedDict([('objectState',
+                                                      OrderedDict([('@object',
+                                                                    'robot1.D_out.power')])),
+                                                     ('int',
+                                                      OrderedDict([('@value',
+                                                                    '0')]))])])])
 
 """
 Ordered dictionary for XML generation:
@@ -162,7 +164,7 @@ XML code:
     </trigger>
 </event>
 
-<!-- Предикат timer будет true по истечении времени в timeout, проверяем, что на экране все еще finish и success -->	
+<!-- Предикат timer будет true по истечении времени в timeout, проверяем, что на экране все еще finish и success -->
 <event id="check_timer" settedUpInitially="false">
     <conditions glue="and">
         <timer timeout="9000" forceDropOnTimeout="true"/>
@@ -181,66 +183,66 @@ XML code:
     </trigger>
 </event>
 """
-DICT_FINISH_PATTERN = [ OrderedDict([ ('@id', 'wait_finish'),
-                                                ('@settedUpInitially', 'true'),
-                                                ( 'conditions',
-                                                  OrderedDict([ ( '@glue',
-                                                                  'and'),
-                                                                ( 'conditions',
-                                                                OrderedDict([
-                                                                    ( '@glue',
-                                                                    'or')
-                                                                ])),
-                                                                ( 'greater',
-                                                                  OrderedDict([ ( 'objectState',
-                                                                                  OrderedDict([ ( '@object',
-                                                                                                  'robot1.display.labels.size')])),
-                                                                                ( 'int',
-                                                                                  OrderedDict([ ( '@value',
-                                                                                                  '0')]))])),
-                                                                ( 'equals',
-                                                                  OrderedDict([ ( 'objectState',
-                                                                                  OrderedDict([ ( '@object',
-                                                                                                  'robot1.display.labels.last.text')])),
-                                                                                ( 'string',
-                                                                                  OrderedDict([ ( '@value',
-                                                                                                  'finish')]))]))])),
-                                                ( 'trigger',
-                                                  OrderedDict([ ( 'setUp',
-                                                                  OrderedDict([ ( '@id',
-                                                                                  'check_timer')]))]))]),
-                                  OrderedDict([ ('@id', 'check_timer'),
-                                                ('@settedUpInitially', 'false'),
-                                                ( 'conditions',
-                                                  OrderedDict([ ( '@glue',
-                                                                  'and'),
-                                                                ( 'timer',
-                                                                  OrderedDict([ ( '@timeout',
-                                                                                  '9000'),
-                                                                                ( '@forceDropOnTimeout',
-                                                                                  'true')])),
-                                                                ( 'conditions',
-                                                                  OrderedDict([
-                                                                      ( '@glue',
-                                                                        'or')
-                                                                  ])),
-                                                                ( 'greater',
-                                                                  OrderedDict([ ( 'objectState',
-                                                                                  OrderedDict([ ( '@object',
-                                                                                                  'robot1.display.labels.size')])),
-                                                                                ( 'int',
-                                                                                  OrderedDict([ ( '@value',
-                                                                                                  '0')]))])),
-                                                                ( 'equals',
-                                                                  OrderedDict([ ( 'objectState',
-                                                                                  OrderedDict([ ( '@object',
-                                                                                                  'robot1.display.labels.last.text')])),
-                                                                                ( 'string',
-                                                                                  OrderedDict([ ( '@value',
-                                                                                                  'finish')]))]))])),
-                                                ( 'trigger',
-                                                  OrderedDict([ ( 'success',
-                                                                  None)]))])]
+DICT_FINISH_PATTERN = [OrderedDict([('@id', 'wait_finish'),
+                                    ('@settedUpInitially', 'true'),
+                                    ('conditions',
+                                     OrderedDict([('@glue',
+                                                   'and'),
+                                                  ('conditions',
+                                                   OrderedDict([
+                                                       ('@glue',
+                                                        'or')
+                                                   ])),
+                                                  ('greater',
+                                                   OrderedDict([('objectState',
+                                                                 OrderedDict([('@object',
+                                                                               'robot1.display.labels.size')])),
+                                                                ('int',
+                                                                 OrderedDict([('@value',
+                                                                               '0')]))])),
+                                                  ('equals',
+                                                   OrderedDict([('objectState',
+                                                                 OrderedDict([('@object',
+                                                                               'robot1.display.labels.last.text')])),
+                                                                ('string',
+                                                                 OrderedDict([('@value',
+                                                                               'finish')]))]))])),
+                                    ('trigger',
+                                     OrderedDict([('setUp',
+                                                   OrderedDict([('@id',
+                                                                 'check_timer')]))]))]),
+                       OrderedDict([('@id', 'check_timer'),
+                                    ('@settedUpInitially', 'false'),
+                                    ('conditions',
+                                     OrderedDict([('@glue',
+                                                   'and'),
+                                                  ('timer',
+                                                   OrderedDict([('@timeout',
+                                                                 '9000'),
+                                                                ('@forceDropOnTimeout',
+                                                                 'true')])),
+                                                  ('conditions',
+                                                   OrderedDict([
+                                                       ('@glue',
+                                                        'or')
+                                                   ])),
+                                                  ('greater',
+                                                   OrderedDict([('objectState',
+                                                                 OrderedDict([('@object',
+                                                                               'robot1.display.labels.size')])),
+                                                                ('int',
+                                                                 OrderedDict([('@value',
+                                                                               '0')]))])),
+                                                  ('equals',
+                                                   OrderedDict([('objectState',
+                                                                 OrderedDict([('@object',
+                                                                               'robot1.display.labels.last.text')])),
+                                                                ('string',
+                                                                 OrderedDict([('@value',
+                                                                               'finish')]))]))])),
+                                    ('trigger',
+                                     OrderedDict([('success',
+                                                   None)]))])]
 
 FIELD_START_FINISH_STR = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
 <root>\
@@ -278,11 +280,10 @@ FIELD_START_FINISH_STR = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
 </root>\
 "
 
-NOTIFICATION =  "<!--\nThis field was generated by maze-gui-gen\n"\
-                "Author: Lev Kozlov\n"\
-                "Contributors: iakov, AlexStrNik, anastasia-kornilova\n"\
-                "Licence: Apache 2.0\n"\
-                "website: https://lvjonok.github.io/maze-gui-gen/\n"\
-                "project page: https://github.com/lvjonok/maze-gui-gen\n"\
-                "Copyright © 2020 Lev Kozlov\n-->\n"
-                
+NOTIFICATION = "<!--\nThis field was generated by maze-gui-gen\n"\
+    "Author: Lev Kozlov\n"\
+    "Contributors: iakov, AlexStrNik, anastasia-kornilova\n"\
+    "Licence: Apache 2.0\n"\
+    "website: https://lvjonok.github.io/maze-gui-gen/\n"\
+    "project page: https://github.com/lvjonok/maze-gui-gen\n"\
+    "Copyright © 2020 Lev Kozlov\n-->\n"
