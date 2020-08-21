@@ -9,8 +9,7 @@ class Command:
 
     def setLastState(self, wl_last_state=False, ct_last_state=False):
         """Function accepts two optional parameters and updates last state"""
-        if not (
-                wl_last_state or ct_last_state):    # at least one part should be updated
+        if not (wl_last_state or ct_last_state):  # at least one part should be updated
             return False
         new_wl_state, new_ct_state = self.current
         if wl_last_state:
@@ -32,8 +31,9 @@ class Command:
     def undo(self):
         """get list of two matrixes 0 - WallMatrix, 1 - CellsMatrix"""
 
-        if len(
-                self.past) < 1:      # we can return redo action if there are at least 1 action
+        if (
+            len(self.past) < 1
+        ):  # we can return redo action if there are at least 1 action
             return False
         self.future.append(self.current)
         self.current = self.past.pop()
@@ -43,8 +43,9 @@ class Command:
     def redo(self):
         """get last state from redo stack"""
 
-        if len(
-                self.future) < 1:    # we can return redo action if there are at least 1 action
+        if (
+            len(self.future) < 1
+        ):  # we can return redo action if there are at least 1 action
             return
         self.past.append(self.current)
         self.current = self.future.pop()

@@ -18,18 +18,18 @@ class Ui_InformationWidget(object):
         InformationWidget.setMinimumSize(QtCore.QSize(900, 600))
         InformationWidget.setMaximumSize(QtCore.QSize(99999, 99999))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../maze.ico"),
-                       QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(
+            QtGui.QPixmap("../maze.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off
+        )
         InformationWidget.setWindowIcon(icon)
-        InformationWidget.setStyleSheet(
-            "QWidget {background-color:rgb(255, 255, 255)}")
+        InformationWidget.setStyleSheet("QWidget {background-color:rgb(255, 255, 255)}")
         self.tutorialImage = QtWidgets.QLabel(InformationWidget)
         self.tutorialImage.setGeometry(QtCore.QRect(0, 0, 900, 600))
         self.tutorialImage.setStyleSheet(
-            "QLabel {\'background-color\':rgb(255, 255, 255)}")
+            "QLabel {'background-color':rgb(255, 255, 255)}"
+        )
         self.tutorialImage.setText("")
-        self.tutorialImage.setPixmap(
-            QtGui.QPixmap("app_screenshots/out_1.png"))
+        self.tutorialImage.setPixmap(QtGui.QPixmap("app_screenshots/out_1.png"))
         self.tutorialImage.setScaledContents(True)
         self.tutorialImage.setObjectName("tutorialImage")
         self.b_nextImage = QtWidgets.QToolButton(InformationWidget)
@@ -46,7 +46,6 @@ class Ui_InformationWidget(object):
 
     def retranslateUi(self, InformationWidget):
         _translate = QtCore.QCoreApplication.translate
-        InformationWidget.setWindowTitle(
-            _translate("InformationWidget", "Tutorial"))
+        InformationWidget.setWindowTitle(_translate("InformationWidget", "Tutorial"))
         self.b_nextImage.setText(_translate("InformationWidget", "N"))
         self.b_previousImage.setText(_translate("InformationWidget", "P"))

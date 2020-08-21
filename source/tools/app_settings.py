@@ -18,7 +18,7 @@ def getMediaDirectory():
 
 class AppSettings:
     def __init__(self):
-        self.settings = QtCore.QSettings('maze-gui-generator')
+        self.settings = QtCore.QSettings("maze-gui-generator")
 
     def getSettings(self, param):
         return self.settings.value(param)

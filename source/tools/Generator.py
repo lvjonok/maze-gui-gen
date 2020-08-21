@@ -17,21 +17,21 @@ class FieldGenerator:
         keys = const.FIELD_GENERATOR_SETTINGS_KEYS
         for key in keys:
             if not key in settings:
-                raise Exception(
-                    "There is no {} key in settings dictionary".format(key))
+                raise Exception("There is no {} key in settings dictionary".format(key))
 
         self.start_id_container = []
         self.finish_id_container = []
         self.walls_id_xml = 0
-        self.xml_line_width = int(settings['valueLinePixelSize'])  # 6
-        self.xml_line_color = int(settings['valueColorLine'])  # "000000"
-        self.size_x = int(settings['x'])  # x
-        self.size_y = int(settings['y'])  # y
+        self.xml_line_width = int(settings["valueLinePixelSize"])  # 6
+        self.xml_line_color = int(settings["valueColorLine"])  # "000000"
+        self.size_x = int(settings["x"])  # x
+        self.size_y = int(settings["y"])  # y
         self.timelimit = [
-            int(p) for p in settings['valueExcersizeTimelimit']]  # timelimit
-        self.cell_size_line = int(settings['valueLineCellSize'])  # -1
-        self.cell_size_maze = int(settings['valueMazeCellSize'])  # -1
-        self.robot_id = const.ROBOTICS_KIT_TO_ID[settings['roboticsKit']]
+            int(p) for p in settings["valueExcersizeTimelimit"]
+        ]  # timelimit
+        self.cell_size_line = int(settings["valueLineCellSize"])  # -1
+        self.cell_size_maze = int(settings["valueMazeCellSize"])  # -1
+        self.robot_id = const.ROBOTICS_KIT_TO_ID[settings["roboticsKit"]]
 
     def getXML_line_width(self):
         return self.xml_line_width
@@ -51,22 +51,34 @@ class FieldGenerator:
         def_size = self.cell_size_maze * 50
         # matrix = convertMap(self.size_x, self.size_y, adj_map)
         doc = self.setRegions(matrix, self.cell_size_maze * 50)
-        doc['root']['world']['walls'] = {'wall': []}
+        doc["root"]["world"]["walls"] = {"wall": []}
         for y_i in range(self.size_y):
             for x_i in range(self.size_x):
                 vertex = y_i * self.size_x + x_i
                 if adj_map[vertex][0]:
-                    doc['root']['world']['walls']['wall'].append(
-                        (self.getXML_wall(x_i * def_size, y_i * def_size, def_size, 0)))
+                    doc["root"]["world"]["walls"]["wall"].append(
+                        (self.getXML_wall(x_i * def_size, y_i * def_size, def_size, 0))
+                    )
                 if adj_map[vertex][1]:
-                    doc['root']['world']['walls']['wall'].append(
-                        (self.getXML_wall(x_i * def_size + def_size, y_i * def_size, 0, def_size)))
+                    doc["root"]["world"]["walls"]["wall"].append(
+                        (
+                            self.getXML_wall(
+                                x_i * def_size + def_size, y_i * def_size, 0, def_size
+                            )
+                        )
+                    )
                 if adj_map[vertex][2]:
-                    doc['root']['world']['walls']['wall'].append(
-                        (self.getXML_wall(x_i * def_size, y_i * def_size + def_size, def_size, 0)))
+                    doc["root"]["world"]["walls"]["wall"].append(
+                        (
+                            self.getXML_wall(
+                                x_i * def_size, y_i * def_size + def_size, def_size, 0
+                            )
+                        )
+                    )
                 if adj_map[vertex][3]:
-                    doc['root']['world']['walls']['wall'].append(
-                        (self.getXML_wall(x_i * def_size, y_i * def_size, 0, def_size)))
+                    doc["root"]["world"]["walls"]["wall"].append(
+                        (self.getXML_wall(x_i * def_size, y_i * def_size, 0, def_size))
+                    )
         # print(xmltodict.unparse(doc, pretty=True))
         return doc
 
@@ -80,22 +92,54 @@ class FieldGenerator:
         def_size = self.cell_size_line * 50
         # matrix = convertMap(self.size_x, self.size_y, adj_map)
         doc = self.setRegions(matrix, self.cell_size_line * 50)
-        doc['root']['world']['colorFields'] = {'line': []}
+        doc["root"]["world"]["colorFields"] = {"line": []}
         for y_i in range(self.size_y):
             for x_i in range(self.size_x):
                 vertex = y_i * self.size_x + x_i
                 if not adj_map[vertex][0]:
-                    doc['root']['world']['colorFields']['line'].append(
-                        (self.getXML_line(def_size // 2 + x_i * def_size, def_size // 2 + y_i * def_size, 0, -def_size // 2)))
+                    doc["root"]["world"]["colorFields"]["line"].append(
+                        (
+                            self.getXML_line(
+                                def_size // 2 + x_i * def_size,
+                                def_size // 2 + y_i * def_size,
+                                0,
+                                -def_size // 2,
+                            )
+                        )
+                    )
                 if not adj_map[vertex][1]:
-                    doc['root']['world']['colorFields']['line'].append(
-                        (self.getXML_line(def_size // 2 + x_i * def_size, def_size // 2 + y_i * def_size, def_size // 2, 0)))
+                    doc["root"]["world"]["colorFields"]["line"].append(
+                        (
+                            self.getXML_line(
+                                def_size // 2 + x_i * def_size,
+                                def_size // 2 + y_i * def_size,
+                                def_size // 2,
+                                0,
+                            )
+                        )
+                    )
                 if not adj_map[vertex][2]:
-                    doc['root']['world']['colorFields']['line'].append(
-                        (self.getXML_line(def_size // 2 + x_i * def_size, def_size // 2 + y_i * def_size, 0, def_size // 2)))
+                    doc["root"]["world"]["colorFields"]["line"].append(
+                        (
+                            self.getXML_line(
+                                def_size // 2 + x_i * def_size,
+                                def_size // 2 + y_i * def_size,
+                                0,
+                                def_size // 2,
+                            )
+                        )
+                    )
                 if not adj_map[vertex][3]:
-                    doc['root']['world']['colorFields']['line'].append(
-                        (self.getXML_line(def_size // 2 + x_i * def_size, def_size // 2 + y_i * def_size, -def_size // 2, 0)))
+                    doc["root"]["world"]["colorFields"]["line"].append(
+                        (
+                            self.getXML_line(
+                                def_size // 2 + x_i * def_size,
+                                def_size // 2 + y_i * def_size,
+                                -def_size // 2,
+                                0,
+                            )
+                        )
+                    )
         # print(xmltodict.unparse(doc, pretty=True))
         return doc
 
@@ -116,19 +160,21 @@ class FieldGenerator:
             <line stroke-width="6" fill-style="none" end="250:-50" id="{line1}" stroke-style="solid"
                 fill="#ff000000" stroke="#ff000000" begin="50:-50"/>
         """
-        width = self.getXML_line_width()    # width in pixels   (integer)
-        color = self.getXML_line_color()    # color in hex      (string)
+        width = self.getXML_line_width()  # width in pixels   (integer)
+        color = self.getXML_line_color()  # color in hex      (string)
         out_dict = OrderedDict()
-        out_dict.update([("@stroke-width", str(width)),
-                         ("@fill-width", "none"),
-                         ("@begin", str(x_start) + ":" + str(y_start)),
-                         ("@end", str(x_start + x_len) +
-                          ":" + str(y_start + y_len)),
-                         ("@id", "{wall" + str(self.walls_id_xml) + "}"),
-                         ("@stroke-style", "solid"),
-                         ("@fill", "#" + str(color)),
-                         ("@stroke", "#" + str(color)
-                          )])
+        out_dict.update(
+            [
+                ("@stroke-width", str(width)),
+                ("@fill-width", "none"),
+                ("@begin", str(x_start) + ":" + str(y_start)),
+                ("@end", str(x_start + x_len) + ":" + str(y_start + y_len)),
+                ("@id", "{wall" + str(self.walls_id_xml) + "}"),
+                ("@stroke-style", "solid"),
+                ("@fill", "#" + str(color)),
+                ("@stroke", "#" + str(color)),
+            ]
+        )
         self.walls_id_xml += 1
         return out_dict
 
@@ -149,10 +195,13 @@ class FieldGenerator:
             <wall id="{wall1}" begin="50:-50" end="250:-50"/>
         """
         out_dict = OrderedDict()
-        out_dict.update([("@id", "{wall" + str(self.walls_id_xml) + "}"),
-                         ("@begin", str(x_start) + ":" + str(y_start)),
-                         ("@end", str(x_start + x_len) + ":" + str(y_start + y_len))
-                         ])
+        out_dict.update(
+            [
+                ("@id", "{wall" + str(self.walls_id_xml) + "}"),
+                ("@begin", str(x_start) + ":" + str(y_start)),
+                ("@end", str(x_start + x_len) + ":" + str(y_start + y_len)),
+            ]
+        )
         self.walls_id_xml += 1
         return out_dict
 
@@ -174,19 +223,22 @@ class FieldGenerator:
                 filled="true" textX="0" textY="0" color="#0000FF" text="Start" type="rectangle"></region>
         """
         out_dict = OrderedDict()
-        out_dict.update([("@visible", "true"),
-                         ("@id", "start_" + str(zone_id)),
-                         ("@x", str(x_start)),
-                         ("@y", str(y_start)),
-                         ("@width", str(x_len)),
-                         ("@height", str(y_len)),
-                         ("@filled", "true"),
-                         ("@textX", "0"),
-                         ("@textY", "0"),
-                         ("@color", "#0000FF"),
-                         ("@text", "Start"),
-                         ("@type", "rectangle")
-                         ])
+        out_dict.update(
+            [
+                ("@visible", "true"),
+                ("@id", "start_" + str(zone_id)),
+                ("@x", str(x_start)),
+                ("@y", str(y_start)),
+                ("@width", str(x_len)),
+                ("@height", str(y_len)),
+                ("@filled", "true"),
+                ("@textX", "0"),
+                ("@textY", "0"),
+                ("@color", "#0000FF"),
+                ("@text", "Start"),
+                ("@type", "rectangle"),
+            ]
+        )
         return out_dict
 
     def getXML_finish(self, x_start, y_start, x_len, y_len, zone_id=0) -> OrderedDict:
@@ -207,19 +259,22 @@ class FieldGenerator:
                 filled="true" textX="0" textY="0" color="#FF0000" text="Finish" type="rectangle"></region>
         """
         out_dict = OrderedDict()
-        out_dict.update([("@visible", "true"),
-                         ("@id", "finish_" + str(zone_id)),
-                         ("@x", str(x_start)),
-                         ("@y", str(y_start)),
-                         ("@width", str(x_len)),
-                         ("@height", str(y_len)),
-                         ("@filled", "true"),
-                         ("@textX", "0"),
-                         ("@textY", "0"),
-                         ("@color", "#FF0000"),
-                         ("@text", "Finish"),
-                         ("@type", "rectangle")
-                         ])
+        out_dict.update(
+            [
+                ("@visible", "true"),
+                ("@id", "finish_" + str(zone_id)),
+                ("@x", str(x_start)),
+                ("@y", str(y_start)),
+                ("@width", str(x_len)),
+                ("@height", str(y_len)),
+                ("@filled", "true"),
+                ("@textX", "0"),
+                ("@textY", "0"),
+                ("@color", "#FF0000"),
+                ("@text", "Finish"),
+                ("@type", "rectangle"),
+            ]
+        )
         return out_dict
 
     def getXML_warzone(self, x_start, y_start, x_len, y_len, zone_id=0) -> OrderedDict:
@@ -240,19 +295,22 @@ class FieldGenerator:
                 filled="true" textX="0" textY="0" color="#FFFF00" text="Warzone" type="rectangle"></region>
         """
         out_dict = OrderedDict()
-        out_dict.update([("@visible", "true"),
-                         ("@id", "warzone_" + str(zone_id)),
-                         ("@x", str(x_start)),
-                         ("@y", str(y_start)),
-                         ("@width", str(x_len)),
-                         ("@height", str(y_len)),
-                         ("@filled", "true"),
-                         ("@textX", "0"),
-                         ("@textY", "0"),
-                         ("@color", "#FFFF00"),
-                         ("@text", "Warzone"),
-                         ("@type", "rectangle")
-                         ])
+        out_dict.update(
+            [
+                ("@visible", "true"),
+                ("@id", "warzone_" + str(zone_id)),
+                ("@x", str(x_start)),
+                ("@y", str(y_start)),
+                ("@width", str(x_len)),
+                ("@height", str(y_len)),
+                ("@filled", "true"),
+                ("@textX", "0"),
+                ("@textY", "0"),
+                ("@color", "#FFFF00"),
+                ("@text", "Warzone"),
+                ("@type", "rectangle"),
+            ]
+        )
         return out_dict
 
     def getXML_insideZone(self, zone_str, robot_id: str = "robot1") -> OrderedDict:
@@ -291,9 +349,7 @@ class FieldGenerator:
             <inside regionId="start_finish" objectId="robot1"></inside>
         """
         out_dict = OrderedDict()
-        out_dict.update([("@regionId", zone_str),
-                         ("@objectId", robot_id)
-                         ])
+        out_dict.update([("@regionId", zone_str), ("@objectId", robot_id)])
         return out_dict
 
     def updateTimelimit(self, doc: OrderedDict, time: list) -> OrderedDict:
@@ -302,12 +358,14 @@ class FieldGenerator:
             Time is (list)      [minutes, seconds]
             Returns doc
         """
-        doc['root']['constraints']['timelimit']['@value'] = (
-            (time[0] * 60 + time[1]) * 1000
-        )
+        doc["root"]["constraints"]["timelimit"]["@value"] = (
+            time[0] * 60 + time[1]
+        ) * 1000
         return doc
 
-    def updateRobotPosition(self, doc: OrderedDict, coordinates: list, cell_size: int) -> OrderedDict:
+    def updateRobotPosition(
+        self, doc: OrderedDict, coordinates: list, cell_size: int
+    ) -> OrderedDict:
         """
             Function updates robot position for given doc (field)
             Params:
@@ -318,13 +376,16 @@ class FieldGenerator:
         """
         y, x = coordinates
         k = cell_size // 50
-        doc['root']['robots']['robot']['@id'] = self.robot_id
-        doc['root']['robots']['robot']['@position'] = str(x * cell_size +
-                                                          25 * (k - 1)) + ":" + str(y * cell_size + 25 * (k - 1))
-        doc['root']['robots']['robot']['startPosition']['@x'] = str(
-            x * cell_size + 25 * k)
-        doc['root']['robots']['robot']['startPosition']['@y'] = str(
-            y * cell_size + 25 * k)
+        doc["root"]["robots"]["robot"]["@id"] = self.robot_id
+        doc["root"]["robots"]["robot"]["@position"] = (
+            str(x * cell_size + 25 * (k - 1)) + ":" + str(y * cell_size + 25 * (k - 1))
+        )
+        doc["root"]["robots"]["robot"]["startPosition"]["@x"] = str(
+            x * cell_size + 25 * k
+        )
+        doc["root"]["robots"]["robot"]["startPosition"]["@y"] = str(
+            y * cell_size + 25 * k
+        )
         return doc
 
     def updateRegionsID(self, center_matrix: list) -> None:
@@ -364,8 +425,7 @@ class FieldGenerator:
         doc = xmltodict.parse(field_template, process_namespaces=True)
 
         if len(self.finish_id_container) > 0:
-            doc['root']['constraints'].update(
-                [('event', const.DICT_FINISH_PATTERN)])
+            doc["root"]["constraints"].update([("event", const.DICT_FINISH_PATTERN)])
 
         doc = self.updateTimelimit(doc, self.timelimit)
 
@@ -377,77 +437,92 @@ class FieldGenerator:
             )
 
             try:
-                doc['root']['world']['regions']['region'].append(start_region)
+                doc["root"]["world"]["regions"]["region"].append(start_region)
             except TypeError:
-                doc['root']['world']['regions'] = OrderedDict()
-                doc['root']['world']['regions'].update(
-                    [('region', [start_region])])
+                doc["root"]["world"]["regions"] = OrderedDict()
+                doc["root"]["world"]["regions"].update([("region", [start_region])])
 
             inside_region = self.getXML_insideZone("start_" + str(start_id))
 
             try:
-                doc['root']['constraints']['constraint'][0]['conditions']['inside'].append(
-                    inside_region)
+                doc["root"]["constraints"]["constraint"][0]["conditions"][
+                    "inside"
+                ].append(inside_region)
             except KeyError:
-                doc['root']['constraints']['constraint'][0]['conditions']['inside'] = [
-                    inside_region]
+                doc["root"]["constraints"]["constraint"][0]["conditions"]["inside"] = [
+                    inside_region
+                ]
 
             last_start_coor = start_coors
 
         for finish_id, finish_coors in enumerate(self.finish_id_container):
             y, x = finish_coors
             finish_region = self.getXML_finish(
-                x * default_size, y * default_size, default_size, default_size, finish_id
+                x * default_size,
+                y * default_size,
+                default_size,
+                default_size,
+                finish_id,
             )
 
             try:
-                doc['root']['world']['regions']['region'].append(finish_region)
+                doc["root"]["world"]["regions"]["region"].append(finish_region)
             except TypeError:
-                doc['root']['world']['regions'] = OrderedDict()
-                doc['root']['world']['regions'].update(
-                    [('region', [finish_region])])
+                doc["root"]["world"]["regions"] = OrderedDict()
+                doc["root"]["world"]["regions"].update([("region", [finish_region])])
 
             inside_region = self.getXML_insideZone("finish_" + str(finish_id))
 
             try:
-                doc['root']['constraints']['event'][0]['conditions']['conditions']['inside'].append(
-                    inside_region)
-                doc['root']['constraints']['event'][1]['conditions']['conditions']['inside'].append(
-                    inside_region)
+                doc["root"]["constraints"]["event"][0]["conditions"]["conditions"][
+                    "inside"
+                ].append(inside_region)
+                doc["root"]["constraints"]["event"][1]["conditions"]["conditions"][
+                    "inside"
+                ].append(inside_region)
             except KeyError:
-                doc['root']['constraints']['event'][0]['conditions']['conditions']['inside'] = [
-                    inside_region]
-                doc['root']['constraints']['event'][1]['conditions']['conditions']['inside'] = [
-                    inside_region]
+                doc["root"]["constraints"]["event"][0]["conditions"]["conditions"][
+                    "inside"
+                ] = [inside_region]
+                doc["root"]["constraints"]["event"][1]["conditions"]["conditions"][
+                    "inside"
+                ] = [inside_region]
 
         for warzone_id, warzone_coors in enumerate(self.warzones_id_container):
             y, x = warzone_coors
             warzone_region = self.getXML_warzone(
-                x * default_size, y * default_size, default_size, default_size, warzone_id
+                x * default_size,
+                y * default_size,
+                default_size,
+                default_size,
+                warzone_id,
             )
 
             try:
-                doc['root']['world']['regions']['region'].append(
-                    warzone_region)
+                doc["root"]["world"]["regions"]["region"].append(warzone_region)
             except TypeError:
-                doc['root']['world']['regions'] = OrderedDict()
-                doc['root']['world']['regions'].update(
-                    [('region', [warzone_region])])
+                doc["root"]["world"]["regions"] = OrderedDict()
+                doc["root"]["world"]["regions"].update([("region", [warzone_region])])
 
-            inside_region = self.getXML_insideZone(
-                "warzone_" + str(warzone_id))
+            inside_region = self.getXML_insideZone("warzone_" + str(warzone_id))
 
             try:
-                doc['root']['constraints']['constraint'][1]['conditions']['not'].append(
-                    {'inside': inside_region})
+                doc["root"]["constraints"]["constraint"][1]["conditions"]["not"].append(
+                    {"inside": inside_region}
+                )
             except AttributeError:
-                doc['root']['constraints']['constraint'][1]['conditions']['not'] = [
-                    {'inside': inside_region}]
+                doc["root"]["constraints"]["constraint"][1]["conditions"]["not"] = [
+                    {"inside": inside_region}
+                ]
         doc = self.updateRobotPosition(doc, last_start_coor, default_size)
 
         if len(self.warzones_id_container) == 0:
-            doc['root']['constraints']['constraint'].pop()
+            doc["root"]["constraints"]["constraint"].pop()
         if len(self.start_id_container) == 0:
-            doc['root']['constraints']['constraint'].pop(0)
+            doc["root"]["constraints"]["constraint"].pop(0)
 
         return doc
+
+
+def getRobotConfiguration(file: str) -> OrderedDict:
+    pass

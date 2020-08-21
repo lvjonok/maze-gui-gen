@@ -1,6 +1,7 @@
 """Module provides utilities to work with graphs"""
 
 from random import randint, shuffle
+
 # import sys
 # sys.setrecursionlimit(50000)
 
@@ -10,8 +11,9 @@ class Graph:
         self.visited = []
         self.size_x = size_x
         self.size_y = size_y
-        self.map = [[WALLS_STATES["filled"]] * size_x *
-                    size_y for i in range(size_y * size_x)]
+        self.map = [
+            [WALLS_STATES["filled"]] * size_x * size_y for i in range(size_y * size_x)
+        ]
 
     def getNextVertex(self, vertex, direction):
         next_vertex = vertex
@@ -20,12 +22,16 @@ class Graph:
         elif direction == 1:
             next_vertex += 1 if vertex % self.size_x != self.size_x - 1 else 0
         elif direction == 2:
-            next_vertex += self.size_x if vertex + \
-                self.size_x < self.size_x * self.size_y else 0
+            next_vertex += (
+                self.size_x if vertex + self.size_x < self.size_x * self.size_y else 0
+            )
         elif direction == 3:
             next_vertex -= 1 if vertex % self.size_x != 0 else 0
-        out = next_vertex if next_vertex != vertex and 0 <= next_vertex < self.size_y * \
-            self.size_x else -1
+        out = (
+            next_vertex
+            if next_vertex != vertex and 0 <= next_vertex < self.size_y * self.size_x
+            else -1
+        )
         return out
 
     def generateGraph(self, start_vertex, loops=True):
@@ -33,7 +39,7 @@ class Graph:
         if not loops:
             return loops
 
-        walls = []      # list contains tuples describing wall to be deleted
+        walls = []  # list contains tuples describing wall to be deleted
 
         for v1 in range(self.size_x * self.size_y):
             for v2 in range(v1 + 1, self.size_x * self.size_y):
@@ -43,7 +49,7 @@ class Graph:
         for _ in range(len(walls) // 5):
             delete_index = randint(0, len(walls) - 1)
             v1, v2 = walls[delete_index]
-            self.map[v1][v2] = WALLS_STATES["empty"]    # delete wall
+            self.map[v1][v2] = WALLS_STATES["empty"]  # delete wall
             self.map[v2][v1] = WALLS_STATES["empty"]
         return loops
 
@@ -59,7 +65,7 @@ class Graph:
                 if vertex != -1 and vertex not in visited:
                     vertices.append(vertex)
             shuffle(vertices)
-            for next_vertex in vertices[:randint(1, 4)]:
+            for next_vertex in vertices[: randint(1, 4)]:
                 try:
                     self.map[current_vertex][next_vertex] = WALLS_STATES["empty"]
                     self.map[next_vertex][current_vertex] = WALLS_STATES["empty"]
@@ -82,7 +88,7 @@ class Graph:
         for vertex in range(self.size_x * self.size_y):
             for d in range(4):
                 nv = self.getNextVertex(vertex, d)
-                if nv != -1:    # if vertex exists
+                if nv != -1:  # if vertex exists
                     # if way is available it will be 0
                     out[vertex][d] = self.map[vertex][nv]
         return out
@@ -104,7 +110,4 @@ def convertMap(size_x, size_y, adj_map):
     return new_map
 
 
-WALLS_STATES = {
-    "empty": 0,
-    "filled": 1
-}
+WALLS_STATES = {"empty": 0, "filled": 1}
