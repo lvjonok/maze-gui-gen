@@ -1,10 +1,12 @@
 """Module contains settings window class"""
 
+from collections import OrderedDict
 from PyQt5 import QtCore, QtWidgets
 
 import source.py_ui.settingsUI as settingsUI  # pylint: disable=import-error
 from source.tools.app_settings import AppSettings  # pylint: disable=import-error
 import source.tools.Const as const  # pylint: disable=import-error
+from source.tools.Generator import getRobotConfiguration # pylint: disable=import-error
 
 
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
@@ -79,13 +81,22 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
             self.settings.updateSettings("valueMazeLoopsCheckBox", False)
 
         robotics_kit = self.settings.getSettings("roboticsKit")
-        if robotics_kit and False:
+        self.roboticsConfig: str = ""
+        if robotics_kit:
             self.roboticsKitList.setCurrentIndex(
                 const.ROBOTICS_KITS.index(robotics_kit)
             )
         else:
             self.roboticsKitList.setCurrentIndex(0)
             self.updateRoboticsKit(None)
+        robot_cfg = self.settings.getSettings("roboticsConfig")
+        # print('rbcfg', robot_cfg)
+        # print('rbrk', robotics_kit)
+        if robotics_kit == "XML" and robot_cfg != "":
+            self.roboticsConfig: str = robot_cfg
+        else:
+            self.roboticsConfig = ""
+            self.settings.updateSettings("roboticsConfig", "\"\"")
 
         self.settings.sync()
 
@@ -189,7 +200,10 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
                 filter="Fields (*.xml)",
                 options=options,
             )
-            print(fileName)
+            if not fileName:  # if it is not accessible
+                return False
+            config: str = str(getRobotConfiguration(fileName))
+            self.settings.updateSettings("roboticsConfig", config)
 
     def getRoboticsKit(self) -> str:
         return str(self.roboticsKitList.currentText())

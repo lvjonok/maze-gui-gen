@@ -600,7 +600,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             if fileName[::-1][0:4] != ".xml"[::-1]:
                 fileName += ".xml"
             file_map = open(fileName, "w")
-            file_map.write(const.NOTIFICATION + xmltodict.unparse(field, pretty=True))
+
+            field_str = xmltodict.unparse(field, pretty=True)
+            field_str = field_str[:39] + const.NOTIFICATION + field_str[39:]
+
+            file_map.write(field_str)
             file_map.close()
 
             # get head of a path and update as last directory

@@ -31,7 +31,12 @@ class FieldGenerator:
         ]  # timelimit
         self.cell_size_line = int(settings["valueLineCellSize"])  # -1
         self.cell_size_maze = int(settings["valueMazeCellSize"])  # -1
-        self.robot_id = const.ROBOTICS_KIT_TO_ID[settings["roboticsKit"]]
+        self.robot_kit_id = const.ROBOTICS_KIT_TO_ID[settings["roboticsKit"]]
+
+        # print("roboticsConfig settings init is {}, bool {}".format(settings["roboticsConfig"], bool(settings["roboticsConfig"])))
+        self.robot_cfg = eval(settings["roboticsConfig"])
+        # print(self.robot_cfg)
+        # print('\n' * 4)
 
     def getXML_line_width(self):
         return self.xml_line_width
@@ -47,7 +52,7 @@ class FieldGenerator:
             matrix  (list): matrix with center buttons values
         """
         if self.cell_size_maze == -1:
-            raise "Cant use not setted variable cell_size_maze"
+            raise Exception("Cant use not setted variable cell_size_maze")
         def_size = self.cell_size_maze * 50
         # matrix = convertMap(self.size_x, self.size_y, adj_map)
         doc = self.setRegions(matrix, self.cell_size_maze * 50)
@@ -313,7 +318,7 @@ class FieldGenerator:
         )
         return out_dict
 
-    def getXML_insideZone(self, zone_str, robot_id: str = "robot1") -> OrderedDict:
+    def getXML_insideZone(self, zone_str, robot_kit_id: str = "robot1") -> OrderedDict:
         """
             Function returns OrderedDict for XML generation
             Dictionary checks if robot is <inside>, should be inside <constraint> </constraint> or <conditions> </conditions>
@@ -349,7 +354,7 @@ class FieldGenerator:
             <inside regionId="start_finish" objectId="robot1"></inside>
         """
         out_dict = OrderedDict()
-        out_dict.update([("@regionId", zone_str), ("@objectId", robot_id)])
+        out_dict.update([("@regionId", zone_str), ("@objectId", robot_kit_id)])
         return out_dict
 
     def updateTimelimit(self, doc: OrderedDict, time: list) -> OrderedDict:
@@ -376,7 +381,7 @@ class FieldGenerator:
         """
         y, x = coordinates
         k = cell_size // 50
-        doc["root"]["robots"]["robot"]["@id"] = self.robot_id
+        # doc["root"]["robots"]["robot"]["@id"] = self.robot_kit_id
         doc["root"]["robots"]["robot"]["@position"] = (
             str(x * cell_size + 25 * (k - 1)) + ":" + str(y * cell_size + 25 * (k - 1))
         )
@@ -411,6 +416,26 @@ class FieldGenerator:
                 if center_matrix[y_index][x_index] == 3:
                     # warzone button
                     self.warzones_id_container.append([y_index, x_index])
+
+    def updateRobotConfig(self, doc: OrderedDict, robot_config: OrderedDict)-> OrderedDict:
+        """
+            Function appends robot configuration into given field:
+            robot_config - (OrderedDict) with saved configuration
+        """
+        doc['root']['robots']['robot'] = robot_config
+
+        # "robot1" is default robot id for generation
+        doc['root']['robots']['robot']['startPosition']['@id'] = "robot1"
+        return doc
+
+    def updateRobotKit(self, doc: OrderedDict, robot_kit_id: str)-> OrderedDict:
+        """
+            Function appends robotics kit id into given field:
+            robot_kit_id - (str) one of Const.ROBOTICS_KIT_TO_ID
+        """
+
+        doc['root']['robots']['robot']['@id'] = robot_kit_id
+        return doc
 
     def setRegions(self, matrix: list, default_size: int) -> OrderedDict:
         """
@@ -514,8 +539,21 @@ class FieldGenerator:
                 doc["root"]["constraints"]["constraint"][1]["conditions"]["not"] = [
                     {"inside": inside_region}
                 ]
+
         doc = self.updateRobotPosition(doc, last_start_coor, default_size)
 
+        # if  # there is no robot config, so we use only kit    
+        # print('robot config is {}, robot kit_id is {}'.format(self.robot_cfg, self.robot_kit_id))
+        if self.robot_kit_id in ["trikKitRobot", "ev3KitUsbRobot"]:
+            doc = self.updateRobotKit(doc, self.robot_kit_id)
+            # print('robotkit')
+        else:
+            doc = self.updateRobotConfig(doc, self.robot_cfg)
+            # print('robotcfg')
+
+        doc = self.updateRobotPosition(doc, last_start_coor, default_size)
+
+        # delete unused parts of XML field
         if len(self.warzones_id_container) == 0:
             doc["root"]["constraints"]["constraint"].pop()
         if len(self.start_id_container) == 0:
@@ -524,5 +562,10 @@ class FieldGenerator:
         return doc
 
 
-def getRobotConfiguration(file: str) -> OrderedDict:
-    pass
+def getRobotConfiguration(fileName: str) -> OrderedDict:
+    doc_file = open(fileName, 'r')
+    doc_str = doc_file.read()
+    doc = xmltodict.parse(doc_str, process_namespaces=True)
+
+    stored_robot = doc['root']['robots']['robot']
+    return stored_robot

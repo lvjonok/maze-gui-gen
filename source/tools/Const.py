@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 ROBOTICS_KITS = ["TRIK", "Lego EV3", "XML"]
 
-ROBOTICS_KIT_TO_ID: dict = {"TRIK": "trikKitRobot", "Lego EV3": "ev3KitUsbRobot"}
+ROBOTICS_KIT_TO_ID: dict = {"TRIK": "trikKitRobot", "Lego EV3": "ev3KitUsbRobot", "XML": "CUSTOM"}
 
 """
 Keys that should be in dictionary for generating fields
@@ -14,6 +14,7 @@ FIELD_GENERATOR_SETTINGS_KEYS: list = [
     "y",  # field size on Y-direction
     "valueExcersizeTimelimit",  # timelimit value
     "roboticsKit",  # robotics kit value from ROBOTICS_KITS
+    "roboticsConfig", # robotics config if roboticsKit == "XML", contains str describing OrderedDict
     "valueLinePixelSize",  # line width size in pixels
     "valueMazeCellSize",  # maze cell size in TRIK Studio cells
     "valueLineCellSize",  # line cell size in TRIK Studio cells
