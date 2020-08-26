@@ -19,6 +19,7 @@ import source.tools.Graph as Graph  # pylint: disable=import-error
 from source.tools.Generator import FieldGenerator  # pylint: disable=import-error
 from source.tools.Command import Command  # pylint: disable=import-error
 import source.tools.Const as const  # pylint: disable=import-error
+from source.tools.Painter import Paint
 
 MEDIA_DIRECTORY = getMediaDirectory()
 
@@ -611,6 +612,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.settings.updateSettings(
                 "valueSavedLastDirectory", os.path.split(fileName)[0]
             )
+        return fileName
 
     def generateXML_line(self):
         generation_settings = self.settingsWindow.getGenerationSettings()
@@ -621,7 +623,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
         field = generator.getFieldLineMaze(adj_map, matrix)
-        self.saveField(field)
+        picture = Paint(adj_map, matrix)
+        path = self.saveField(field)
+        picture.saveLineMazeImage(path[:-3] + "png")
 
     # generates XML file with maze
     def generateXML_maze(self):
@@ -633,7 +637,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
         field = generator.getFieldMaze(adj_map, matrix)
-        self.saveField(field)
+        picture = Paint(adj_map, matrix)
+        path = self.saveField(field)
+        picture.saveMazeImage(path[:-3] + "png")
 
     def getWallsMatrix(self):
         """Generates map vertex->adjanced vertices from wallsButtons"""
