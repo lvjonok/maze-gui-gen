@@ -64,7 +64,7 @@ class FieldGenerator:
                     doc["root"]["world"]["walls"]["wall"].append(
                         (self.getXML_wall(x_i * def_size, y_i * def_size, def_size, 0))
                     )
-                if adj_map[vertex][1]:
+                if adj_map[vertex][1] and x_i == self.size_x - 1:
                     doc["root"]["world"]["walls"]["wall"].append(
                         (
                             self.getXML_wall(
@@ -72,7 +72,7 @@ class FieldGenerator:
                             )
                         )
                     )
-                if adj_map[vertex][2]:
+                if adj_map[vertex][2] and y_i == self.size_y - 1:
                     doc["root"]["world"]["walls"]["wall"].append(
                         (
                             self.getXML_wall(
