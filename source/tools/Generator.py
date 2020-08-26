@@ -11,8 +11,7 @@ class FieldGenerator:
             The constructor for Field Generator class
 
             Parameters:
-            x (int): field x-direction size
-            y (int): field y-direction size
+            settings - dictionary with parameters from settings
         """
         keys = const.FIELD_GENERATOR_SETTINGS_KEYS
         for key in keys:
