@@ -6,7 +6,7 @@ from PyQt5 import QtCore, QtWidgets
 import source.py_ui.settingsUI as settingsUI  # pylint: disable=import-error
 from source.tools.app_settings import AppSettings  # pylint: disable=import-error
 import source.tools.Const as const  # pylint: disable=import-error
-from source.tools.Generator import getRobotConfiguration # pylint: disable=import-error
+from source.tools.Generator import getRobotConfiguration  # pylint: disable=import-error
 
 
 class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
@@ -96,7 +96,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
             self.roboticsConfig: str = robot_cfg
         else:
             self.roboticsConfig = ""
-            self.settings.updateSettings("roboticsConfig", "\"\"")
+            self.settings.updateSettings("roboticsConfig", '""')
 
         self.settings.sync()
 

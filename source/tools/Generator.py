@@ -417,24 +417,26 @@ class FieldGenerator:
                     # warzone button
                     self.warzones_id_container.append([y_index, x_index])
 
-    def updateRobotConfig(self, doc: OrderedDict, robot_config: OrderedDict)-> OrderedDict:
+    def updateRobotConfig(
+        self, doc: OrderedDict, robot_config: OrderedDict
+    ) -> OrderedDict:
         """
             Function appends robot configuration into given field:
             robot_config - (OrderedDict) with saved configuration
         """
-        doc['root']['robots']['robot'] = robot_config
+        doc["root"]["robots"]["robot"] = robot_config
 
         # "robot1" is default robot id for generation
-        doc['root']['robots']['robot']['startPosition']['@id'] = "robot1"
+        doc["root"]["robots"]["robot"]["startPosition"]["@id"] = "robot1"
         return doc
 
-    def updateRobotKit(self, doc: OrderedDict, robot_kit_id: str)-> OrderedDict:
+    def updateRobotKit(self, doc: OrderedDict, robot_kit_id: str) -> OrderedDict:
         """
             Function appends robotics kit id into given field:
             robot_kit_id - (str) one of Const.ROBOTICS_KIT_TO_ID
         """
 
-        doc['root']['robots']['robot']['@id'] = robot_kit_id
+        doc["root"]["robots"]["robot"]["@id"] = robot_kit_id
         return doc
 
     def setRegions(self, matrix: list, default_size: int) -> OrderedDict:
@@ -542,7 +544,7 @@ class FieldGenerator:
 
         doc = self.updateRobotPosition(doc, last_start_coor, default_size)
 
-        # if  # there is no robot config, so we use only kit    
+        # if  # there is no robot config, so we use only kit
         # print('robot config is {}, robot kit_id is {}'.format(self.robot_cfg, self.robot_kit_id))
         if self.robot_kit_id in ["trikKitRobot", "ev3KitUsbRobot"]:
             doc = self.updateRobotKit(doc, self.robot_kit_id)
@@ -563,9 +565,9 @@ class FieldGenerator:
 
 
 def getRobotConfiguration(fileName: str) -> OrderedDict:
-    doc_file = open(fileName, 'r')
+    doc_file = open(fileName, "r")
     doc_str = doc_file.read()
     doc = xmltodict.parse(doc_str, process_namespaces=True)
 
-    stored_robot = doc['root']['robots']['robot']
+    stored_robot = doc["root"]["robots"]["robot"]
     return stored_robot
