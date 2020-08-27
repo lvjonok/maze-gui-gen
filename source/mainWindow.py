@@ -617,6 +617,19 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             )
         return fileName
 
+    def checkStartZone(self, matrix: list) -> bool:
+        """
+        Function checks matrix of center buttons values
+        False if there are more than 1 start zones
+        """
+        start_counter = 0
+        for line in matrix:
+            start_counter += line.count(1)
+        if start_counter > 1:
+            return False
+        else:
+            return True
+
     def generateXML_line(self):
         generation_settings = self.settingsWindow.getGenerationSettings()
         generation_settings["x"] = self.size_x
@@ -625,6 +638,19 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         # generator.setCellSize(lineCell=self.settingsWindow.getSliderLineCellSize())
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
+
+        if not self.checkStartZone(matrix):
+            msg = QtWidgets.QMessageBox()
+            if self.locale_language == "en":
+                msg.setText("You might have only one start zone!")
+                msg.setWindowTitle("Error")
+            else:
+                msg.setText("У вас может быть только одна стартовая зона!")
+                msg.setWindowTitle("Ошибка")
+            msg.setIcon(QtWidgets.QMessageBox.Critical)
+            msg.exec_()
+            return False
+
         field = generator.getFieldLineMaze(adj_map, matrix)
         path = self.saveField(field)
 
@@ -651,6 +677,19 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         # generator.setCellSize(mazeCell=self.settingsWindow.getSliderMazeCellSize())
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
+
+        if not self.checkStartZone(matrix):
+            msg = QtWidgets.QMessageBox()
+            if self.locale_language == "en":
+                msg.setText("You might have only one start zone!")
+                msg.setWindowTitle("Error")
+            else:
+                msg.setText("У вас может быть только одна стартовая зона!")
+                msg.setWindowTitle("Ошибка")
+            msg.setIcon(QtWidgets.QMessageBox.Critical)
+            msg.exec_()
+            return False
+
         field = generator.getFieldMaze(adj_map, matrix)
         path = self.saveField(field)
 
