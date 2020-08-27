@@ -11,8 +11,7 @@ class FieldGenerator:
             The constructor for Field Generator class
 
             Parameters:
-            x (int): field x-direction size
-            y (int): field y-direction size
+            settings - dictionary with parameters from settings
         """
         keys = const.FIELD_GENERATOR_SETTINGS_KEYS
         for key in keys:
@@ -565,9 +564,18 @@ class FieldGenerator:
 
 
 def getRobotConfiguration(fileName: str) -> OrderedDict:
+    """
+        Function opens given file and takes OrderedDict describing robot configuration
+    """
     doc_file = open(fileName, "r")
     doc_str = doc_file.read()
     doc = xmltodict.parse(doc_str, process_namespaces=True)
 
     stored_robot = doc["root"]["robots"]["robot"]
     return stored_robot
+
+def getRobotKit(doc: OrderedDict) -> str:
+    """
+        Function gets robot kit id from OrderedDict describing XML field
+    """
+    return doc['root']['robots']['robot']['@id']

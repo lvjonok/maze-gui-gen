@@ -16,9 +16,10 @@ from source.tools.app_settings import (  # pylint: disable=import-error
     getMediaDirectory,
 )
 import source.tools.Graph as Graph  # pylint: disable=import-error
-from source.tools.Generator import FieldGenerator  # pylint: disable=import-error
+from source.tools.Generator import FieldGenerator, getRobotKit  # pylint: disable=import-error
 from source.tools.Command import Command  # pylint: disable=import-error
 import source.tools.Const as const  # pylint: disable=import-error
+from source.tools.Painter import Paint, SVG
 
 MEDIA_DIRECTORY = getMediaDirectory()
 
@@ -611,6 +612,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.settings.updateSettings(
                 "valueSavedLastDirectory", os.path.split(fileName)[0]
             )
+        return fileName
 
     def generateXML_line(self):
         generation_settings = self.settingsWindow.getGenerationSettings()
@@ -621,7 +623,16 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
         field = generator.getFieldLineMaze(adj_map, matrix)
-        self.saveField(field)
+        picture = Paint(adj_map, matrix)
+        pic_field = SVG(adj_map, matrix)
+        path = self.saveField(field)
+        picture.saveLineMazeImage(path[:-3] + "png", getRobotKit(field))
+        pic_field.saveField(
+            path[:-3] + "svg", 
+            int(generation_settings["valueLineCellSize"]) * 50,  # 50 - default size for one cell in TRIK Studio
+            generation_settings["valueColorLine"],
+            int(generation_settings["valueLinePixelSize"])
+        )
 
     # generates XML file with maze
     def generateXML_maze(self):
@@ -633,7 +644,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
         field = generator.getFieldMaze(adj_map, matrix)
-        self.saveField(field)
+        picture = Paint(adj_map, matrix)
+        path = self.saveField(field)
+        picture.saveMazeImage(path[:-3] + "png", getRobotKit(field))
 
     def getWallsMatrix(self):
         """Generates map vertex->adjanced vertices from wallsButtons"""
