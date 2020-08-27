@@ -1,6 +1,8 @@
-"""Module helps to draw field png preview"""
+"""Module helps to draw images for fields"""
 
 import os
+import xmltodict
+import svgwrite
 from PIL import Image, ImageDraw
 from source.tools.app_settings import getMediaDirectory
 
@@ -8,6 +10,8 @@ class Paint:
     def __init__(self, adj_map: list, matrix: list) -> list:
         """
             The constructor for Painter class
+
+            Class goal to create PNG images to check field, without opening TRIK Studio
 
             Parameters:
             adj_map (list): matrix: vertex -> vertices 
@@ -158,3 +162,73 @@ class Paint:
             Wrapped function to show image
         """
         image.show()
+
+class SVG:
+    def __init__(self, adj_map: list, matrix: list) -> list:
+        """
+            The constructor for SVG class
+
+            Class goal to create SVG field image for maze with lines
+
+            Parameters:
+            adj_map (list): matrix: vertex -> vertices 
+            [up, right, bottom, left]
+            matrix  (list): matrix with center buttons values
+        """
+        self.walls_map = adj_map
+        self.cells_map = matrix
+        self.heigth = len(matrix)
+        self.width = len(matrix[0])
+        
+    def saveField(self, field_path: str, cell_size: int, line_color: str, line_width: int) -> None:
+        """
+            Function creates needed SVG field and saves to given field_path
+        """
+        svg = svgwrite.Drawing(field_path, (self.width * cell_size, self.heigth * cell_size), profile="tiny")
+        for y_index in range(self.heigth):
+            for x_index in range(self.width):
+                vertex = y_index * self.width + x_index
+                x_start = x_index * cell_size + cell_size // 2
+                y_start = y_index * cell_size + cell_size // 2
+
+                bcoors = [x_start, y_start]
+
+                if not self.walls_map[vertex][0]:
+                    coors = bcoors[:]
+                    coors[1] += line_width // 2
+                    svg.add(self.createLine(svg, coors + [x_start, y_start - cell_size // 2], line_color, line_width))
+                if not self.walls_map[vertex][1]:
+                    coors = bcoors[:]
+                    coors[0] -= line_width // 2
+                    svg.add(self.createLine(svg, coors + [x_start + cell_size // 2, y_start], line_color, line_width))
+                if not self.walls_map[vertex][2]:
+                    coors = bcoors[:]
+                    coors[1] -= line_width // 2
+                    svg.add(self.createLine(svg, coors + [x_start, y_start + cell_size // 2], line_color, line_width))
+                if not self.walls_map[vertex][3]:
+                    coors = bcoors[:]
+                    coors[0] += line_width // 2
+                    svg.add(self.createLine(svg, coors + [x_start - cell_size // 2, y_start], line_color, line_width))
+        svg.save(pretty=True, indent=4)
+
+    def createLine(self, svg, coors: list, color: str, width: int) -> None:
+        """
+            Wrapped svgwrite function that creates Line Object
+            coors = [x1, y1, x2, y2]
+            color = hex string, for example #0023FF
+            width = (int) line width in pixels
+        """
+        start = tuple(coors[0:2])
+        finish = tuple(coors[2:4])
+
+        rgb_color = self.convertColor(color)
+        svg_color = svgwrite.rgb(rgb_color[0], rgb_color[1], rgb_color[2], '%')
+        return svg.line(start, finish, stroke=svg_color, stroke_width=width)
+
+    def convertColor(self, color: str) -> list:
+        """
+            Function converts hex color representation to RGB list with 3 values
+        """
+        color = color.lstrip('#')
+        hlen = len(color)
+        return list(int(color[i:i+hlen//3], 16) for i in range(0, hlen, hlen//3))

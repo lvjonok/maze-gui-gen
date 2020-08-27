@@ -40,6 +40,7 @@ six==1.15.0
 snowballstemmer==2.0.0
 Sphinx==1.4.9
 supertools==1.0.1
+svgwrite==1.4
 toml==0.10.1
 typed-ast==1.4.1
 urllib3==1.25.10
