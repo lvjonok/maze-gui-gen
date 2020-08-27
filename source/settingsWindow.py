@@ -270,7 +270,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
 
     def getGenerationSettings(self) -> dict:
         """
-            Function returns applied settings for every key in Const.FIELD_GENERATOR_SETTINGS_KEYS
+        Function returns applied settings for every key in Const.FIELD_GENERATOR_SETTINGS_KEYS
         """
         keys: list = const.FIELD_GENERATOR_SETTINGS_KEYS
         out_dict: dict = {}

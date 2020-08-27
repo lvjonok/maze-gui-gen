@@ -16,7 +16,9 @@ class Ui_settingsForm(object):
         settingsForm.setObjectName("settingsForm")
         settingsForm.setWindowModality(QtCore.Qt.NonModal)
         settingsForm.resize(700, 450)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(settingsForm.sizePolicy().hasHeightForWidth())
@@ -46,10 +48,14 @@ class Ui_settingsForm(object):
         self.mazeCellSizeValue.setObjectName("mazeCellSizeValue")
         self.gridLayout.addWidget(self.mazeCellSizeValue, 7, 2, 1, 2)
         self.svgFieldLabel = QtWidgets.QLabel(self.groupBox)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.svgFieldLabel.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.svgFieldLabel.sizePolicy().hasHeightForWidth()
+        )
         self.svgFieldLabel.setSizePolicy(sizePolicy)
         self.svgFieldLabel.setObjectName("svgFieldLabel")
         self.gridLayout.addWidget(self.svgFieldLabel, 1, 0, 1, 1)
@@ -63,33 +69,39 @@ class Ui_settingsForm(object):
         self.lineCellSizeLabel.setObjectName("lineCellSizeLabel")
         self.gridLayout.addWidget(self.lineCellSizeLabel, 5, 0, 1, 1)
         self.roboticsKitLabel = QtWidgets.QLabel(self.groupBox)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.roboticsKitLabel.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.roboticsKitLabel.sizePolicy().hasHeightForWidth()
+        )
         self.roboticsKitLabel.setSizePolicy(sizePolicy)
         self.roboticsKitLabel.setObjectName("roboticsKitLabel")
         self.gridLayout.addWidget(self.roboticsKitLabel, 3, 0, 1, 1)
         self.lineCellSizeSlider = QtWidgets.QSlider(self.groupBox)
-        self.lineCellSizeSlider.setStyleSheet("QSlider::groove:vertical {\n"
-"    background: red;\n"
-"    position: absolute; /* absolutely position 4px from the left and right of the widget. setting margins on the widget should work too... */\n"
-"    left: 4px; right: 4px;\n"
-"}\n"
-"\n"
-"QSlider::handle:vertical {\n"
-"    height: 10px;\n"
-"    background: green;\n"
-"    margin: 0 -4px; /* expand outside the groove */\n"
-"}\n"
-"\n"
-"QSlider::add-page:vertical {\n"
-"    background: white;\n"
-"}\n"
-"\n"
-"QSlider::sub-page:vertical {\n"
-"    background: pink;\n"
-"}")
+        self.lineCellSizeSlider.setStyleSheet(
+            "QSlider::groove:vertical {\n"
+            "    background: red;\n"
+            "    position: absolute; /* absolutely position 4px from the left and right of the widget. setting margins on the widget should work too... */\n"
+            "    left: 4px; right: 4px;\n"
+            "}\n"
+            "\n"
+            "QSlider::handle:vertical {\n"
+            "    height: 10px;\n"
+            "    background: green;\n"
+            "    margin: 0 -4px; /* expand outside the groove */\n"
+            "}\n"
+            "\n"
+            "QSlider::add-page:vertical {\n"
+            "    background: white;\n"
+            "}\n"
+            "\n"
+            "QSlider::sub-page:vertical {\n"
+            "    background: pink;\n"
+            "}"
+        )
         self.lineCellSizeSlider.setMinimum(1)
         self.lineCellSizeSlider.setMaximum(30)
         self.lineCellSizeSlider.setProperty("value", 2)
@@ -101,10 +113,14 @@ class Ui_settingsForm(object):
         self.applyChangesButton.setObjectName("applyChangesButton")
         self.gridLayout.addWidget(self.applyChangesButton, 12, 0, 1, 1)
         self.pngImageLabel = QtWidgets.QLabel(self.groupBox)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pngImageLabel.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.pngImageLabel.sizePolicy().hasHeightForWidth()
+        )
         self.pngImageLabel.setSizePolicy(sizePolicy)
         self.pngImageLabel.setObjectName("pngImageLabel")
         self.gridLayout.addWidget(self.pngImageLabel, 0, 0, 1, 1)
@@ -115,10 +131,14 @@ class Ui_settingsForm(object):
         self.svgFieldCheckBox.setObjectName("svgFieldCheckBox")
         self.gridLayout.addWidget(self.svgFieldCheckBox, 1, 1, 1, 1)
         self.lineCellSizeValue = QtWidgets.QLabel(self.groupBox)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lineCellSizeValue.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.lineCellSizeValue.sizePolicy().hasHeightForWidth()
+        )
         self.lineCellSizeValue.setSizePolicy(sizePolicy)
         self.lineCellSizeValue.setScaledContents(False)
         self.lineCellSizeValue.setObjectName("lineCellSizeValue")
@@ -127,13 +147,14 @@ class Ui_settingsForm(object):
         self.linePixelSizeValue.setObjectName("linePixelSizeValue")
         self.gridLayout.addWidget(self.linePixelSizeValue, 6, 2, 1, 2)
         self.colorLabel = QtWidgets.QLabel(self.groupBox)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Maximum
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.colorLabel.sizePolicy().hasHeightForWidth())
         self.colorLabel.setSizePolicy(sizePolicy)
-        self.colorLabel.setStyleSheet("QLabel {background-color: rgb(0, 0, 0);}\n"
-"")
+        self.colorLabel.setStyleSheet("QLabel {background-color: rgb(0, 0, 0);}\n" "")
         self.colorLabel.setText("")
         self.colorLabel.setObjectName("colorLabel")
         self.gridLayout.addWidget(self.colorLabel, 11, 1, 1, 3)
@@ -159,18 +180,26 @@ class Ui_settingsForm(object):
         self.roboticsKitList.addItem("")
         self.gridLayout.addWidget(self.roboticsKitList, 3, 1, 1, 1)
         self.MazeLoopsLabel = QtWidgets.QLabel(self.groupBox)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.MazeLoopsLabel.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.MazeLoopsLabel.sizePolicy().hasHeightForWidth()
+        )
         self.MazeLoopsLabel.setSizePolicy(sizePolicy)
         self.MazeLoopsLabel.setObjectName("MazeLoopsLabel")
         self.gridLayout.addWidget(self.MazeLoopsLabel, 2, 0, 1, 1)
         self.MazeLoopsCheckBox = QtWidgets.QCheckBox(self.groupBox)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.MazeLoopsCheckBox.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.MazeLoopsCheckBox.sizePolicy().hasHeightForWidth()
+        )
         self.MazeLoopsCheckBox.setSizePolicy(sizePolicy)
         self.MazeLoopsCheckBox.setAutoFillBackground(False)
         self.MazeLoopsCheckBox.setChecked(False)
@@ -185,22 +214,54 @@ class Ui_settingsForm(object):
     def retranslateUi(self, settingsForm):
         _translate = QtCore.QCoreApplication.translate
         settingsForm.setWindowTitle(_translate("settingsForm", "Settings"))
-        self.groupBox.setTitle(_translate("settingsForm", "Settings for fields generation"))
+        self.groupBox.setTitle(
+            _translate("settingsForm", "Settings for fields generation")
+        )
         self.excersizeTime.setDisplayFormat(_translate("settingsForm", "mm:ss"))
-        self.linePixelSizeLabel.setText(_translate("settingsForm", "<html><head/><body><p>Line width (pixels)</p></body></html>"))
+        self.linePixelSizeLabel.setText(
+            _translate(
+                "settingsForm",
+                "<html><head/><body><p>Line width (pixels)</p></body></html>",
+            )
+        )
         self.lineColorLabel.setText(_translate("settingsForm", "Line color"))
-        self.mazeCellSizeValue.setText(_translate("settingsForm", "<html><head/><body><p align=\"center\">3</p></body></html>"))
-        self.svgFieldLabel.setText(_translate("settingsForm", "Save SVG field for each XML field"))
+        self.mazeCellSizeValue.setText(
+            _translate(
+                "settingsForm",
+                '<html><head/><body><p align="center">3</p></body></html>',
+            )
+        )
+        self.svgFieldLabel.setText(
+            _translate("settingsForm", "Save SVG field for each XML field")
+        )
         self.pngImageCheckBox.setText(_translate("settingsForm", "True"))
-        self.timelimitLabel.setText(_translate("settingsForm", "Timelimit for excersize"))
-        self.lineCellSizeLabel.setText(_translate("settingsForm", "Line cell size (in TRIK Studio cells)"))
-        self.roboticsKitLabel.setText(_translate("settingsForm", "Robotics construction kit"))
+        self.timelimitLabel.setText(
+            _translate("settingsForm", "Timelimit for excersize")
+        )
+        self.lineCellSizeLabel.setText(
+            _translate("settingsForm", "Line cell size (in TRIK Studio cells)")
+        )
+        self.roboticsKitLabel.setText(
+            _translate("settingsForm", "Robotics construction kit")
+        )
         self.applyChangesButton.setText(_translate("settingsForm", "Apply changes"))
         self.pngImageLabel.setText(_translate("settingsForm", "Save PNG field preview"))
-        self.mazeCellSizeLabel.setText(_translate("settingsForm", "Maze cell size (in TRIK Studio cells)"))
+        self.mazeCellSizeLabel.setText(
+            _translate("settingsForm", "Maze cell size (in TRIK Studio cells)")
+        )
         self.svgFieldCheckBox.setText(_translate("settingsForm", "True"))
-        self.lineCellSizeValue.setText(_translate("settingsForm", "<html><head/><body><p align=\"center\">2</p></body></html>"))
-        self.linePixelSizeValue.setText(_translate("settingsForm", "<html><head/><body><p align=\"center\">6</p></body></html>"))
+        self.lineCellSizeValue.setText(
+            _translate(
+                "settingsForm",
+                '<html><head/><body><p align="center">2</p></body></html>',
+            )
+        )
+        self.linePixelSizeValue.setText(
+            _translate(
+                "settingsForm",
+                '<html><head/><body><p align="center">6</p></body></html>',
+            )
+        )
         self.roboticsKitList.setItemText(0, _translate("settingsForm", "TRIK"))
         self.roboticsKitList.setItemText(1, _translate("settingsForm", "Lego EV3"))
         self.roboticsKitList.setItemText(2, _translate("settingsForm", "XML"))

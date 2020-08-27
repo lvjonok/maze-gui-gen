@@ -79,10 +79,10 @@ class Graph:
 
     def getMapVertexList(self):
         """
-            Converts Graph matrix to vertex -> adjanced vertices
-            Walls:
-                0 - empty
-                1 - filled
+        Converts Graph matrix to vertex -> adjanced vertices
+        Walls:
+            0 - empty
+            1 - filled
         """
         out = [[1, 1, 1, 1] for vertex in range(self.size_x * self.size_y)]
         for vertex in range(self.size_x * self.size_y):

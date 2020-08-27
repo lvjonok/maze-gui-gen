@@ -16,7 +16,10 @@ from source.tools.app_settings import (  # pylint: disable=import-error
     getMediaDirectory,
 )
 import source.tools.Graph as Graph  # pylint: disable=import-error
-from source.tools.Generator import FieldGenerator, getRobotKit  # pylint: disable=import-error
+from source.tools.Generator import (
+    FieldGenerator,
+    getRobotKit,
+)  # pylint: disable=import-error
 from source.tools.Command import Command  # pylint: disable=import-error
 import source.tools.Const as const  # pylint: disable=import-error
 from source.tools.Painter import Paint, SVG
@@ -633,9 +636,10 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             pic_field = SVG(adj_map, matrix)
             pic_field.saveField(
                 path[:-3] + "svg",
-                int(generation_settings["valueLineCellSize"]) * 50,  # 50 - default size for one cell in TRIK Studio
+                int(generation_settings["valueLineCellSize"])
+                * 50,  # 50 - default size for one cell in TRIK Studio
                 generation_settings["valueColorLine"],
-                int(generation_settings["valueLinePixelSize"])
+                int(generation_settings["valueLinePixelSize"]),
             )
 
     # generates XML file with maze
