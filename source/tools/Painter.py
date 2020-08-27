@@ -1,6 +1,8 @@
 """Module helps to draw field png preview"""
 
+import os
 from PIL import Image, ImageDraw
+from source.tools.app_settings import getMediaDirectory
 
 class Paint:
     def __init__(self, adj_map: list, matrix: list) -> list:
@@ -8,23 +10,26 @@ class Paint:
             The constructor for Painter class
 
             Parameters:
-            adj_map (list): matrix: vertex -> vertices [up, right, bottom, left]
+            adj_map (list): matrix: vertex -> vertices 
+            [up, right, bottom, left]
             matrix  (list): matrix with center buttons values
         """
         self.walls_map = adj_map
         self.cells_map = matrix
         self.height = len(matrix)
         self.width = len(matrix[0])
-        self.const_move = 10    # outline width in pixels
+        self.const_move = 15    # outline width in pixels
+        self.size = 100
 
-    def saveMazeImage(self, path: str) -> None:
+    def saveMazeImage(self, path: str, robot_kit_id: str = "trikKitRobot") -> None:
         """
             Function saves image with maze with walls at given path
         """
-        size = 30
-        img = self.createImage( self.width * size + self.const_move * 2,
-                                self.height * size + self.const_move * 2)
+        img = self.createImage( self.width * self.size + self.const_move * 2,
+                                self.height * self.size + self.const_move * 2)
         im_d = ImageDraw.Draw(img)
+        start_coors = self.addZones(im_d, self.cells_map)
+        size = self.size
         for x_i in range(self.width):
             for y_i in range(self.height):
                 vertex =  y_i * self.width + x_i
@@ -53,25 +58,31 @@ class Paint:
                 else:
                     self.addDottedLine(im_d, [x_start, y_start, x_start, y_start + size])
         
-        self.showImage(img)
+        # paste robot into image
+        MEDIA_DIRECTORY = getMediaDirectory()
+        b_size = round(self.size * 0.6)
+        im2 = Image.open(os.path.join(MEDIA_DIRECTORY, robot_kit_id + '.png')).resize((b_size, b_size))
+        b_place = round(self.const_move + self.size * 0.2)
+        img.paste(im2, (start_coors[0] * self.size + b_place, start_coors[1] * self.size + b_place))
+        # img.show()
         img.save(path)
  
-    def saveLineMazeImage(self, path: str) -> None:
+    def saveLineMazeImage(self, path: str, robot_kit_id: str = "trikKitRobot") -> None:
         """
             Function saves images with maze with lines at given path
         """
-        size = 30
-        half_size = size // 2
-        img = self.createImage( self.width * size + self.const_move * 2,
-                                self.height * size + self.const_move * 2)
+        half_size = self.size // 2
+        img = self.createImage( self.width * self.size + self.const_move * 2,
+                                self.height * self.size + self.const_move * 2)
         im_d = ImageDraw.Draw(img)
+        start_coors = self.addZones(im_d, self.cells_map)
         for x_i in range(self.width):
             for y_i in range(self.height):
                 vertex =  y_i * self.width + x_i
 
                 # coordinates of left upper edge of cell
-                x_start = x_i * size + self.const_move + half_size
-                y_start = y_i * size + self.const_move + half_size
+                x_start = x_i * self.size + self.const_move + half_size
+                y_start = y_i * self.size + self.const_move + half_size
 
                 if not self.walls_map[vertex][0]:
                     self.addLine(im_d, [x_start, y_start, x_start, y_start - half_size])
@@ -85,7 +96,13 @@ class Paint:
                 if not self.walls_map[vertex][3]:
                     self.addLine(im_d, [x_start, y_start, x_start - half_size, y_start])
         
-        # self.showImage(img)
+        # paste robot into image
+        MEDIA_DIRECTORY = getMediaDirectory()
+        b_size = round(self.size * 0.6)
+        im2 = Image.open(os.path.join(MEDIA_DIRECTORY, robot_kit_id + '.png')).resize((b_size, b_size))
+        b_place = round(self.const_move + self.size * 0.2)
+        img.paste(im2, (start_coors[0] * self.size + b_place, start_coors[1] * self.size + b_place))
+        # img.show()
         img.save(path)
 
     def addLine(self, image_draw, coors: list):
@@ -109,7 +126,27 @@ class Paint:
             for x in range(coors[0], coors[2], 3):
                 image_draw.point([x, y], fill="black")
 
-    def createImage(self, width: int, height: int): 
+    def addZones(self, image_draw, matrix: list) -> list:
+        """
+            Function appends rectangles with needed color to image draw
+            returns list with start coordinates (indices) [x, y]
+        """
+        colors = ["#ffffff", "#2d7cd6", "#e86f6f", "#fff199"]
+        last_coors = [0, 0]
+        for y_index in range(self.height):
+            for x_index in range(self.width):
+                x_start = x_index * self.size + self.const_move
+                y_start = y_index * self.size + self.const_move
+
+                coors = [x_start, y_start, x_start + self.size, y_start + self.size]
+
+                image_draw.rectangle(coors, fill=colors[matrix[y_index][x_index]])
+                if matrix[y_index][x_index] == 1:
+                    last_coors = [x_index, y_index]
+
+        return last_coors        
+
+    def createImage(self, width: int, height: int) -> Image.Image: 
         """
             Wrapped PIL function to create an empty image with white background
             returns Image

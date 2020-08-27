@@ -564,9 +564,18 @@ class FieldGenerator:
 
 
 def getRobotConfiguration(fileName: str) -> OrderedDict:
+    """
+        Function opens given file and takes OrderedDict describing robot configuration
+    """
     doc_file = open(fileName, "r")
     doc_str = doc_file.read()
     doc = xmltodict.parse(doc_str, process_namespaces=True)
 
     stored_robot = doc["root"]["robots"]["robot"]
     return stored_robot
+
+def getRobotKit(doc: OrderedDict) -> str:
+    """
+        Function gets robot kit id from OrderedDict describing XML field
+    """
+    return doc['root']['robots']['robot']['@id']
