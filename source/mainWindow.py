@@ -623,16 +623,20 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
         field = generator.getFieldLineMaze(adj_map, matrix)
-        picture = Paint(adj_map, matrix)
-        pic_field = SVG(adj_map, matrix)
         path = self.saveField(field)
-        picture.saveLineMazeImage(path[:-3] + "png", getRobotKit(field))
-        pic_field.saveField(
-            path[:-3] + "svg", 
-            int(generation_settings["valueLineCellSize"]) * 50,  # 50 - default size for one cell in TRIK Studio
-            generation_settings["valueColorLine"],
-            int(generation_settings["valueLinePixelSize"])
-        )
+
+        if self.settingsWindow.getPNGImageCheckBox():
+            picture = Paint(adj_map, matrix)
+            picture.saveLineMazeImage(path[:-3] + "png", getRobotKit(field))
+
+        if self.settingsWindow.getSVGFieldCheckBox():
+            pic_field = SVG(adj_map, matrix)
+            pic_field.saveField(
+                path[:-3] + "svg",
+                int(generation_settings["valueLineCellSize"]) * 50,  # 50 - default size for one cell in TRIK Studio
+                generation_settings["valueColorLine"],
+                int(generation_settings["valueLinePixelSize"])
+            )
 
     # generates XML file with maze
     def generateXML_maze(self):
@@ -644,9 +648,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
         field = generator.getFieldMaze(adj_map, matrix)
-        picture = Paint(adj_map, matrix)
         path = self.saveField(field)
-        picture.saveMazeImage(path[:-3] + "png", getRobotKit(field))
+
+        if self.settingsWindow.getPNGImageCheckBox():
+            picture = Paint(adj_map, matrix)
+            picture.saveMazeImage(path[:-3] + "png", getRobotKit(field))
 
     def getWallsMatrix(self):
         """Generates map vertex->adjanced vertices from wallsButtons"""
