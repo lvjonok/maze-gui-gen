@@ -22,6 +22,8 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         self.linePixelSizeSlider.valueChanged.connect(self.updateValueLinePixelSize)
         self.mazeCellSizeSlider.valueChanged.connect(self.updateValueMazeCellSize)
         self.MazeLoopsCheckBox.stateChanged.connect(self.updateValueMazeLoopsCheckBox)
+        self.pngImageCheckBox.stateChanged.connect(self.updateValuePNGImageCheckBox)
+        self.svgFieldCheckBox.stateChanged.connect(self.updateValueSVGFieldCheckBox)
         self.excersizeTime.timeChanged.connect(self.updateValueExcersizeTimelimit)
         self.applyChangesButton.clicked.connect(self.applyChanges)
         self.roboticsKitList.activated.connect(self.updateRoboticsKit)
@@ -79,6 +81,20 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         else:
             self.MazeLoopsCheckBox.setChecked(False)
             self.settings.updateSettings("valueMazeLoopsCheckBox", False)
+
+        png_set = self.settings.getSettings("valuePNGImageCheckBox")
+        if png_set:
+            self.pngImageCheckBox.setChecked(png_set == "true")
+        else:
+            self.pngImageCheckBox.setChecked(False)
+            self.settings.updateSettings("valuePNGImageCheckBox", False)
+
+        svg_set = self.settings.getSettings("valueSVGFieldCheckBox")
+        if svg_set:
+            self.svgFieldCheckBox.setChecked(svg_set == "true")
+        else:
+            self.svgFieldCheckBox.setChecked(False)
+            self.settings.updateSettings("valueSVGFieldCheckBox", False)
 
         robotics_kit = self.settings.getSettings("roboticsKit")
         self.roboticsConfig: str = ""
@@ -142,6 +158,16 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
             "valueMazeLoopsCheckBox", self.MazeLoopsCheckBox.isChecked()
         )
 
+    def updateValuePNGImageCheckBox(self):
+        self.settings.updateSettings(
+            "valuePNGImageCheckBox", self.pngImageCheckBox.isChecked()
+        )
+
+    def updateValueSVGFieldCheckBox(self):
+        self.settings.updateSettings(
+            "valueSVGFieldCheckBox", self.svgFieldCheckBox.isChecked()
+        )
+
     def updateValueExcersizeTimelimit(self):
         self.settings.updateSettings("valueExcersizeTimelimit", self.getTimelimit())
 
@@ -159,6 +185,12 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
 
     def getMazeCheckBox(self):
         return self.MazeLoopsCheckBox.isChecked()
+
+    def getPNGImageCheckBox(self):
+        return self.pngImageCheckBox.isChecked()
+
+    def getSVGFieldCheckBox(self):
+        return self.svgFieldCheckBox.isChecked()
 
     def getTimelimit(self):
         v = self.excersizeTime.time().toString()
@@ -202,16 +234,21 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
             )
             if not fileName:  # if it is not accessible
                 return False
-            config: str = str(getRobotConfiguration(fileName))
-            self.settings.updateSettings("roboticsConfig", config)
+
+            config: OrderedDict = getRobotConfiguration(fileName)
+            if not config:  # if we could not take configuration
+                return False
+            self.settings.updateSettings("roboticsConfig", str(config))
 
     def getRoboticsKit(self) -> str:
         return str(self.roboticsKitList.currentText())
 
     def setRussian(self):
         self.locale_language = "ru"
-        self.roboticsKitLabel.setText("Платформа")
+        self.pngImageLabel.setText("Сохранять PNG превью для полей")
+        self.svgFieldLabel.setText("Сохранять SVG файл для полей")
         self.MazeLoopsLabel.setText("Лабиринт с циклами")
+        self.roboticsKitLabel.setText("Платформа")
         self.groupBox.setTitle("Настройки для генерации полей")
         self.lineCellSizeLabel.setText("Размер ячейки с линией")
         self.linePixelSizeLabel.setText("Ширина линии")
@@ -222,8 +259,10 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
 
     def setEnglish(self):
         self.locale_language = "en"
-        self.roboticsKitLabel.setText("Robotics construction kit")
+        self.pngImageLabel.setText("Save PNG image with field preview")
+        self.svgFieldLabel.setText("Save SVG file for each XML field")
         self.MazeLoopsLabel.setText("Maze with loops")
+        self.roboticsKitLabel.setText("Robotics construction kit")
         self.groupBox.setTitle("Settings for fields generation")
         self.lineCellSizeLabel.setText("Line cell size")
         self.linePixelSizeLabel.setText("Line width")
@@ -234,7 +273,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
 
     def getGenerationSettings(self) -> dict:
         """
-            Function returns applied settings for every key in Const.FIELD_GENERATOR_SETTINGS_KEYS
+        Function returns applied settings for every key in Const.FIELD_GENERATOR_SETTINGS_KEYS
         """
         keys: list = const.FIELD_GENERATOR_SETTINGS_KEYS
         out_dict: dict = {}

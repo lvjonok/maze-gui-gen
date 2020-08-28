@@ -8,10 +8,10 @@ import source.tools.Const as const  # pylint: disable=import-error
 class FieldGenerator:
     def __init__(self, settings: dict):
         """
-            The constructor for Field Generator class
+        The constructor for Field Generator class
 
-            Parameters:
-            settings - dictionary with parameters from settings
+        Parameters:
+        settings - dictionary with parameters from settings
         """
         keys = const.FIELD_GENERATOR_SETTINGS_KEYS
         for key in keys:
@@ -45,10 +45,10 @@ class FieldGenerator:
 
     def getFieldMaze(self, adj_map: list, matrix: list) -> list:
         """
-            Function creates XML dictionary with maze field
+        Function creates XML dictionary with maze field
 
-            adj_map (list): matrix: vertex -> vertices [up, right, bottom, left]
-            matrix  (list): matrix with center buttons values
+        adj_map (list): matrix: vertex -> vertices [up, right, bottom, left]
+        matrix  (list): matrix with center buttons values
         """
         if self.cell_size_maze == -1:
             raise Exception("Cant use not setted variable cell_size_maze")
@@ -88,10 +88,10 @@ class FieldGenerator:
 
     def getFieldLineMaze(self, adj_map: list, matrix: list) -> list:
         """
-            Function creates XML dictionary with line maze field
+        Function creates XML dictionary with line maze field
 
-            adj_map (list): matrix: vertex -> vertices [up, right, bottom, left]
-            matrix  (list): matrix with center buttons values
+        adj_map (list): matrix: vertex -> vertices [up, right, bottom, left]
+        matrix  (list): matrix with center buttons values
         """
         def_size = self.cell_size_line * 50
         # matrix = convertMap(self.size_x, self.size_y, adj_map)
@@ -149,20 +149,20 @@ class FieldGenerator:
 
     def getXML_line(self, x_start, y_start, x_len, y_len) -> OrderedDict:
         """
-            Function returns OrderedDict for XML generation
-            Dictionary describes one <line>, should be inside <colorFields> </colorField>
-            info: https://help.trikset.com/v/en/studio/2d-model/settings#less-than-line-greater-than
-            to add this dictionary in your xml field use:
+        Function returns OrderedDict for XML generation
+        Dictionary describes one <line>, should be inside <colorFields> </colorField>
+        info: https://help.trikset.com/v/en/studio/2d-model/settings#less-than-line-greater-than
+        to add this dictionary in your xml field use:
 
-            try:
-                doc['root']['world']['colorFields']['line'].append(FieldGenerator.getXML_line(params))
-            except TypeError:
-                doc['root']['world']['colorFields'] = OrderedDict()
-                doc['root']['world']['colorFields'].update([('line', [FieldGenerator.getXML_line(params)])])
+        try:
+            doc['root']['world']['colorFields']['line'].append(FieldGenerator.getXML_line(params))
+        except TypeError:
+            doc['root']['world']['colorFields'] = OrderedDict()
+            doc['root']['world']['colorFields'].update([('line', [FieldGenerator.getXML_line(params)])])
 
-            XML code example:
-            <line stroke-width="6" fill-style="none" end="250:-50" id="{line1}" stroke-style="solid"
-                fill="#ff000000" stroke="#ff000000" begin="50:-50"/>
+        XML code example:
+        <line stroke-width="6" fill-style="none" end="250:-50" id="{line1}" stroke-style="solid"
+            fill="#ff000000" stroke="#ff000000" begin="50:-50"/>
         """
         width = self.getXML_line_width()  # width in pixels   (integer)
         color = self.getXML_line_color()  # color in hex      (string)
@@ -184,19 +184,19 @@ class FieldGenerator:
 
     def getXML_wall(self, x_start, y_start, x_len, y_len) -> OrderedDict:
         """
-            Function returns OrderedDict for XML generation
-            Dictionary describes one <wall>, should be inside <walls> </walls>
-            info: https://help.trikset.com/v/en/studio/2d-model/settings#less-than-wall-greater-than
-            For example, to add this dictionary in your xml field use:
+        Function returns OrderedDict for XML generation
+        Dictionary describes one <wall>, should be inside <walls> </walls>
+        info: https://help.trikset.com/v/en/studio/2d-model/settings#less-than-wall-greater-than
+        For example, to add this dictionary in your xml field use:
 
-            try:
-                doc['root']['world']['walls']['wall'].append(FieldGenerator.getXML_wall(params))
-            except TypeError:
-                doc['root']['world']['walls'] = OrderedDict()
-                doc['root']['world']['walls'].update([('wall', [FieldGenerator.getXML_wall(params)])])
+        try:
+            doc['root']['world']['walls']['wall'].append(FieldGenerator.getXML_wall(params))
+        except TypeError:
+            doc['root']['world']['walls'] = OrderedDict()
+            doc['root']['world']['walls'].update([('wall', [FieldGenerator.getXML_wall(params)])])
 
-            XML code example:
-            <wall id="{wall1}" begin="50:-50" end="250:-50"/>
+        XML code example:
+        <wall id="{wall1}" begin="50:-50" end="250:-50"/>
         """
         out_dict = OrderedDict()
         out_dict.update(
@@ -211,20 +211,20 @@ class FieldGenerator:
 
     def getXML_start(self, x_start, y_start, x_len, y_len, zone_id=0) -> OrderedDict:
         """
-            Function returns OrderedDict for XML generation
-            Dictionary describes one start <region>, should be inside <region> </region>
-            info: https://help.trikset.com/v/en/studio/2d-model/settings#less-than-region-greater-than
-            For example, to add this dictionary in your XML field use:
+        Function returns OrderedDict for XML generation
+        Dictionary describes one start <region>, should be inside <region> </region>
+        info: https://help.trikset.com/v/en/studio/2d-model/settings#less-than-region-greater-than
+        For example, to add this dictionary in your XML field use:
 
-            try:
-                doc['root']['world']['regions']['region'].append(FieldGenerator.getXML_start(params))
-            except TypeError:
-                doc['root']['world']['regions'] = OrderedDict()
-                doc['root']['world']['regions'].update([('region', [FieldGenerator.getXML_start(params)])])
+        try:
+            doc['root']['world']['regions']['region'].append(FieldGenerator.getXML_start(params))
+        except TypeError:
+            doc['root']['world']['regions'] = OrderedDict()
+            doc['root']['world']['regions'].update([('region', [FieldGenerator.getXML_start(params)])])
 
-            XML code example:
-            <region visible="true" id="start_0" x="10" y="10" width="10" height="10"
-                filled="true" textX="0" textY="0" color="#0000FF" text="Start" type="rectangle"></region>
+        XML code example:
+        <region visible="true" id="start_0" x="10" y="10" width="10" height="10"
+            filled="true" textX="0" textY="0" color="#0000FF" text="Start" type="rectangle"></region>
         """
         out_dict = OrderedDict()
         out_dict.update(
@@ -247,20 +247,20 @@ class FieldGenerator:
 
     def getXML_finish(self, x_start, y_start, x_len, y_len, zone_id=0) -> OrderedDict:
         """
-            Function returns OrderedDict for XML generation
-            Dictionary describes one finish <region>, should be inside <region> </region>
-            info: https://help.trikset.com/v/en/studio/2d-model/settings#less-than-region-greater-than
-            For example, to add this dictionary in your XML field use:
+        Function returns OrderedDict for XML generation
+        Dictionary describes one finish <region>, should be inside <region> </region>
+        info: https://help.trikset.com/v/en/studio/2d-model/settings#less-than-region-greater-than
+        For example, to add this dictionary in your XML field use:
 
-            try:
-                doc['root']['world']['regions']['region'].append(FieldGenerator.getXML_finish(params))
-            except TypeError:
-                doc['root']['world']['regions'] = OrderedDict()
-                doc['root']['world']['regions'].update([('region', [FieldGenerator.getXML_finish(params)])])
+        try:
+            doc['root']['world']['regions']['region'].append(FieldGenerator.getXML_finish(params))
+        except TypeError:
+            doc['root']['world']['regions'] = OrderedDict()
+            doc['root']['world']['regions'].update([('region', [FieldGenerator.getXML_finish(params)])])
 
-            XML code example:
-            <region visible="true" id="finish_0" x="10" y="10" width="10" height="10"
-                filled="true" textX="0" textY="0" color="#FF0000" text="Finish" type="rectangle"></region>
+        XML code example:
+        <region visible="true" id="finish_0" x="10" y="10" width="10" height="10"
+            filled="true" textX="0" textY="0" color="#FF0000" text="Finish" type="rectangle"></region>
         """
         out_dict = OrderedDict()
         out_dict.update(
@@ -283,20 +283,20 @@ class FieldGenerator:
 
     def getXML_warzone(self, x_start, y_start, x_len, y_len, zone_id=0) -> OrderedDict:
         """
-            Function returns OrderedDict for XML generation
-            Dictionary describes one warzone <region> (shows error when you enter this zone), should be inside <region> </region>
-            info: https://help.trikset.com/v/en/studio/2d-model/settings#less-than-region-greater-than
-            For example, to add this dictionary in your XML field use:
+        Function returns OrderedDict for XML generation
+        Dictionary describes one warzone <region> (shows error when you enter this zone), should be inside <region> </region>
+        info: https://help.trikset.com/v/en/studio/2d-model/settings#less-than-region-greater-than
+        For example, to add this dictionary in your XML field use:
 
-            try:
-                doc['root']['world']['regions']['region'].append(FieldGenerator.getXML_warzone(params))
-            except TypeError:
-                doc['root']['world']['regions'] = OrderedDict()
-                doc['root']['world']['regions'].update([('region', [FieldGenerator.getXML_warzone(params)])])
+        try:
+            doc['root']['world']['regions']['region'].append(FieldGenerator.getXML_warzone(params))
+        except TypeError:
+            doc['root']['world']['regions'] = OrderedDict()
+            doc['root']['world']['regions'].update([('region', [FieldGenerator.getXML_warzone(params)])])
 
-            XML code example:
-            <region visible="true" id="warzone_0" x="10" y="10" width="10" height="10"
-                filled="true" textX="0" textY="0" color="#FFFF00" text="Warzone" type="rectangle"></region>
+        XML code example:
+        <region visible="true" id="warzone_0" x="10" y="10" width="10" height="10"
+            filled="true" textX="0" textY="0" color="#FFFF00" text="Warzone" type="rectangle"></region>
         """
         out_dict = OrderedDict()
         out_dict.update(
@@ -319,38 +319,38 @@ class FieldGenerator:
 
     def getXML_insideZone(self, zone_str, robot_kit_id: str = "robot1") -> OrderedDict:
         """
-            Function returns OrderedDict for XML generation
-            Dictionary checks if robot is <inside>, should be inside <constraint> </constraint> or <conditions> </conditions>
-            info: https://help.trikset.com/v/en/studio/2d-model/restrictions
+        Function returns OrderedDict for XML generation
+        Dictionary checks if robot is <inside>, should be inside <constraint> </constraint> or <conditions> </conditions>
+        info: https://help.trikset.com/v/en/studio/2d-model/restrictions
 
-            This part should be add to describe start constrain:
+        This part should be add to describe start constrain:
 
-            inside_region = self.getXML_insideZone("start_" + str(start_id))
-            try:
-                doc['root']['constraints']['constraint'][0]['conditions']['inside'].append(inside_region)
-            except KeyError:
-                doc['root']['constraints']['constraint'][0]['conditions']['inside'] = [inside_region]
+        inside_region = self.getXML_insideZone("start_" + str(start_id))
+        try:
+            doc['root']['constraints']['constraint'][0]['conditions']['inside'].append(inside_region)
+        except KeyError:
+            doc['root']['constraints']['constraint'][0]['conditions']['inside'] = [inside_region]
 
-            To specify finish constraint use:
+        To specify finish constraint use:
 
-            inside_region = self.getXML_insideZone("finish_" + str(finish_id))
-            try:
-                doc['root']['constraints']['event'][0]['conditions']['conditions']['inside'].append(inside_region)
-                doc['root']['constraints']['event'][1]['conditions']['conditions']['inside'].append(inside_region)
-            except KeyError:
-                doc['root']['constraints']['event'][0]['conditions']['conditions']['inside'] = [inside_region]
-                doc['root']['constraints']['event'][1]['conditions']['conditions']['inside'] = [inside_region]
+        inside_region = self.getXML_insideZone("finish_" + str(finish_id))
+        try:
+            doc['root']['constraints']['event'][0]['conditions']['conditions']['inside'].append(inside_region)
+            doc['root']['constraints']['event'][1]['conditions']['conditions']['inside'].append(inside_region)
+        except KeyError:
+            doc['root']['constraints']['event'][0]['conditions']['conditions']['inside'] = [inside_region]
+            doc['root']['constraints']['event'][1]['conditions']['conditions']['inside'] = [inside_region]
 
-            To specify warzone constraint use:
+        To specify warzone constraint use:
 
-            inside_region = self.getXML_insideZone("warzone_" + str(warzone_id))
-            try:
-                doc['root']['constraints']['constraint'][1]['conditions']['not'].append({'inside': inside_region})
-            except AttributeError:
-                doc['root']['constraints']['constraint'][1]['conditions']['not'] = [{'inside': inside_region}]
+        inside_region = self.getXML_insideZone("warzone_" + str(warzone_id))
+        try:
+            doc['root']['constraints']['constraint'][1]['conditions']['not'].append({'inside': inside_region})
+        except AttributeError:
+            doc['root']['constraints']['constraint'][1]['conditions']['not'] = [{'inside': inside_region}]
 
-            XML code example:
-            <inside regionId="start_finish" objectId="robot1"></inside>
+        XML code example:
+        <inside regionId="start_finish" objectId="robot1"></inside>
         """
         out_dict = OrderedDict()
         out_dict.update([("@regionId", zone_str), ("@objectId", robot_kit_id)])
@@ -358,9 +358,9 @@ class FieldGenerator:
 
     def updateTimelimit(self, doc: OrderedDict, time: list) -> OrderedDict:
         """
-            Function updates timelimit for given doc (field)
-            Time is (list)      [minutes, seconds]
-            Returns doc
+        Function updates timelimit for given doc (field)
+        Time is (list)      [minutes, seconds]
+        Returns doc
         """
         doc["root"]["constraints"]["timelimit"]["@value"] = (
             time[0] * 60 + time[1]
@@ -371,12 +371,12 @@ class FieldGenerator:
         self, doc: OrderedDict, coordinates: list, cell_size: int
     ) -> OrderedDict:
         """
-            Function updates robot position for given doc (field)
-            Params:
-                doc          - xml field converted to               (OrderedDict)
-                coordinates  - any start coordinate list            [y, x]
-                cell_size    - size for cell denoted by settings    (int)
-            Returns doc      - (OrderedDict)
+        Function updates robot position for given doc (field)
+        Params:
+            doc          - xml field converted to               (OrderedDict)
+            coordinates  - any start coordinate list            [y, x]
+            cell_size    - size for cell denoted by settings    (int)
+        Returns doc      - (OrderedDict)
         """
         y, x = coordinates
         k = cell_size // 50
@@ -394,12 +394,12 @@ class FieldGenerator:
 
     def updateRegionsID(self, center_matrix: list) -> None:
         """
-            Function updates containers for start, finish and warzones
-            center_matrix is matrix describing values of center cells:
-            0 - empty
-            1 - start
-            2 - finish
-            3 - warzone
+        Function updates containers for start, finish and warzones
+        center_matrix is matrix describing values of center cells:
+        0 - empty
+        1 - start
+        2 - finish
+        3 - warzone
         """
         self.start_id_container = []
         self.finish_id_container = []
@@ -420,8 +420,8 @@ class FieldGenerator:
         self, doc: OrderedDict, robot_config: OrderedDict
     ) -> OrderedDict:
         """
-            Function appends robot configuration into given field:
-            robot_config - (OrderedDict) with saved configuration
+        Function appends robot configuration into given field:
+        robot_config - (OrderedDict) with saved configuration
         """
         doc["root"]["robots"]["robot"] = robot_config
 
@@ -431,8 +431,8 @@ class FieldGenerator:
 
     def updateRobotKit(self, doc: OrderedDict, robot_kit_id: str) -> OrderedDict:
         """
-            Function appends robotics kit id into given field:
-            robot_kit_id - (str) one of Const.ROBOTICS_KIT_TO_ID
+        Function appends robotics kit id into given field:
+        robot_kit_id - (str) one of Const.ROBOTICS_KIT_TO_ID
         """
 
         doc["root"]["robots"]["robot"]["@id"] = robot_kit_id
@@ -440,10 +440,10 @@ class FieldGenerator:
 
     def setRegions(self, matrix: list, default_size: int) -> OrderedDict:
         """
-            Function    addes start, finish, war zones to field pattern,
-                        sets timelimit and robot's start position
-            matrix: list - center buttons values containter (0 - empty, 1 - start, 2 - finish, 3 - warzone)
-            default_size: int - size for every cell in TRIK Studio
+        Function    addes start, finish, war zones to field pattern,
+                    sets timelimit and robot's start position
+        matrix: list - center buttons values containter (0 - empty, 1 - start, 2 - finish, 3 - warzone)
+        default_size: int - size for every cell in TRIK Studio
         """
         self.updateRegionsID(matrix)
         field_template = const.FIELD_START_FINISH_STR
@@ -565,17 +565,22 @@ class FieldGenerator:
 
 def getRobotConfiguration(fileName: str) -> OrderedDict:
     """
-        Function opens given file and takes OrderedDict describing robot configuration
+    Function opens given file and takes OrderedDict describing robot configuration
     """
     doc_file = open(fileName, "r")
     doc_str = doc_file.read()
-    doc = xmltodict.parse(doc_str, process_namespaces=True)
-
-    stored_robot = doc["root"]["robots"]["robot"]
+    
+    try:
+        doc = xmltodict.parse(doc_str, process_namespaces=True)
+        stored_robot = doc["root"]["robots"]["robot"]
+    except:
+        # if we could not take configuration from file
+        return False
     return stored_robot
+
 
 def getRobotKit(doc: OrderedDict) -> str:
     """
-        Function gets robot kit id from OrderedDict describing XML field
+    Function gets robot kit id from OrderedDict describing XML field
     """
-    return doc['root']['robots']['robot']['@id']
+    return doc["root"]["robots"]["robot"]["@id"]

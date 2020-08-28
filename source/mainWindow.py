@@ -16,7 +16,10 @@ from source.tools.app_settings import (  # pylint: disable=import-error
     getMediaDirectory,
 )
 import source.tools.Graph as Graph  # pylint: disable=import-error
-from source.tools.Generator import FieldGenerator, getRobotKit  # pylint: disable=import-error
+from source.tools.Generator import (
+    FieldGenerator,
+    getRobotKit,
+)  # pylint: disable=import-error
 from source.tools.Command import Command  # pylint: disable=import-error
 import source.tools.Const as const  # pylint: disable=import-error
 from source.tools.Painter import Paint, SVG
@@ -614,6 +617,19 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             )
         return fileName
 
+    def checkStartZone(self, matrix: list) -> bool:
+        """
+        Function checks matrix of center buttons values
+        False if there are more than 1 start zones
+        """
+        start_counter = 0
+        for line in matrix:
+            start_counter += line.count(1)
+        if start_counter > 1:
+            return False
+        else:
+            return True
+
     def generateXML_line(self):
         generation_settings = self.settingsWindow.getGenerationSettings()
         generation_settings["x"] = self.size_x
@@ -622,17 +638,35 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         # generator.setCellSize(lineCell=self.settingsWindow.getSliderLineCellSize())
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
+
+        if not self.checkStartZone(matrix):
+            msg = QtWidgets.QMessageBox()
+            if self.locale_language == "en":
+                msg.setText("You might have only one start zone!")
+                msg.setWindowTitle("Error")
+            else:
+                msg.setText("У вас может быть только одна стартовая зона!")
+                msg.setWindowTitle("Ошибка")
+            msg.setIcon(QtWidgets.QMessageBox.Critical)
+            msg.exec_()
+            return False
+
         field = generator.getFieldLineMaze(adj_map, matrix)
-        picture = Paint(adj_map, matrix)
-        pic_field = SVG(adj_map, matrix)
         path = self.saveField(field)
-        picture.saveLineMazeImage(path[:-3] + "png", getRobotKit(field))
-        pic_field.saveField(
-            path[:-3] + "svg", 
-            int(generation_settings["valueLineCellSize"]) * 50,  # 50 - default size for one cell in TRIK Studio
-            generation_settings["valueColorLine"],
-            int(generation_settings["valueLinePixelSize"])
-        )
+
+        if self.settingsWindow.getPNGImageCheckBox():
+            picture = Paint(adj_map, matrix)
+            picture.saveLineMazeImage(path[:-3] + "png", getRobotKit(field))
+
+        if self.settingsWindow.getSVGFieldCheckBox():
+            pic_field = SVG(adj_map, matrix)
+            pic_field.saveField(
+                path[:-3] + "svg",
+                int(generation_settings["valueLineCellSize"])
+                * 50,  # 50 - default size for one cell in TRIK Studio
+                generation_settings["valueColorLine"],
+                int(generation_settings["valueLinePixelSize"]),
+            )
 
     # generates XML file with maze
     def generateXML_maze(self):
@@ -643,10 +677,25 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         # generator.setCellSize(mazeCell=self.settingsWindow.getSliderMazeCellSize())
         adj_map = self.getWallsMatrix()
         matrix = self.getCenterButtonsMatrix()
+
+        if not self.checkStartZone(matrix):
+            msg = QtWidgets.QMessageBox()
+            if self.locale_language == "en":
+                msg.setText("You might have only one start zone!")
+                msg.setWindowTitle("Error")
+            else:
+                msg.setText("У вас может быть только одна стартовая зона!")
+                msg.setWindowTitle("Ошибка")
+            msg.setIcon(QtWidgets.QMessageBox.Critical)
+            msg.exec_()
+            return False
+
         field = generator.getFieldMaze(adj_map, matrix)
-        picture = Paint(adj_map, matrix)
         path = self.saveField(field)
-        picture.saveMazeImage(path[:-3] + "png", getRobotKit(field))
+
+        if self.settingsWindow.getPNGImageCheckBox():
+            picture = Paint(adj_map, matrix)
+            picture.saveMazeImage(path[:-3] + "png", getRobotKit(field))
 
     def getWallsMatrix(self):
         """Generates map vertex->adjanced vertices from wallsButtons"""
