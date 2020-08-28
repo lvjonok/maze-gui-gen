@@ -177,7 +177,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.height() // (self.size_y),
         ]
         self.ui_scale = (max(min(window_sizes), min_size)) / min_size
-        self.ui_scale = 2
+        # self.ui_scale = 2
         self.ui_x = 0
         self.ui_y = 0
         self.displayWalls()
