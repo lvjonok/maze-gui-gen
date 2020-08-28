@@ -52,14 +52,14 @@ class InformationWindow(QtWidgets.QWidget, informationUI.Ui_InformationWidget):
 
     def nextImage(self):
         self.current_image += 1
-        if self.current_image > 7:
+        if self.current_image > 8:
             self.current_image = 1
         self.displayImage()
 
     def previousImage(self):
         self.current_image -= 1
         if self.current_image < 1:
-            self.current_image = 7
+            self.current_image = 8
         self.displayImage()
 
     def displayImage(self):
