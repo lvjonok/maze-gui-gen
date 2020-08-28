@@ -234,8 +234,11 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
             )
             if not fileName:  # if it is not accessible
                 return False
-            config: str = str(getRobotConfiguration(fileName))
-            self.settings.updateSettings("roboticsConfig", config)
+
+            config: OrderedDict = getRobotConfiguration(fileName)
+            if not config:  # if we could not take configuration
+                return False
+            self.settings.updateSettings("roboticsConfig", str(config))
 
     def getRoboticsKit(self) -> str:
         return str(self.roboticsKitList.currentText())

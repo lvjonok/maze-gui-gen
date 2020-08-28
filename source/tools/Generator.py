@@ -569,9 +569,13 @@ def getRobotConfiguration(fileName: str) -> OrderedDict:
     """
     doc_file = open(fileName, "r")
     doc_str = doc_file.read()
-    doc = xmltodict.parse(doc_str, process_namespaces=True)
-
-    stored_robot = doc["root"]["robots"]["robot"]
+    
+    try:
+        doc = xmltodict.parse(doc_str, process_namespaces=True)
+        stored_robot = doc["root"]["robots"]["robot"]
+    except:
+        # if we could not take configuration from file
+        return False
     return stored_robot
 
 
