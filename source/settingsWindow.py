@@ -233,11 +233,29 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
                 options=options,
             )
             if not fileName:  # if it is not accessible
+                # in case we can't remain "XML" robot kit, we change it to default
+                self.roboticsKitList.setCurrentIndex(0)
+                self.settings.updateSettings("roboticsKit", self.roboticsKit)
                 return False
 
             config: OrderedDict = getRobotConfiguration(fileName)
+            # print('config',config)
             if not config:  # if we could not take configuration
+                # in case we can't remain "XML" robot kit, we change it to default
+                msg = QtWidgets.QMessageBox()
+                if self.locale_language == "en":
+                    msg.setText("There are some errors with this field, select another!")
+                    msg.setWindowTitle("Error")
+                else:
+                    msg.setText("Возникли проблемы с этим полем, выберите другое!")
+                    msg.setWindowTitle("Ошибка")
+                msg.setIcon(QtWidgets.QMessageBox.Critical)
+                msg.exec_()
+                self.roboticsKitList.setCurrentIndex(0)
+                self.settings.updateSettings("roboticsKit", self.roboticsKit)
                 return False
+
+            # print('writing', config)
             self.settings.updateSettings("roboticsConfig", str(config))
 
     def getRoboticsKit(self) -> str:
