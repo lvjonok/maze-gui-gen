@@ -54,7 +54,7 @@ class Command:
 
     def resetHistory(self, wl_last_state, ct_last_state):
         """delete history"""
-        print('resetted history')
+        # print('resetted history')
         self.past = []
         self.future = []
         self.current = [wl_last_state, ct_last_state]
