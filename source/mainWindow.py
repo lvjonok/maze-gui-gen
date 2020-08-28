@@ -173,10 +173,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
 
         min_size = self.basic_min_size
         window_sizes = [
-            self.width() // (self.size_x + 1),
-            self.height() // (self.size_y + 1),
+            self.width() // (self.size_x),
+            self.height() // (self.size_y),
         ]
         self.ui_scale = (max(min(window_sizes), min_size)) / min_size
+        self.ui_scale = 2
         self.ui_x = 0
         self.ui_y = 0
         self.displayWalls()
@@ -486,7 +487,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
                 2 - finish zone
         """
         min_size = self.basic_min_size
-        window_sizes = [self.width() // (x_len + 1), self.height() // (y_len + 1)]
+        window_sizes = [self.width() // (x_len), self.height() // (y_len)]
         self.ui_scale = (max(min(window_sizes), min_size)) / min_size
         for y_index in range(y_len + 1):
             self.wallsButtons.append([0] * (x_len + 1))
@@ -811,10 +812,9 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.size_x = x_size
             self.size_y = y_size
             self.generateWallsButtons(x_size, y_size, 0)
-            self.CommandAccepter.resetHistory()
-            self.CommandAccepter.setLastState(
+            self.CommandAccepter.resetHistory(
                 wl_last_state=self.getWallsMatrix(),
-                ct_last_state=self.getCenterButtonsMatrix(),
+                ct_last_state=self.getCenterButtonsMatrix()
             )
         else:
             return False

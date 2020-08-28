@@ -3,8 +3,8 @@
 
 class Command:
     def __init__(self, wl_last_state, ct_last_state):
-        self.past = []
         self.current = [wl_last_state, ct_last_state]
+        self.past = []
         self.future = []
 
     def setLastState(self, wl_last_state=False, ct_last_state=False):
@@ -52,6 +52,9 @@ class Command:
 
         return self.current
 
-    def resetHistory(self):
+    def resetHistory(self, wl_last_state, ct_last_state):
         """delete history"""
+        print('resetted history')
         self.past = []
+        self.future = []
+        self.current = [wl_last_state, ct_last_state]
