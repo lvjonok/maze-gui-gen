@@ -186,6 +186,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         """Clears window and adds triggers"""
 
         self.setupUi(self)
+        self.setWindowTitle("maze-gui-gen")
 
         # actions for file menu
         self.actionExportXmlMaze.triggered.connect(self.generateXML_maze)
