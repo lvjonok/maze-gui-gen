@@ -11,7 +11,7 @@
 
 <details><summary>Пример</summary>
 <p>
-<img src="source/gifs/out1.gif" width="700" height="700" />
+<img src="source/gifs/out1.gif"/>
 </p>
 </details>
 
@@ -19,7 +19,7 @@
 
 <details><summary>Пример</summary>
 <p>
-<img src="source/gifs/out2.gif" width="700" height="700" />
+<img src="source/gifs/out2.gif"/>
 </p>
 </details>
 
@@ -27,7 +27,7 @@
 
 <details><summary>Пример</summary>
 <p>
-<img src="source/gifs/out3.gif" width="700" height="700" />
+<img src="source/gifs/out3.gif"/>
 </p>
 </details>
 
@@ -35,7 +35,7 @@
 
 <details><summary>Пример</summary>
 <p>
-<img src="source/gifs/out4.gif" width="700" height="700" />
+<img src="source/gifs/out4.gif"/>
 </p>
 </details>
 
@@ -44,7 +44,7 @@
 
 ## Интерфейс maze-gui-gen
 
-<img src="source/media/out_ru_1.png" width="700" height="700" />
+<img src="source/media/out_ru_1.png"/>
 
 **maze-gui-gen** имеет следующие элементы интерфейса:
 
@@ -56,7 +56,7 @@
 * [Панель "Справка"](#справка)
 
 # Файл
-<img src="source/media/out_ru_2.png" width="700" height="700" />
+<img src="source/media/out_ru_2.png"/>
 
 1. **Сохранить матрицу смежности** - возможность сохранить карту лабиринта (.txt) в двух форматах: матрица смежности, массив из N (вершин) массивов на 4 элемента, указывающий на связь с верхней, правой, нижней и левой вершиной.
 
@@ -65,7 +65,7 @@
 1. **Сохранить поле с линиями** - возможность сгенерировать и сохранить поле формата (.xml) с лабиринтом из линий.
 
 # Правка
-<img src="source/media/out_ru_3.png" width="700" height="700" />
+<img src="source/media/out_ru_3.png"/>
 
 1. **Отменить** - возможность вернуться к состоянию карты до вашего последнего изменения  
 ```Сочетание клавиш Ctrl+Z```
@@ -75,7 +75,7 @@
 При создании новой карты история изменений обнуляется
 
 # Вид
-<img src="source/media/out_ru_4.png" width="700" height="700" />
+<img src="source/media/out_ru_4.png"/>
 
 Панель "Вид" содержит кнопки, позволяющие изменить масштаб карты. (Приблизить / Отдалить)
 
@@ -84,7 +84,7 @@
 1. Вращения колесика мыши
 
 # Инструменты
-<img src="source/media/out_ru_5.png" width="700" height="700" />
+<img src="source/media/out_ru_5.png"/>
 
 1. **Создать карту** - возможность специально указать нужный размер карты  
 ```Сочетание клавиш Ctrl+N```
@@ -96,7 +96,7 @@
 ```Сочетание Ctrl+F```
 
 # Настройки
-<img src="source/media/out_ru_6.png" width="700" height="700" />
+<img src="source/media/out_ru_6.png"/>
 
 Панель "Настройки" содержит кнопки, позволяющие открыть [окно Настроек](#настройки-maze-gui-gen) или выбрать язык.
 
@@ -104,7 +104,7 @@
 ```Ctrl+Shift+S```.
 
 # Справка
-<img src="source/media/out_ru_7.png" width="700" height="700" />
+<img src="source/media/out_ru_7.png"/>
 
 1. **Помощь** - возможность открыть справку.  
 ```Сочетание клавиш F1```
@@ -115,7 +115,7 @@
 
 Окно настроек **maze-gui-gen** открывается выбором соответствующего пункта в [главном меню](#настройки)
 
-<img src="source/media/out_ru_8.png" width="700" height="700" />
+<img src="source/media/out_ru_8.png"/>
 
 ## Настройки для генерации полей
 
