@@ -199,7 +199,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
         return v
 
     def updateValueColorLine(self, event):
-        color = QtWidgets.QColorDialog.getColor()
+        color = QtWidgets.QColorDialog.getColor(options=QtWidgets.QColorDialog.DontUseNativeDialog)
         if color:
             rgb = color.getRgb()[0:3]
             hex_color = self.rgb_to_hex(rgb)
