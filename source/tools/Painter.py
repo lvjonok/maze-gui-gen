@@ -1,7 +1,6 @@
 """Module helps to draw images for fields"""
 
 import os
-import xmltodict
 import svgwrite
 from PIL import Image, ImageDraw
 from source.tools.app_settings import getMediaDirectory

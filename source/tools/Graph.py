@@ -94,7 +94,7 @@ class Graph:
         return out
 
 
-def convertMap(size_x, size_y, adj_map):
+def convertToAdjacencyMatrix(size_x, size_y, adj_map):
     """Convert map from vertex-> adjanced vertices to vertex -> all vertices"""
     am_v = size_x * size_y
     new_map = [[0] * am_v for i in range(am_v)]
