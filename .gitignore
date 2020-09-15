@@ -1,6 +1,11 @@
-/_site
-/pyqt
-/source/__pycache__
-/source/py_ui/
-/source/tools
+/__pycache__
+/build
+/dist
+/main.spec
 /.vscode
+/source/__pycache__
+/pyqt
+/source/tools/__pycache__
+/source/py_ui/__pycache__
+/_site
+/maze-gui-gen-helper
