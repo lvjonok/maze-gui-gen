@@ -2,8 +2,6 @@
 <html lang="{{ site.lang | default: "en-US" }}">
 
 <head>
-  {% if site.google_analytics %}
-  <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174937787-1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -12,8 +10,8 @@
 
     gtag('config', 'UA-174937787-1');
   </script>
+  
   <link rel="shortcut icon" type="image/png" href="source/media/maze.png">
-  {% endif %}
   <meta charset="UTF-8">
 
   {% seo %}
