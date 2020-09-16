@@ -86,7 +86,7 @@ class Ui_aboutWidget(object):
         self.labelHelp.setText(
             _translate(
                 "aboutWidget",
-                '<html><head/><body><p align="center"><br/></p><p align="center"><span style=" font-size:14pt;">Program: maze-gui-generator</span></p><p align="center"><span style=" font-size:14pt;">GUI field generator for TRIK Studio simulator.</span><br/></p><p align="center"><span style=" font-size:14pt;">Version: 1.2</span></p><p align="center"><span style=" font-size:14pt;">Author: Lev Kozlov</span></p><p align="center"><span style=" font-size:14pt;">Contributors: iakov, anastasiia-kornilova, AlexStrNik</span></p><p align="center"><span style=" font-size:14pt;">Copyright © 2020 Lev Kozlov</span><br/></p><p align="center"><span style=" font-size:14pt;">Licence: Apache 2.0</span></p></body></html>',
+                '<html><head/><body><p align="center"><br/></p><p align="center"><span style=" font-size:14pt;">Program: maze-gui-generator</span></p><p align="center"><span style=" font-size:14pt;">GUI field generator for TRIK Studio simulator.</span><br/></p><p align="center"><span style=" font-size:14pt;">Version: 1.2</span></p><p align="center"><span style=" font-size:14pt;">Author: Lev Kozlov</span></p><p align="center"><span style=" font-size:13pt;">Contributors: iakov, anastasiia-kornilova, AlexStrNik</span></p><p align="center"><span style=" font-size:14pt;">Copyright © 2020 Lev Kozlov</span><br/></p><p align="center"><span style=" font-size:14pt;">Licence: Apache 2.0</span></p></body></html>',
             )
         )
         self.InfoLabel.setText(
