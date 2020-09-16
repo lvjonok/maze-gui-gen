@@ -617,7 +617,8 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
             self.settings.updateSettings(
                 "valueSavedLastDirectory", os.path.split(fileName)[0]
             )
-        return fileName
+            return fileName
+        return False
 
     def checkStartZone(self, matrix: list) -> bool:
         """
@@ -656,11 +657,11 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         field = generator.getFieldLineMaze(adj_map, matrix)
         path = self.saveField(field)
 
-        if self.settingsWindow.getPNGImageCheckBox():
+        if path and self.settingsWindow.getPNGImageCheckBox():
             picture = Paint(adj_map, matrix)
             picture.saveLineMazeImage(path[:-3] + "png", getRobotKit(field))
 
-        if self.settingsWindow.getSVGFieldCheckBox():
+        if path and self.settingsWindow.getSVGFieldCheckBox():
             pic_field = SVG(adj_map, matrix)
             pic_field.saveField(
                 path[:-3] + "svg",
@@ -695,7 +696,7 @@ class MazeGenApp(QtWidgets.QMainWindow, screen.Ui_MainWindow):
         field = generator.getFieldMaze(adj_map, matrix)
         path = self.saveField(field)
 
-        if self.settingsWindow.getPNGImageCheckBox():
+        if path and self.settingsWindow.getPNGImageCheckBox():
             picture = Paint(adj_map, matrix)
             picture.saveMazeImage(path[:-3] + "png", getRobotKit(field))
 
