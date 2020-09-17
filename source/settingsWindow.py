@@ -44,7 +44,7 @@ class SettingsWindow(QtWidgets.QWidget, settingsUI.Ui_settingsForm):
             self.colorLine = color_set
         else:
             self.colorLine = "000000"
-            self.settings.updateSettings("valueColorLine", self.color_line)
+            self.settings.updateSettings("valueColorLine", self.colorLine)
 
         self.colorLabel.setStyleSheet(
             "QLabel {background-color: #" + str(self.colorLine) + ";}"
