@@ -11,7 +11,7 @@
 
 <details><summary>Пример</summary>
 <p>
-<img src="source/gifs/out1.gif"/>
+<img src="https://github.com/lvjonok/maze-gui-gen/blob/gh-pages/source/gifs/out1.gif"/>
 </p>
 </details>
 
@@ -19,7 +19,7 @@
 
 <details><summary>Пример</summary>
 <p>
-<img src="source/gifs/out2.gif"/>
+<img src="https://github.com/lvjonok/maze-gui-gen/blob/gh-pages/source/gifs/out2.gif"/>
 </p>
 </details>
 
@@ -27,7 +27,7 @@
 
 <details><summary>Пример</summary>
 <p>
-<img src="source/gifs/out3.gif"/>
+<img src="https://github.com/lvjonok/maze-gui-gen/blob/gh-pages/source/gifs/out3.gif"/>
 </p>
 </details>
 
@@ -35,7 +35,7 @@
 
 <details><summary>Пример</summary>
 <p>
-<img src="source/gifs/out4.gif"/>
+<img src="https://github.com/lvjonok/maze-gui-gen/blob/gh-pages/source/gifs/out4.gif"/>
 </p>
 </details>
 
