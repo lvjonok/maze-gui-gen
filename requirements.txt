@@ -22,7 +22,7 @@ pathspec==0.8.0
 Pillow==7.2.0
 pycodestyle==2.6.0
 pyflakes==1.4.0
-Pygments==2.6.1
+Pygments==2.7.4
 PyInstaller==3.6
 pyparsing==2.4.7
 pyperclip==1.8.0
